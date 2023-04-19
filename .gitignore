@@ -1,0 +1,19 @@
+# mac os finder caches:
+.DS_Store
+
+# unity caches:
+Library/
+Logs/
+Packages/packages-lock.json
+Temp/
+UserSettings/
+
+# visual studio caches:
+.vs/
+obj/
+.vsconfig
+*.csproj
+*.sln
+
+# keep:
+!.gitkeep
