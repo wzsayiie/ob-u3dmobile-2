@@ -1,5 +1,8 @@
 using UnityEngine;
 
-public class Game : MonoBehaviour
+namespace U3DMobile
 {
+    public class Game : MonoBehaviour
+    {
+    }
 }
