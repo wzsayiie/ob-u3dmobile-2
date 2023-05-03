@@ -1,17 +1,20 @@
 using U3DMobile;
 using UnityEditor;
 
-static class MenuItems
+namespace U3DMobileEditor
 {
-    [MenuItem("U3DMobile/Game Settings")]
-    static void OnGameSettings()
+    internal static class MenuItems
     {
-        Utility.PingPath<GameSettings>("Assets/Resources/GameSettings.asset");
-    }
+        [MenuItem("U3DMobile/Game Settings")]
+        private static void OnGameSettings()
+        {
+            Utility.PingPath<GameSettings>("Assets/Resources/GameSettings.asset");
+        }
 
-    [MenuItem("U3DMobile/Build Settings")]
-    static void OnBuildSettings()
-    {
-        Utility.PingPath<BuildSettings>("Assets/BuildSettings.asset");
+        [MenuItem("U3DMobile/Build Settings")]
+        private static void OnBuildSettings()
+        {
+            Utility.PingPath<BuildSettings>("Assets/BuildSettings.asset");
+        }
     }
 }
