@@ -11,9 +11,15 @@ namespace U3DMobile
         public int iden;
     }
 
-    //store channel.
+    //store channel:
     [Serializable]
     public class StoreChannel
+    {
+        public string channel;
+    }
+
+    [Serializable]
+    public class ChannelGateway
     {
         public string channel;
         public string gateway;
@@ -78,40 +84,61 @@ namespace U3DMobile
         //games will be distributed to different "channel"s,
         //such as different app stores, and different testing environments.
         //also may connect to the servers by different gateways.
-        [SerializeField]
-        private string _activeChan;
-        [SerializeField]
-        private List<StoreChannel> _channels;
+        [SerializeField] private string _activeChannel;
+        [SerializeField] private string _activeGateway;
+        [SerializeField] private List<StoreChannel  > _channels;
+        [SerializeField] private List<ChannelGateway> _gateways;
 
-        public StoreChannel GetChannel()
+        public string GetChannel()
         {
-            if (_activeChan == null || string.IsNullOrWhiteSpace(_activeChan))
+            if (string.IsNullOrWhiteSpace(_activeChannel))
             {
                 return null;
             }
+
+            string name = _activeChannel.Trim();
+
+            //the target must be an item in the list.
             if (_channels == null || _channels.Count == 0)
             {
                 return null;
             }
-
-            string channel = _activeChan.Trim();
             foreach (StoreChannel candicate in _channels)
             {
-                if (channel != candicate.channel.Trim())
+                if (candicate != null &&
+                    !string.IsNullOrWhiteSpace(candicate.channel) &&
+                    name == candicate.channel.Trim())
                 {
-                    continue;
+                    return name;
                 }
-                if (string.IsNullOrWhiteSpace(candicate.gateway))
-                {
-                    continue;
-                }
+            }
+            return null;
+        }
 
-                return new StoreChannel {
-                    channel = channel,
-                    gateway = candicate.gateway.Trim()
-                };
+        public string Getgateway()
+        {
+            if (string.IsNullOrWhiteSpace(_activeGateway))
+            {
+                return null;
             }
 
+            string name = _activeGateway.Trim();
+
+            //the target must be an item in the list.
+            if (_gateways == null || _gateways.Count == 0)
+            {
+                return null;
+            }
+            foreach (ChannelGateway candicate in _gateways)
+            {
+                if (candicate != null &&
+                    !string.IsNullOrWhiteSpace(candicate.channel) &&
+                    !string.IsNullOrWhiteSpace(candicate.gateway) &&
+                    name == candicate.channel.Trim())
+                {
+                    return candicate.gateway.Trim();
+                }
+            }
             return null;
         }
 
