@@ -4,9 +4,9 @@ using UnityEngine;
 
 namespace U3DMobileEditor
 {
-    internal static class Utility
+    internal static class AssetHelper
     {
-        internal static T LoadAsset<T>(string path) where T : ScriptableObject
+        internal static T LoadScriptable<T>(string path) where T : ScriptableObject
         {
             //try load the asset.
             var asset = AssetDatabase.LoadAssetAtPath<T>(path);
@@ -25,18 +25,6 @@ namespace U3DMobileEditor
             asset = ScriptableObject.CreateInstance<T>();
             AssetDatabase.CreateAsset(asset, path);
             return asset;
-        }
-
-        internal static void PingPath<T>(string path) where T : ScriptableObject
-        {
-            var obj = LoadAsset<T>(path);
-            PingScriptable(obj);
-        }
-
-        internal static void PingScriptable(ScriptableObject obj)
-        {
-            Selection.activeObject = obj;
-            EditorGUIUtility.PingObject(obj);
         }
     }
 }
