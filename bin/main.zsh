@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-cd `dirname %0`/..
+cd `dirname $0`/..
 
 #requied environment variables:
 echo _target_branch: $_target_branch
