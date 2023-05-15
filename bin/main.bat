@@ -53,7 +53,7 @@ if not exist "%_action_script%" (
 
 call "%_action_script%"
 if not "%errorlevel%"=="0" (
-    echo "%_action_script%" return error
+    echo "%_action_script%" returns error %errorlevel%
     exit /b 1
 )
 
