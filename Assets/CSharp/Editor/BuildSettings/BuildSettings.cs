@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace U3DMobileEditor
 {
-    //bundle identifier:
+    //bundle identifier.
     [Serializable]
     internal class BundleIdentifier
     {
@@ -44,10 +44,18 @@ namespace U3DMobileEditor
         public string             carryOpts ;
     }
 
+    //patch entry.
+    [Serializable]
+    internal class PatchEntry
+    {
+        public bool               selected;
+        public UnityEngine.Object file    ;
+    }
+
     //build settings.
     internal class BuildSettings : ScriptableObject
     {
-        //
+        //asset bundle set identifier.
         [SerializeField]
         private BundleIdentifier _identifier;
 
@@ -56,7 +64,9 @@ namespace U3DMobileEditor
             return _identifier != null ? _identifier.iden : 0;
         }
 
-        //
+        //for different distribution channels,
+        //the asset bundles put into the installation package may be different.
+        //use the "CarryOption" to control this point.
         [SerializeField]
         private string _activeCarry;
         [SerializeField]
@@ -88,13 +98,22 @@ namespace U3DMobileEditor
             return null;
         }
 
-        //
+        //asset bundle entries.
         [SerializeField]
         private List<BundleEntry> _entries;
 
         internal List<BundleEntry> GetEntries()
         {
             return _entries != null && _entries.Count > 0 ? _entries : null;
+        }
+
+        //script patch entries.
+        [SerializeField]
+        private List<PatchEntry> _patches;
+
+        internal List<PatchEntry> GetPatches()
+        {
+            return _patches != null && _patches.Count > 0 ? _patches : null;
         }
     }
 }

@@ -64,17 +64,11 @@ namespace U3DMobileEditor
             SerializedProperty file = property.FindPropertyRelative("file");
             UnityEngine.Object fObj = file.objectReferenceValue;
 
-            EditorGUI.BeginDisabledGroup(fObj == null);
-            EditorGUI.PropertyField(_1, property.FindPropertyRelative("selected"), GUIContent.none);
-            EditorGUI.EndDisabledGroup();
-
+            EditorGUI.PropertyField(_1, property.FindPropertyRelative("selected"  ), GUIContent.none);
             EditorGUI.PropertyField(_2, file, GUIContent.none);
-
-            EditorGUI.BeginDisabledGroup(fObj == null);
             EditorGUI.PropertyField(_3, property.FindPropertyRelative("packMode"  ), GUIContent.none);
             EditorGUI.PropertyField(_4, property.FindPropertyRelative("demandMode"), GUIContent.none);
             EditorGUI.PropertyField(_5, property.FindPropertyRelative("carryOpts" ), GUIContent.none);
-            EditorGUI.EndDisabledGroup();
 
             //second line:
             var _6 = new Rect(
@@ -88,6 +82,38 @@ namespace U3DMobileEditor
         }
     }
 
+    [CustomPropertyDrawer(typeof(PatchEntry))]
+    internal class PatchEntryDrawer : PropertyDrawer
+    {
+        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+        {
+            return EditorGUIUtility.singleLineHeight * 2;
+        }
+
+        public override void OnGUI(Rect r, SerializedProperty property, GUIContent label)
+        {
+            //first line:
+            var _1 = new Rect(r.x     , r.y, 20          , EditorGUIUtility.singleLineHeight);
+            var _2 = new Rect(r.x + 20, r.y, r.width - 20, EditorGUIUtility.singleLineHeight);
+
+            SerializedProperty file = property.FindPropertyRelative("file");
+            UnityEngine.Object fObj = file.objectReferenceValue;
+
+            EditorGUI.PropertyField(_1, property.FindPropertyRelative("selected"), GUIContent.none);
+            EditorGUI.PropertyField(_2, file, GUIContent.none);
+
+            //second line:
+            var _3 = new Rect(
+                r.x    , EditorGUIUtility.singleLineHeight + r.y,
+                r.width, EditorGUIUtility.singleLineHeight
+            );
+            if (fObj != null)
+            {
+                EditorGUI.LabelField(_3, AssetDatabase.GetAssetPath(fObj));
+            }
+        }
+    }
+
     [CustomEditor(typeof(BuildSettings))]
     internal class BuildSettingsInspector : Editor
     {
@@ -95,6 +121,7 @@ namespace U3DMobileEditor
         private SerializedProperty _activeCarry;
         private SerializedProperty _carryOptions;
         private SerializedProperty _entries;
+        private SerializedProperty _patches;
 
         internal static BuildSettingsInspector instance;
 
@@ -112,6 +139,7 @@ namespace U3DMobileEditor
             _activeCarry  = serializedObject.FindProperty("_activeCarry");
             _carryOptions = serializedObject.FindProperty("_carryOptions");
             _entries      = serializedObject.FindProperty("_entries");
+            _patches      = serializedObject.FindProperty("_patches");
         }
 
         public override void OnInspectorGUI()
@@ -139,6 +167,16 @@ namespace U3DMobileEditor
             {
             }
             GUILayout.EndHorizontal();
+
+            //patch entries:
+            EditorGUILayout.PropertyField(_patches, new GUIContent("Patch Entries"));
+
+            if (GUILayout.Button("Generate Patch Manifest"))
+            {
+            }
+            if (GUILayout.Button("Copy Selected Patches"))
+            {
+            }
 
             serializedObject.ApplyModifiedProperties();
         }
