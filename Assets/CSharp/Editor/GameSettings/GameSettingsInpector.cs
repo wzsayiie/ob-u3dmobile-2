@@ -52,8 +52,8 @@ namespace U3DMobileEditor
         {
             var _1 = new Rect(r.x      , r.y, 20           , EditorGUIUtility.singleLineHeight);
             var _2 = new Rect(r.x +  20, r.y, 90           , EditorGUIUtility.singleLineHeight);
-            var _3 = new Rect(r.x + 120, r.y, 60           , EditorGUIUtility.singleLineHeight);
-            var _4 = new Rect(r.x + 180, r.y, r.width - 180, EditorGUIUtility.singleLineHeight);
+            var _3 = new Rect(r.x + 120, r.y, 55           , EditorGUIUtility.singleLineHeight);
+            var _4 = new Rect(r.x + 175, r.y, r.width - 175, EditorGUIUtility.singleLineHeight);
 
             SerializedProperty channel = property.FindPropertyRelative("channel");
 
@@ -83,9 +83,9 @@ namespace U3DMobileEditor
     {
         public override void OnGUI(Rect r, SerializedProperty property, GUIContent label)
         {
-            var _1 = new Rect(r.x     , r.y, 20          , EditorGUIUtility.singleLineHeight);
-            var _2 = new Rect(r.x + 20, r.y, 80          , EditorGUIUtility.singleLineHeight);
-            var _3 = new Rect(r.x + 90, r.y, r.width - 90, EditorGUIUtility.singleLineHeight);
+            var _1 = new Rect(r.x +  14, r.y, 20           , EditorGUIUtility.singleLineHeight);
+            var _2 = new Rect(r.x +  35, r.y, 80           , EditorGUIUtility.singleLineHeight);
+            var _3 = new Rect(r.x + 115, r.y, r.width - 115, EditorGUIUtility.singleLineHeight);
 
             EditorGUI.PropertyField(_1, property.FindPropertyRelative("enabled"), GUIContent.none);
 
@@ -103,13 +103,13 @@ namespace U3DMobileEditor
     {
         public override void OnGUI(Rect r, SerializedProperty property, GUIContent label)
 	    {
-            var _1 = new Rect(r.x     , r.y, 20          , EditorGUIUtility.singleLineHeight);
-            var _2 = new Rect(r.x + 20, r.y, 40          , EditorGUIUtility.singleLineHeight);
-            var _3 = new Rect(r.x + 60, r.y, r.width - 60, EditorGUIUtility.singleLineHeight);
+            var _1 = new Rect(r.x      , r.y, 20           , EditorGUIUtility.singleLineHeight);
+            var _2 = new Rect(r.x +  20, r.y, 80           , EditorGUIUtility.singleLineHeight);
+            var _3 = new Rect(r.x + 100, r.y, r.width - 100, EditorGUIUtility.singleLineHeight);
 
             EditorGUI.PropertyField(_1, property.FindPropertyRelative("enabled"), GUIContent.none);
 
-            EditorGUI.LabelField(_2, "Flavor");
+            EditorGUI.LabelField(_2, "Asset Flavor");
             EditorGUI.PropertyField(_3, property.FindPropertyRelative("name"), GUIContent.none);
         }
     }
@@ -203,9 +203,10 @@ namespace U3DMobileEditor
             //forced urls.
             EditorGUILayout.PropertyField(_forcedUrls, new GUIContent("Forced URLs"));
 
-            //asset flavors.
+            //asset flavors:
             EditorGUILayout.PropertyField(_flavors, new GUIContent("Asset Flavors"));
-            if (GUILayout.Button("Switch Selected Flavors"))
+
+            if (GUILayout.Button("Copy Selected Flavors"))
             {
             }
 

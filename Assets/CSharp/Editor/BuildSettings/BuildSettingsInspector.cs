@@ -155,25 +155,16 @@ namespace U3DMobileEditor
             //bundle entries:
             EditorGUILayout.PropertyField(_entries, new GUIContent("Bundle Entries"));
 
-            if (GUILayout.Button("Generate Bundle Manifest"))
-            {
-            }
-
-            GUILayout.BeginHorizontal();
             if (GUILayout.Button("Pack Selected (for Android)"))
             {
             }
             if (GUILayout.Button("Pack Selected (for iOS)"))
             {
             }
-            GUILayout.EndHorizontal();
 
             //patch entries:
             EditorGUILayout.PropertyField(_patches, new GUIContent("Patch Entries"));
 
-            if (GUILayout.Button("Generate Patch Manifest"))
-            {
-            }
             if (GUILayout.Button("Copy Selected Patches"))
             {
             }
