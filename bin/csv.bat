@@ -2,9 +2,9 @@
 
 setlocal
 
-cd %~dp0\..\..
+cd %~dp0\..
 
-set _excutable_js="bin\csv\BUILD\transfer.js"
+set _excutable_js="bin\csv\BUILD\csv.js"
 
 where node
 if not "%errorlevel%"=="0" (

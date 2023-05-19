@@ -2,7 +2,7 @@
 
 setlocal
 
-cd /d %~dp0\..\..
+cd /d %~dp0\..
 
 ::required environment variable:
 echo _store_channel     : %_store_channel%

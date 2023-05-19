@@ -6,7 +6,7 @@ module.exports = {
 
     entry : "./src/main.ts",
     output: {
-        filename: 'transfer.js',
+        filename: 'csv.js',
         path: path.resolve(__dirname, './BUILD'),
     },
 

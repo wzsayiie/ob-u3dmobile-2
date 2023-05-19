@@ -2,7 +2,7 @@
 
 set -e -u
 
-cd `dirname $0`/../..
+cd `dirname $0`/..
 
 #required environment variable:
 echo _store_channel     : $_store_channel

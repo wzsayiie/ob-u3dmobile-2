@@ -1,8 +1,8 @@
 #!/bin/zsh
 
-cd `dirname $0`/../..
+cd `dirname $0`/..
 
-_excutable_js="bin/csv/BUILD/transfer.js"
+_excutable_js="bin/csv/BUILD/csv.js"
 
 which node
 if [ $? -ne 0 ]; then
