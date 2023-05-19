@@ -1,0 +1,13 @@
+{
+    "name": "csv",
+    "scripts": {
+        "dev": "webpack --config wpconfig.js --watch",
+        "pck": "webpack --config wpconfig.js"
+    },
+    "devDependencies": {
+        "webpack-cli": "*",
+        "webpack": "*",
+        "typescript": "*",
+        "ts-loader": "*"
+    }
+}

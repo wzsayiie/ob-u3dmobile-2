@@ -1,19 +1,24 @@
-# mac os finder caches:
+#mac os finder caches:
 .DS_Store
 
-# unity caches:
+#unity caches:
 Library/
 Logs/
 Packages/packages-lock.json
 Temp/
 UserSettings/
 
-# visual studio caches:
+#visual studio caches:
 .vs/
 obj/
 .vsconfig
 *.csproj
 *.sln
+
+#csv transfer local:
+bin/csv/BUILD/
+bin/csv/node_modules/
+bin/csv/package-lock.json
 
 # keep:
 !.gitkeep
