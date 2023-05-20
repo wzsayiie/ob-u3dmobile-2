@@ -1,7 +1,5 @@
 #!/bin/zsh
 
-set -e -u
-
 cd `dirname $0`/..
 
 #required environment variable:
@@ -19,11 +17,11 @@ if [ ! $_bundle_identifier ]; then
     echo no input bundle identifier
 fi
 
-_time_stamp=`date "+%Y-%m-%d_%H-%M-%S"`
+declare _time_stamp=`date "+%Y-%m-%d_%H-%M-%S"`
 
 #NOTE: unity will use "_output_dir" as output directory.
-_output_dir=BUILD/${_time_stamp}_${_store_channel}_${_package_identifier}_${_bundle_identifier}
- _unity_log=$_output_dir/log.txt
+export _output_dir=BUILD/${_time_stamp}_${_store_channel}_${_package_identifier}_${_bundle_identifier}
+declare _unity_log=$_output_dir/log.txt
 
 "/Applications/Unity/Hub/Editor/2021.3.22f1c1/Unity.app/Contents/MacOS/Unity" \
     -executeMethod U3DMobileEditor.BuildProcess.Launch \
