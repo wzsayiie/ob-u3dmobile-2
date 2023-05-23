@@ -30,7 +30,7 @@ declare _unity_log=$_output_dir/log.txt
     -quit
 
 if [ $? -ne 0 ]; then
-    echo unity returns error $?
+    echo unity returns error
     exit 1
 fi
 

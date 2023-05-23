@@ -51,7 +51,7 @@ fi
 
 sh "$_action_script"
 if [ $? -ne 0 ]; then
-    echo "$_action_script" returns error $?
+    echo "$_action_script" returns error
     exit 1
 fi
 

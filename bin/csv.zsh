@@ -17,7 +17,7 @@ fi
 
 node --enable-source-maps "$_excutable_js"
 if [ $? -ne 0 ]; then
-    echo the executable return error $?
+    echo the executable returns error
     exit 1
 fi
 

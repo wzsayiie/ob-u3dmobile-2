@@ -37,7 +37,7 @@ set  _unity_log=%_output_dir%\log.txt
     -quit
 
 if not "%errorlevel%"=="0" (
-    echo unity returns error %errorlevel%
+    echo unity returns error
     exit /b 1
 )
 

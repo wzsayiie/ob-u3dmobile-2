@@ -19,7 +19,7 @@ if not exist %_excutable_js% (
 
 node --enable-source-maps %_excutable_js%
 if not "%errorlevel%"=="0" (
-    echo the executable return error %errorlevel%
+    echo the executable returns error
     exit /b 1
 )
 
