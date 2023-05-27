@@ -1,4 +1,4 @@
-package com.enterprise.app;
+package com.enterprise.game;
 
 public class NativeCenter {
 }

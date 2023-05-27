@@ -1,4 +1,4 @@
-package com.enterprise.app;
+package com.enterprise.game;
 
 import android.os.Bundle;
 import com.unity3d.player.UnityPlayerActivity;

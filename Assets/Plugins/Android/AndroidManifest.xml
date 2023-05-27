@@ -4,7 +4,7 @@
     <application>
         <!--NOTE: for a custom activity, unity will not add the attributes and child nodes
             of the default UnityPlayerActivity to it. remember to add these configurations manually.-->
-        <activity android:name="com.enterprise.app.MainActivity">
+        <activity android:name="com.enterprise.game.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
