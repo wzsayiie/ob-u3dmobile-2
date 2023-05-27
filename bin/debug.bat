@@ -1,7 +1,7 @@
 @echo off
 
-::this file records the environment variables needed by build tools.
-::if building manually, remember to execute this file to get these parameters.
+::this file records the environment variables needed by command line tools.
+::if necessary, to execute this file to get these parameters.
 
 ::set "android" or "ios".
 set _target_platform=android
@@ -16,7 +16,7 @@ set  _apk_keystore=master
 set _ipa_provision=master
 
 ::application informations.
-set  _app_package_id=me.wzsayiie.u3dmobile
+set  _app_package_id=com.enterprise.game
 set _app_version_str=1.0.0
 set _app_version_num=1
 

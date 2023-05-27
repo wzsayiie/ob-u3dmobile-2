@@ -1,7 +1,7 @@
 #!/bin/zsh
 
-#this script records the environment variables needed by build tools.
-#if building manually, remember to "source" this script to get these parameters.
+#this script records the environment variables needed by shell tools.
+#if necessary, to "source" this script to get these parameters.
 
 #set "android" or "ios".
 export _target_platform="android"
@@ -16,7 +16,7 @@ export  _apk_keystore="master"
 export _ipa_provision="master"
 
 #application informations.
-export  _app_package_id="me.wzsayiie.u3dmobile"
+export  _app_package_id="com.enterprise.game"
 export _app_version_str="1.0.0"
 export _app_version_num=1
 

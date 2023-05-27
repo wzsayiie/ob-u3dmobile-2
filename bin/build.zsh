@@ -9,12 +9,15 @@ echo _bundle_identifier : $_bundle_identifier
 
 if [ ! $_store_channel ]; then
     echo no input store channel
+    exit 1
 fi
 if [ ! $_package_identifier ]; then
     echo no input package identifier
+    exit 1
 fi
 if [ ! $_bundle_identifier ]; then
     echo no input bundle identifier
+    exit 1
 fi
 
 declare _time_stamp=`date "+%Y-%m-%d_%H-%M-%S"`
@@ -28,6 +31,8 @@ declare _unity_log=$_output_dir/log.txt
     -logFile $_unity_log \
     -batchmode \
     -quit
+
+cat $_unity_log
 
 if [ $? -ne 0 ]; then
     echo unity returns error

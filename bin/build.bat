@@ -36,6 +36,8 @@ set  _unity_log=%_output_dir%\log.txt
     -batchmode ^
     -quit
 
+type %_unity_log%
+
 if not "%errorlevel%"=="0" (
     echo unity returns error
     exit /b 1
