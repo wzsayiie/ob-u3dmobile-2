@@ -3,8 +3,8 @@
 cd `dirname $0`/..
 
 #requied environment variables:
-echo _target_branch: $_target_branch
-echo _action_script: $_action_script
+echo "_target_branch: $_target_branch"
+echo "_action_script: $_action_script"
 
 if [ ! $_target_branch ]; then
     echo no input branch

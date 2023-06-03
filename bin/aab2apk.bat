@@ -4,7 +4,11 @@ setlocal
 
 set _apk_file=%1
 if "%_apk_file%"=="" (
-    exit no input
+    echo no input
+    exit /b 1
+)
+if not exist "%_apk_file%" (
+    echo not found "%_apk_file%"
     exit /b 1
 )
 
@@ -18,6 +22,12 @@ if not "%errorlevel%"=="0" (
 where unzip
 if not "%errorlevel%"=="0" (
     echo not found unzip
+    exit /b 1
+)
+
+where touch
+if not "%errorlevel%"=="0" (
+    echo not found touch
     exit /b 1
 )
 
@@ -46,7 +56,7 @@ echo jks password: %_jks_pass%
 echo key name    : %_key_name%
 echo key password: %_key_pass%
 
-:: goto destination directory and clean:
+::goto destination directory and clean:
 for %%i in ("%_apk_file%") do (
     set _wk_dir=%%~di%%~pi
     set _o_name=%%~ni
@@ -75,6 +85,9 @@ if not "%errorlevel%"=="0" (
 ::extract the needed apk.
 unzip  "%_o_name%.apks" "universal.apk"
 rename "universal.apk"  "%_o_name%.apk"
+touch  "%_o_name%.apk"
 del /q "%_o_name%.apks"
+
+exit /b 0
 
 endlocal

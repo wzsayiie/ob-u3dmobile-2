@@ -2,7 +2,7 @@
 
 cd `dirname $0`/..
 
-declare _excutable_js="bin/csv/BUILD/csv.js"
+declare _excutable_js=bin/csv/BUILD/csv.js
 
 which node
 if [ $? -ne 0 ]; then
