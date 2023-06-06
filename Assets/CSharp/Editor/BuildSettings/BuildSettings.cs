@@ -4,11 +4,11 @@ using UnityEngine;
 
 namespace U3DMobileEditor
 {
-    //bundle identifier.
+    //bundle serial.
     [Serializable]
-    internal class BundleIdentifier
+    internal class BundleSerial
     {
-        public int iden;
+        public int serial;
     }
 
     //bundle carry option.
@@ -55,13 +55,13 @@ namespace U3DMobileEditor
     //build settings.
     internal class BuildSettings : ScriptableObject
     {
-        //asset bundle set identifier.
+        //asset bundle set serial.
         [SerializeField]
-        private BundleIdentifier _identifier;
+        private BundleSerial _serial;
 
-        internal int GetBundleIdentifier()
+        internal int GetBundleSerial()
         {
-            return _identifier != null ? _identifier.iden : 0;
+            return _serial != null ? _serial.serial : 0;
         }
 
         //for different distribution channels,

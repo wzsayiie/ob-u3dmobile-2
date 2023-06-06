@@ -3,16 +3,16 @@ using UnityEngine;
 
 namespace U3DMobileEditor
 {
-    [CustomPropertyDrawer(typeof(BundleIdentifier))]
-    internal class BundleIdentifierDrawer : PropertyDrawer
+    [CustomPropertyDrawer(typeof(BundleSerial))]
+    internal class BundleSerialDrawer : PropertyDrawer
     {
         public override void OnGUI(Rect r, SerializedProperty property, GUIContent label)
         {
             var _1 = new Rect(r.x      , r.y, 110          , EditorGUIUtility.singleLineHeight);
             var _2 = new Rect(r.x + 110, r.y, r.width - 110, EditorGUIUtility.singleLineHeight);
 
-            EditorGUI.LabelField(_1, "Bundle Identifier");
-            EditorGUI.PropertyField(_2, property.FindPropertyRelative("iden"), GUIContent.none);
+            EditorGUI.LabelField(_1, "Bundle Serial");
+            EditorGUI.PropertyField(_2, property.FindPropertyRelative("serial"), GUIContent.none);
         }
     }
 
@@ -117,7 +117,7 @@ namespace U3DMobileEditor
     [CustomEditor(typeof(BuildSettings))]
     internal class BuildSettingsInspector : Editor
     {
-        private SerializedProperty _identifier;
+        private SerializedProperty _serial;
         private SerializedProperty _activeCarry;
         private SerializedProperty _carryOptions;
         private SerializedProperty _entries;
@@ -135,7 +135,7 @@ namespace U3DMobileEditor
         {
             instance = this;
 
-            _identifier   = serializedObject.FindProperty("_identifier");
+            _serial       = serializedObject.FindProperty("_serial");
             _activeCarry  = serializedObject.FindProperty("_activeCarry");
             _carryOptions = serializedObject.FindProperty("_carryOptions");
             _entries      = serializedObject.FindProperty("_entries");
@@ -146,8 +146,8 @@ namespace U3DMobileEditor
         {
             serializedObject.Update();
 
-            //bundle identifier.
-            EditorGUILayout.PropertyField(_identifier, new GUIContent("Bundle Identifier"));
+            //bundle serial.
+            EditorGUILayout.PropertyField(_serial, new GUIContent("Bundle Serial"));
 
             //package carry options.
             EditorGUILayout.PropertyField(_carryOptions, new GUIContent("Package Carry Options"));

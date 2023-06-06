@@ -4,16 +4,16 @@ using UnityEngine;
 
 namespace U3DMobileEditor
 {
-    [CustomPropertyDrawer(typeof(PackageIdentifier))]
-    internal class PackageIdentifierDrawer : PropertyDrawer
+    [CustomPropertyDrawer(typeof(PackageSerial))]
+    internal class PackageSerialDrawer : PropertyDrawer
     {
         public override void OnGUI(Rect r, SerializedProperty property, GUIContent label)
         {
             var _1 = new Rect(r.x      , r.y, 110          , EditorGUIUtility.singleLineHeight);
             var _2 = new Rect(r.x + 110, r.y, r.width - 110, EditorGUIUtility.singleLineHeight);
 
-            EditorGUI.LabelField(_1, "Package Identifier");
-            EditorGUI.PropertyField(_2, property.FindPropertyRelative("iden"), GUIContent.none);
+            EditorGUI.LabelField(_1, "Package Serial");
+            EditorGUI.PropertyField(_2, property.FindPropertyRelative("serial"), GUIContent.none);
         }
     }
 
@@ -151,7 +151,7 @@ namespace U3DMobileEditor
     [CustomEditor(typeof(GameSettings))]
     internal class GameSettingsInspector : Editor
     {
-        private SerializedProperty _identifier;
+        private SerializedProperty _serial;
         private SerializedProperty _activeChannel;
         private SerializedProperty _activeGateway;
         private SerializedProperty _channels;
@@ -178,7 +178,7 @@ namespace U3DMobileEditor
         {
             instance = this;
 
-            _identifier    = serializedObject.FindProperty("_identifier");
+            _serial        = serializedObject.FindProperty("_serial");
             _activeChannel = serializedObject.FindProperty("_activeChannel");
             _activeGateway = serializedObject.FindProperty("_activeGateway");
             _channels      = serializedObject.FindProperty("_channels");
@@ -193,8 +193,8 @@ namespace U3DMobileEditor
             serializedObject.Update();
             EditorGUI.BeginDisabledGroup(EditorApplication.isPlayingOrWillChangePlaymode);
 
-            //package identifier.
-            EditorGUILayout.PropertyField(_identifier, new GUIContent("Package Identifier"));
+            //package serial.
+            EditorGUILayout.PropertyField(_serial, new GUIContent("Package Serial"));
 
             //store channels.
             EditorGUILayout.PropertyField(_channels, new GUIContent("Store Channels"));

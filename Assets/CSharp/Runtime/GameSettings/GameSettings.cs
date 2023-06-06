@@ -4,11 +4,11 @@ using UnityEngine;
 
 namespace U3DMobile
 {
-    //installation package identifier.
+    //installation package serial.
     [Serializable]
-    public class PackageIdentifier
+    public class PackageSerial
     {
-        public int iden;
+        public int serial;
     }
 
     //store channel:
@@ -70,15 +70,15 @@ namespace U3DMobile
     //game settings.
     public class GameSettings : ScriptableObject
     {
-        //use a custom package identifier.
+        //use a custom package serial.
         //the "version" and "version code" fields provided by the system may be used
         //by publishers for other purposes.
         [SerializeField]
-        private PackageIdentifier _identifier;
+        private PackageSerial _serial;
 
-        public int GetPackageIdentifier()
+        public int GetPackageSerial()
         {
-            return _identifier != null ? _identifier.iden : 0;
+            return _serial != null ? _serial.serial : 0;
         }
 
         //games will be distributed to different "channel"s,
