@@ -30,10 +30,11 @@ set _time_stamp=%_build_date%_%_build_time%
 set _output_dir=BUILD\%_time_stamp%_%_store_channel%_%_package_serial%_%_bundle_serial%
 set _unity_logs=%_output_dir%\log.txt
 
-"C:\Program Files\Unity\Hub\Editor\2021.3.22f1c1\Editor\Unity.exe" ^
-    -executeMethod U3DMobileEditor.BuildProcess.Launch ^
-    -logFile %_unity_logs% ^
-    -batchmode ^
+"C:\Program Files\Unity\Hub\Editor\2021.3.22f1c1\Editor\Unity.exe"  ^
+    -projectPath   .                                                ^
+    -executeMethod U3DMobileEditor.BuildProcess.Launch              ^
+    -logFile       %_unity_logs%                                    ^
+    -batchmode                                                      ^
     -quit
 
 type %_unity_logs%

@@ -26,10 +26,11 @@ declare _time_stamp=`date "+%Y-%m-%d_%H-%M-%S"`
 export  _output_dir=BUILD/${_time_stamp}_${_store_channel}_${_package_serial}_${_bundle_serial}
 declare _unity_logs=$_output_dir/log.txt
 
-"/Applications/Unity/Hub/Editor/2021.3.22f1c1/Unity.app/Contents/MacOS/Unity" \
-    -executeMethod U3DMobileEditor.BuildProcess.Launch \
-    -logFile $_unity_logs \
-    -batchmode \
+"/Applications/Unity/Hub/Editor/2021.3.22f1c1/Unity.app/Contents/MacOS/Unity"   \
+    -projectPath   .                                                            \
+    -executeMethod U3DMobileEditor.BuildProcess.Launch                          \
+    -logFile       $_unity_logs                                                 \
+    -batchmode                                                                  \
     -quit
 
 cat $_unity_logs
