@@ -70,6 +70,8 @@ namespace U3DMobile
     //game settings.
     public class GameSettings : ScriptableObject
     {
+        public const string SavedPath = "Assets/Resources/GameSettings.asset";
+
         //use a custom package serial.
         //the "version" and "version code" fields provided by the system may be used
         //by publishers for other purposes.
@@ -115,7 +117,26 @@ namespace U3DMobile
             return null;
         }
 
-        public string Getgateway()
+        public bool IsLegalChannel(string channel)
+        {
+            if (_channels == null || _channels.Count == 0)
+            {
+                return false;
+            }
+
+            foreach (StoreChannel candicate in _channels)
+            {
+                if (candicate != null &&
+                    !string.IsNullOrWhiteSpace(candicate.channel) &&
+                    channel == candicate.channel.Trim())
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public string GetGateway()
         {
             if (string.IsNullOrWhiteSpace(_activeGateway))
             {
@@ -140,6 +161,26 @@ namespace U3DMobile
                 }
             }
             return null;
+        }
+
+        public bool IsLegalGateway(string channelGateway)
+        {
+            if (_gateways == null || _gateways.Count == 0)
+            {
+                return false;
+            }
+
+            foreach (ChannelGateway candicate in _gateways)
+            {
+                if (candicate != null &&
+                    !string.IsNullOrWhiteSpace(candicate.channel) &&
+                    !string.IsNullOrWhiteSpace(candicate.gateway) &&
+                    channelGateway == candicate.channel.Trim())
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         //sometimes the game needs to download assets and patches from a specific server,

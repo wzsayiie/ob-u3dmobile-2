@@ -11,15 +11,6 @@ namespace U3DMobileEditor
         public string TargetPlatform;
         public string TargetProduct ;
 
-        //apk keystore.
-        public string JKSFile;
-        public string JKSFilePassword;
-        public string JKSKey;
-        public string JKSKeyPassword;
-
-        //ipa mobileprovision.
-        public string MPFile;
-
         //app information.
         public string AppPackageID ;
         public string AppVersionStr;
@@ -38,6 +29,15 @@ namespace U3DMobileEditor
         //build settings.
         public int    BundleSerial;
         public string CarryOption ;
+
+        //apk keystore.
+        public string JKSFile;
+        public string JKSFilePassword;
+        public string JKSKey;
+        public string JKSKeyPassword;
+
+        //ipa mobileprovision.
+        public string MobileProvision;
     }
 
     internal static class BuildProcess
@@ -46,7 +46,7 @@ namespace U3DMobileEditor
         {
             var buildArgs = new BuildArgs();
             var argErrors = new List<string>();
-            AnalyseBuildArgs(buildArgs, argErrors);
+            AnalyseArgs(buildArgs, argErrors);
 
             if (argErrors.Count > 0)
             {
@@ -58,10 +58,10 @@ namespace U3DMobileEditor
             }
         }
 
-        private static void AnalyseBuildArgs(BuildArgs args, List<string> errors)
+        private static void AnalyseArgs(BuildArgs args, List<string> errors)
         {
             //target platform:
-            args.TargetPlatform = Environment.GetEnvironmentVariable("_target_platform");
+            args.TargetPlatform = GetEnvironmentVariable("_target_platform");
 
             if (args.TargetPlatform != "android" &&
                 args.TargetPlatform != "ios"     )
@@ -71,12 +71,12 @@ namespace U3DMobileEditor
             }
 
             //target product:
-            args.TargetProduct = Environment.GetEnvironmentVariable("_target_product");
+            args.TargetProduct = GetEnvironmentVariable("_target_product");
 
             if (args.TargetPlatform == "android" &&
                 args.TargetProduct  != "apk"     &&
                 args.TargetProduct  != "aab"     &&
-                args.TargetProduct  != "assets"  )
+                args.TargetProduct  != "res"     )
             {
                 errors.Add(
                     $"unexpected product {args.TargetProduct} for platform {args.TargetPlatform}"
@@ -84,22 +84,29 @@ namespace U3DMobileEditor
                 return;
             }
 
-            if (args.TargetPlatform == "ios"    &&
-                args.TargetProduct  != "ipa"    &&
-                args.TargetProduct  != "assets" )
+            if (args.TargetPlatform == "ios" &&
+                args.TargetProduct  != "ipa" &&
+                args.TargetProduct  != "res" )
             {
                 errors.Add(
                     $"unexpected product {args.TargetProduct} for platform {args.TargetPlatform}"
                 );
                 return;
+            }
+
+            //app information:
+            bool needAndrPkg = args.TargetProduct == "apk" || args.TargetProduct == "aab";
+            bool needIOSPkg  = args.TargetProduct == "ipa" ;
+
+            if (needAndrPkg || needIOSPkg)
+            {
             }
 
             //apk keystore:
-            if (args.TargetProduct == "apk" ||
-                args.TargetProduct == "aab" )
+            if (needAndrPkg)
             do
             {
-                string name = Environment.GetEnvironmentVariable("_apk_keystore");
+                string name = GetEnvironmentVariable("_apk_keystore");
                 if (string.IsNullOrEmpty(name))
                 {
                     errors.Add("no input jks name");
@@ -137,9 +144,34 @@ namespace U3DMobileEditor
             while (false);
 
             //ipa mobileprovision:
-            if (args.TargetProduct == "ipa")
+            if (needIOSPkg)
+            do
             {
+                string name = GetEnvironmentVariable("_ipa_provision");
+                if (string.IsNullOrWhiteSpace(name))
+                {
+                    errors.Add("no input mobileprovision name");
+                    break;
+                }
+
+                args.MobileProvision = $"keystores/ios/{name}.mobileprivision";
+                if (!File.Exists(args.MobileProvision))
+                {
+                    errors.Add($"did not find {args.MobileProvision}");
+                }
             }
+            while (false);
+        }
+
+        private static Dictionary<string, List<string>> GetEnvironmentDictionary(string name)
+        {
+            return null;
+        }
+
+        private static string GetEnvironmentVariable(string name)
+        {
+            string value = Environment.GetEnvironmentVariable(name);
+            return value != null ? value.Trim() : null;
         }
 
         private static string ReadAllText(string file)
@@ -154,12 +186,7 @@ namespace U3DMobileEditor
             }
         }
 
-        private static Dictionary<string, List<string>> GetEnvDictionary(string name)
-        {
-            return null;
-        }
-
-        private static void AssignBuildArgs(BuildArgs args, List<string> errors)
+        private static void AssignArgs(BuildArgs args, List<string> errors)
         {
         }
     }

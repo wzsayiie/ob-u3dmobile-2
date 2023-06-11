@@ -8,13 +8,13 @@ namespace U3DMobileEditor
         [MenuItem("U3DMobile/Game Settings")]
         private static void OnGameSettings()
         {
-            UIHelper.PingPath<GameSettings>("Assets/Resources/GameSettings.asset");
+            UIHelper.PingPath<GameSettings>(GameSettings.SavedPath);
         }
 
         [MenuItem("U3DMobile/Build Settings")]
         private static void OnBuildSettings()
         {
-            UIHelper.PingPath<BuildSettings>("Assets/BuildSettings.asset");
+            UIHelper.PingPath<BuildSettings>(BuildSettings.SavedPath);
         }
     }
 }

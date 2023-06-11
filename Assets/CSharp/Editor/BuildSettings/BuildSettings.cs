@@ -55,6 +55,8 @@ namespace U3DMobileEditor
     //build settings.
     internal class BuildSettings : ScriptableObject
     {
+        internal const string SavedPath = "Assets/BuildSettings.asset";
+
         //asset bundle set serial.
         [SerializeField]
         private BundleSerial _serial;
