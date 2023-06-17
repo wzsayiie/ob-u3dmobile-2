@@ -15,7 +15,7 @@ namespace U3DMobileEditor
     [Serializable]
     internal class CarryOption
     {
-        public string name;
+        public string option;
     }
 
     //bundle entry:
@@ -38,7 +38,7 @@ namespace U3DMobileEditor
     internal class BundleEntry
     {
         public bool               selected  ;
-        public UnityEngine.Object file      ;
+        public UnityEngine.Object fileObj   ;
         public PackMode           packMode  ;
         public DemandMode         demandMode;
         public string             carryOpts ;
@@ -49,7 +49,7 @@ namespace U3DMobileEditor
     internal class PatchEntry
     {
         public bool               selected;
-        public UnityEngine.Object file    ;
+        public UnityEngine.Object fileObj ;
     }
 
     //build settings.
@@ -59,42 +59,36 @@ namespace U3DMobileEditor
 
         //asset bundle set serial.
         [SerializeField]
-        private BundleSerial _serial;
+        private BundleSerial _bundleSerial;
 
         internal int GetBundleSerial()
         {
-            return _serial != null ? _serial.serial : 0;
+            return _bundleSerial != null ? _bundleSerial.serial : 0;
         }
 
         //for different distribution channels,
         //the asset bundles put into the installation package may be different.
         //use the "CarryOption" to control this point.
-        [SerializeField]
-        private string _activeCarry;
-        [SerializeField]
-        private List<CarryOption> _carryOptions;
+        [SerializeField] private string _activeCarry;
+        [SerializeField] private List<CarryOption> _carryOptions;
 
         internal string GetCarryOption()
         {
-            if (_carryOptions == null)
+            if (string.IsNullOrWhiteSpace(_activeCarry))
             {
                 return null;
             }
-
-            string name = _activeCarry.Trim();
-
-            //the target must be an item in the list.
             if (_carryOptions == null || _carryOptions.Count == 0)
             {
                 return null;
             }
-            foreach (CarryOption candicate in _carryOptions)
+
+            string target = _activeCarry.Trim();
+            foreach (CarryOption item in _carryOptions)
             {
-                if (candicate != null &&
-                    !string.IsNullOrWhiteSpace(candicate.name) &&
-                    name == candicate.name.Trim())
+                if (item != null && item.option == target)
                 {
-                    return name;
+                    return target;
                 }
             }
             return null;
@@ -102,20 +96,34 @@ namespace U3DMobileEditor
 
         //asset bundle entries.
         [SerializeField]
-        private List<BundleEntry> _entries;
+        private List<BundleEntry> _bundleEntries;
 
-        internal List<BundleEntry> GetEntries()
+        internal List<BundleEntry> GetBundleEntries()
         {
-            return _entries != null && _entries.Count > 0 ? _entries : null;
+            if (_bundleEntries != null && _bundleEntries.Count > 0)
+            {
+                return _bundleEntries;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         //script patch entries.
         [SerializeField]
-        private List<PatchEntry> _patches;
+        private List<PatchEntry> _bundlePatches;
 
-        internal List<PatchEntry> GetPatches()
+        internal List<PatchEntry> GetBundlePatches()
         {
-            return _patches != null && _patches.Count > 0 ? _patches : null;
+            if (_bundlePatches != null && _bundlePatches.Count > 0)
+            {
+                return _bundlePatches;
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }

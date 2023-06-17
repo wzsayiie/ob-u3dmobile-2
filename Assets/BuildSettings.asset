@@ -12,3 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38f7d984dcbc2204bbdb18c355374e43, type: 3}
   m_Name: BuildSettings
   m_EditorClassIdentifier: 
+  _bundleSerial:
+    serial: 0
+  _activeCarry: 
+  _carryOptions: []
+  _bundleEntries: []
+  _bundlePatches: []

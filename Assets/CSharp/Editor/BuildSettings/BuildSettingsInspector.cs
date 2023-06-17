@@ -24,7 +24,7 @@ namespace U3DMobileEditor
             var _1 = new Rect(r.x     , r.y, 20          , EditorGUIUtility.singleLineHeight);
             var _2 = new Rect(r.x + 20, r.y, r.width - 20, EditorGUIUtility.singleLineHeight);
 
-            SerializedProperty name = property.FindPropertyRelative("name");
+            SerializedProperty name = property.FindPropertyRelative("option");
 
             string cursor = name.stringValue;
             string active = BuildSettingsInspector.instance.activeCarry;
@@ -61,7 +61,7 @@ namespace U3DMobileEditor
             var _4 = new Rect(r.x + 205, r.y,  90          , EditorGUIUtility.singleLineHeight);
             var _5 = new Rect(r.x + 300, r.y, r.width - 300, EditorGUIUtility.singleLineHeight);
 
-            SerializedProperty file = property.FindPropertyRelative("file");
+            SerializedProperty file = property.FindPropertyRelative("fileObj");
             UnityEngine.Object fObj = file.objectReferenceValue;
 
             EditorGUI.PropertyField(_1, property.FindPropertyRelative("selected"  ), GUIContent.none);
@@ -96,7 +96,7 @@ namespace U3DMobileEditor
             var _1 = new Rect(r.x     , r.y, 20          , EditorGUIUtility.singleLineHeight);
             var _2 = new Rect(r.x + 20, r.y, r.width - 20, EditorGUIUtility.singleLineHeight);
 
-            SerializedProperty file = property.FindPropertyRelative("file");
+            SerializedProperty file = property.FindPropertyRelative("fileObj");
             UnityEngine.Object fObj = file.objectReferenceValue;
 
             EditorGUI.PropertyField(_1, property.FindPropertyRelative("selected"), GUIContent.none);
@@ -117,11 +117,11 @@ namespace U3DMobileEditor
     [CustomEditor(typeof(BuildSettings))]
     internal class BuildSettingsInspector : Editor
     {
-        private SerializedProperty _serial;
+        private SerializedProperty _bundleSerial;
         private SerializedProperty _activeCarry;
         private SerializedProperty _carryOptions;
-        private SerializedProperty _entries;
-        private SerializedProperty _patches;
+        private SerializedProperty _bundleEntries;
+        private SerializedProperty _bundlePatches;
 
         internal static BuildSettingsInspector instance;
 
@@ -135,26 +135,21 @@ namespace U3DMobileEditor
         {
             instance = this;
 
-            _serial       = serializedObject.FindProperty("_serial");
-            _activeCarry  = serializedObject.FindProperty("_activeCarry");
-            _carryOptions = serializedObject.FindProperty("_carryOptions");
-            _entries      = serializedObject.FindProperty("_entries");
-            _patches      = serializedObject.FindProperty("_patches");
+            _bundleSerial  = serializedObject.FindProperty("_bundleSerial");
+            _activeCarry   = serializedObject.FindProperty("_activeCarry");
+            _carryOptions  = serializedObject.FindProperty("_carryOptions");
+            _bundleEntries = serializedObject.FindProperty("_bundleEntries");
+            _bundlePatches = serializedObject.FindProperty("_bundlePatches");
         }
 
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
 
-            //bundle serial.
-            EditorGUILayout.PropertyField(_serial, new GUIContent("Bundle Serial"));
-
-            //package carry options.
+            EditorGUILayout.PropertyField(_bundleSerial, new GUIContent("Bundle Serial"));
             EditorGUILayout.PropertyField(_carryOptions, new GUIContent("Package Carry Options"));
 
-            //bundle entries:
-            EditorGUILayout.PropertyField(_entries, new GUIContent("Bundle Entries"));
-
+            EditorGUILayout.PropertyField(_bundleEntries, new GUIContent("Bundle Entries"));
             if (GUILayout.Button("Pack Selected (for Android)"))
             {
             }
@@ -162,9 +157,7 @@ namespace U3DMobileEditor
             {
             }
 
-            //patch entries:
-            EditorGUILayout.PropertyField(_patches, new GUIContent("Patch Entries"));
-
+            EditorGUILayout.PropertyField(_bundlePatches, new GUIContent("Patch Entries"));
             if (GUILayout.Button("Copy Selected Patches"))
             {
             }

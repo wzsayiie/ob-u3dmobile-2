@@ -17,6 +17,34 @@ namespace U3DMobileEditor
         }
     }
 
+    [CustomPropertyDrawer(typeof(GameLanguage))]
+    internal class GameLanguageDrawer : PropertyDrawer
+    {
+        public override void OnGUI(Rect r, SerializedProperty property, GUIContent label)
+        {
+            var _1 = new Rect(r.x     , r.y, 20          , EditorGUIUtility.singleLineHeight);
+            var _2 = new Rect(r.x + 20, r.y, r.width - 20, EditorGUIUtility.singleLineHeight);
+
+            SerializedProperty language = property.FindPropertyRelative("language");
+
+            string current = language.stringValue;
+            string lighted = GameSettingsInspector.instance.preferredLanguage;
+            bool oldIsOn = (
+                !string.IsNullOrWhiteSpace(current) &&
+                !string.IsNullOrWhiteSpace(lighted) &&
+                current.Trim() == lighted.Trim()
+            );
+
+            //use bold style to remind users that this is a "radio" toggle.
+            bool newIsOn = EditorGUI.Toggle(_1, oldIsOn, GUI.skin.GetStyle("BoldToggle"));
+            if (!oldIsOn && newIsOn)
+            {
+                GameSettingsInspector.instance.preferredLanguage = current;
+            }
+            EditorGUI.PropertyField(_2, language, GUIContent.none);
+        }
+    }
+
     [CustomPropertyDrawer(typeof(StoreChannel))]
     internal class StoreChannelDrawer : PropertyDrawer
     {
@@ -27,19 +55,19 @@ namespace U3DMobileEditor
 
             SerializedProperty channel = property.FindPropertyRelative("channel");
 
-            string cursor = channel.stringValue;
-            string active = GameSettingsInspector.instance.activeChannel;
+            string current = channel.stringValue;
+            string lighted = GameSettingsInspector.instance.activeChannel;
             bool oldIsOn = (
-                !string.IsNullOrWhiteSpace(cursor) &&
-                !string.IsNullOrWhiteSpace(active) &&
-                cursor.Trim() == active.Trim()
+                !string.IsNullOrWhiteSpace(current) &&
+                !string.IsNullOrWhiteSpace(lighted) &&
+                current.Trim() == lighted.Trim()
             );
 
             //use bold style to remind users that this is a "radio" toggle.
             bool newIsOn = EditorGUI.Toggle(_1, oldIsOn, GUI.skin.GetStyle("BoldToggle"));
             if (!oldIsOn && newIsOn)
             {
-                GameSettingsInspector.instance.activeChannel = cursor;
+                GameSettingsInspector.instance.activeChannel = current;
             }
             EditorGUI.PropertyField(_2, channel, GUIContent.none);
         }
@@ -57,19 +85,19 @@ namespace U3DMobileEditor
 
             SerializedProperty channel = property.FindPropertyRelative("channel");
 
-            string cursor = channel.stringValue;
-            string active = GameSettingsInspector.instance.activeGateway;
+            string current = channel.stringValue;
+            string lighted = GameSettingsInspector.instance.activeGateway;
             bool oldIsOn = (
-                !string.IsNullOrWhiteSpace(cursor) &&
-                !string.IsNullOrWhiteSpace(active) &&
-                cursor.Trim() == active.Trim()
+                !string.IsNullOrWhiteSpace(current) &&
+                !string.IsNullOrWhiteSpace(lighted) &&
+                current.Trim() == lighted.Trim()
             );
 
             //use bold style to remind users that this is a "radio" toggle.
             bool newIsOn = EditorGUI.Toggle(_1, oldIsOn, GUI.skin.GetStyle("BoldToggle"));
             if (!oldIsOn && newIsOn)
             {
-                GameSettingsInspector.instance.activeGateway = cursor;
+                GameSettingsInspector.instance.activeGateway = current;
             }
             EditorGUI.PropertyField(_2, channel, GUIContent.none);
 
@@ -110,7 +138,7 @@ namespace U3DMobileEditor
             EditorGUI.PropertyField(_1, property.FindPropertyRelative("enabled"), GUIContent.none);
 
             EditorGUI.LabelField(_2, "Asset Flavor");
-            EditorGUI.PropertyField(_3, property.FindPropertyRelative("name"), GUIContent.none);
+            EditorGUI.PropertyField(_3, property.FindPropertyRelative("flavor"), GUIContent.none);
         }
     }
 
@@ -151,16 +179,24 @@ namespace U3DMobileEditor
     [CustomEditor(typeof(GameSettings))]
     internal class GameSettingsInspector : Editor
     {
-        private SerializedProperty _serial;
+        private SerializedProperty _packageSerial;
+        private SerializedProperty _preferredLanguage;
+        private SerializedProperty _languages;
         private SerializedProperty _activeChannel;
-        private SerializedProperty _activeGateway;
         private SerializedProperty _channels;
+        private SerializedProperty _activeGateway;
         private SerializedProperty _gateways;
         private SerializedProperty _forcedUrls;
-        private SerializedProperty _flavors;
-        private SerializedProperty _flags;
+        private SerializedProperty _assetFlavors;
+        private SerializedProperty _userFlags;
 
         internal static GameSettingsInspector instance;
+
+        internal string preferredLanguage
+        {
+            get { return _preferredLanguage.stringValue ; }
+            set { _preferredLanguage.stringValue = value; }
+        }
 
         internal string activeChannel
         {
@@ -178,14 +214,16 @@ namespace U3DMobileEditor
         {
             instance = this;
 
-            _serial        = serializedObject.FindProperty("_serial");
-            _activeChannel = serializedObject.FindProperty("_activeChannel");
-            _activeGateway = serializedObject.FindProperty("_activeGateway");
-            _channels      = serializedObject.FindProperty("_channels");
-            _gateways      = serializedObject.FindProperty("_gateways");
-            _forcedUrls    = serializedObject.FindProperty("_forcedUrls");
-            _flavors       = serializedObject.FindProperty("_flavors");
-            _flags         = serializedObject.FindProperty("_flags");
+            _packageSerial     = serializedObject.FindProperty("_packageSerial");
+            _preferredLanguage = serializedObject.FindProperty("_preferredLanguage");
+            _languages         = serializedObject.FindProperty("_languages");
+            _activeChannel     = serializedObject.FindProperty("_activeChannel");
+            _channels          = serializedObject.FindProperty("_channels");
+            _activeGateway     = serializedObject.FindProperty("_activeGateway");
+            _gateways          = serializedObject.FindProperty("_gateways");
+            _forcedUrls        = serializedObject.FindProperty("_forcedUrls");
+            _assetFlavors      = serializedObject.FindProperty("_assetFlavors");
+            _userFlags         = serializedObject.FindProperty("_userFlags");
         }
 
         public override void OnInspectorGUI()
@@ -193,25 +231,18 @@ namespace U3DMobileEditor
             serializedObject.Update();
             EditorGUI.BeginDisabledGroup(EditorApplication.isPlayingOrWillChangePlaymode);
 
-            //package serial.
-            EditorGUILayout.PropertyField(_serial, new GUIContent("Package Serial"));
+            EditorGUILayout.PropertyField(_packageSerial, new GUIContent("Package Serial"  ));
+            EditorGUILayout.PropertyField(_languages    , new GUIContent("Languages"       ));
+            EditorGUILayout.PropertyField(_channels     , new GUIContent("Store Channels"  ));
+            EditorGUILayout.PropertyField(_gateways     , new GUIContent("Channel Gateways"));
+            EditorGUILayout.PropertyField(_forcedUrls   , new GUIContent("Forced URLs"     ));
 
-            //store channels.
-            EditorGUILayout.PropertyField(_channels, new GUIContent("Store Channels"));
-            EditorGUILayout.PropertyField(_gateways, new GUIContent("Channel Gateways"));
-
-            //forced urls.
-            EditorGUILayout.PropertyField(_forcedUrls, new GUIContent("Forced URLs"));
-
-            //asset flavors:
-            EditorGUILayout.PropertyField(_flavors, new GUIContent("Asset Flavors"));
-
+            EditorGUILayout.PropertyField(_assetFlavors, new GUIContent("Asset Flavors"));
             if (GUILayout.Button("Copy Selected Flavors"))
             {
             }
 
-            //user flags.
-            EditorGUILayout.PropertyField(_flags, new GUIContent("User Flags"));
+            EditorGUILayout.PropertyField(_userFlags, new GUIContent("User Flags"));
 
             EditorGUI.EndDisabledGroup();
             serializedObject.ApplyModifiedProperties();

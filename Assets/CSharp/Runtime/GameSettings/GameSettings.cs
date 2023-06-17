@@ -11,6 +11,13 @@ namespace U3DMobile
         public int serial;
     }
 
+    //game language.
+    [Serializable]
+    public class GameLanguage
+    {
+        public string language;
+    }
+
     //store channel:
     [Serializable]
     public class StoreChannel
@@ -44,8 +51,8 @@ namespace U3DMobile
     [Serializable]
     public class AssetFlavor
     {
-        public string name   ;
         public bool   enabled;
+        public string flavor ;
     }
 
     //user flag:
@@ -76,20 +83,69 @@ namespace U3DMobile
         //the "version" and "version code" fields provided by the system may be used
         //by publishers for other purposes.
         [SerializeField]
-        private PackageSerial _serial;
+        private PackageSerial _packageSerial;
 
         public int GetPackageSerial()
         {
-            return _serial != null ? _serial.serial : 0;
+            return _packageSerial != null ? _packageSerial.serial : 0;
+        }
+
+        //generally speaking, there is no need to dynamically switch languages within a game.
+        //however, games released in southeast asia are an exception,
+        //as there is a large population of chinese and english speakers in the region.
+        [SerializeField] private string _preferredLanguage;
+        [SerializeField] private List<GameLanguage> _languages;
+
+        public string GetPreferredLanguage()
+        {
+            if (string.IsNullOrWhiteSpace(_preferredLanguage))
+            {
+                return null;
+            }
+            if (_languages == null || _languages.Count == 0)
+            {
+                return null;
+            }
+
+            string cand = _preferredLanguage.Trim();
+            foreach (GameLanguage item in _languages)
+            {
+                if (item != null && item.language == cand)
+                {
+                    return cand;
+                }
+            }
+
+            return null;
+        }
+
+        public bool IsLegalLanguage(string language)
+        {
+            if (string.IsNullOrWhiteSpace(language))
+            {
+                return false;
+            }
+            if (_languages == null || _languages.Count == 0)
+            {
+                return false;
+            }
+
+            string cand = language.Trim();
+            foreach (GameLanguage item in _languages)
+            {
+                if (item != null && item.language == cand)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         //games will be distributed to different "channel"s,
         //such as different app stores, and different testing environments.
-        //also may connect to the servers by different gateways.
         [SerializeField] private string _activeChannel;
-        [SerializeField] private string _activeGateway;
-        [SerializeField] private List<StoreChannel  > _channels;
-        [SerializeField] private List<ChannelGateway> _gateways;
+        [SerializeField] private List<StoreChannel> _channels;
 
         public string GetChannel()
         {
@@ -97,38 +153,38 @@ namespace U3DMobile
             {
                 return null;
             }
-
-            string name = _activeChannel.Trim();
-
-            //the target must be an item in the list.
             if (_channels == null || _channels.Count == 0)
             {
                 return null;
             }
-            foreach (StoreChannel candicate in _channels)
+
+            string cand = _activeChannel.Trim();
+            foreach (StoreChannel item in _channels)
             {
-                if (candicate != null &&
-                    !string.IsNullOrWhiteSpace(candicate.channel) &&
-                    name == candicate.channel.Trim())
+                if (item != null && item.channel == cand)
                 {
-                    return name;
+                    return cand;
                 }
             }
+
             return null;
         }
 
         public bool IsLegalChannel(string channel)
         {
+            if (string.IsNullOrWhiteSpace(channel))
+            {
+                return false;
+            }
             if (_channels == null || _channels.Count == 0)
             {
                 return false;
             }
 
-            foreach (StoreChannel candicate in _channels)
+            string cand = channel.Trim();
+            foreach (StoreChannel item in _channels)
             {
-                if (candicate != null &&
-                    !string.IsNullOrWhiteSpace(candicate.channel) &&
-                    channel == candicate.channel.Trim())
+                if (item != null && item.channel == cand)
                 {
                     return true;
                 }
@@ -136,49 +192,71 @@ namespace U3DMobile
             return false;
         }
 
+        //packages from different channels may connect to the same gateway,
+        //for example, packages from various app stores in the same region.
+        [SerializeField] private string _activeGateway;
+        [SerializeField] private List<ChannelGateway> _gateways;
+
         public string GetGateway()
         {
             if (string.IsNullOrWhiteSpace(_activeGateway))
             {
                 return null;
             }
-
-            string name = _activeGateway.Trim();
-
-            //the target must be an item in the list.
             if (_gateways == null || _gateways.Count == 0)
             {
                 return null;
             }
-            foreach (ChannelGateway candicate in _gateways)
+
+            string cand = _activeGateway.Trim();
+            foreach (ChannelGateway item in _gateways)
             {
-                if (candicate != null &&
-                    !string.IsNullOrWhiteSpace(candicate.channel) &&
-                    !string.IsNullOrWhiteSpace(candicate.gateway) &&
-                    name == candicate.channel.Trim())
+                if (item == null)
                 {
-                    return candicate.gateway.Trim();
+                    continue;
                 }
+                if (item.channel != cand)
+                {
+                    continue;
+                }
+                if (string.IsNullOrWhiteSpace(item.gateway))
+                {
+                    continue;
+                }
+
+                return item.gateway.Trim();
             }
             return null;
         }
 
-        public bool IsLegalGateway(string channelGateway)
+        public bool IsLegalGateway(string gateway)
         {
+            if (string.IsNullOrWhiteSpace(gateway))
+            {
+                return false;
+            }
             if (_gateways == null || _gateways.Count == 0)
             {
                 return false;
             }
 
-            foreach (ChannelGateway candicate in _gateways)
+            string cand = gateway.Trim();
+            foreach (ChannelGateway item in _gateways)
             {
-                if (candicate != null &&
-                    !string.IsNullOrWhiteSpace(candicate.channel) &&
-                    !string.IsNullOrWhiteSpace(candicate.gateway) &&
-                    channelGateway == candicate.channel.Trim())
+                if (item == null)
                 {
-                    return true;
+                    continue;
                 }
+                if (string.IsNullOrWhiteSpace(item.channel))
+                {
+                    continue;
+                }
+                if (item.gateway != cand)
+                {
+                    continue;
+                }
+
+                return true;
             }
             return false;
         }
@@ -188,12 +266,12 @@ namespace U3DMobile
         [SerializeField]
         private ForcedUrls _forcedUrls;
 
-        public string GetAssetUrl() { return GetForcedUrl(_forcedUrls?.asset); }
-        public string GetPatchUrl() { return GetForcedUrl(_forcedUrls?.patch); }
+        public string GetForcedAssetUrl() { return GetForcedUrl(_forcedUrls?.asset); }
+        public string GetForcedPatchUrl() { return GetForcedUrl(_forcedUrls?.patch); }
 
         private string GetForcedUrl(ForcedUrlItem item)
         {
-            if (item != null)
+            if (item == null)
             {
                 return null;
             }
@@ -202,30 +280,36 @@ namespace U3DMobile
                 return null;
             }
 
-            return item.url;
+            return item.url.Trim();
         }
 
         //packages of different channels may contain different assets with same names,
         //such as different game icons.
         //use "flavor" to differentiate them.
         [SerializeField]
-        private List<AssetFlavor> _flavors;
+        private List<AssetFlavor> _assetFlavors;
 
         public HashSet<string> GetEnabledFlavors()
         {
-            if (_flavors == null || _flavors.Count == 0)
+            if (_assetFlavors == null || _assetFlavors.Count == 0)
             {
                 return null;
             }
 
             var enabled = new HashSet<string>();
-            foreach (AssetFlavor flavor in _flavors)
+            foreach (AssetFlavor item in _assetFlavors)
             {
-                string name = flavor.name.Trim();
-                if (!string.IsNullOrWhiteSpace(name) && flavor.enabled)
+                if (item == null)
                 {
-                    enabled.Add(name);
+                    continue;
                 }
+                if (!item.enabled || string.IsNullOrWhiteSpace(item.flavor))
+                {
+                    continue;
+                }
+
+                string flavor = item.flavor.Trim();
+                enabled.Add(flavor);
             }
             return enabled.Count > 0 ? enabled : null;
         }
@@ -233,12 +317,12 @@ namespace U3DMobile
         //some flags may be required in games,
         //such as whether to enable the manager, whether to skip the novice guide.
         [SerializeField]
-        private List<UserFlag> _flags;
+        private List<UserFlag> _userFlags;
 
         public bool GetBoolFlag(string name)
         {
             UserFlag flag = GetUserFlag(name, UserFlagType.Bool);
-            return flag != null ? flag.boolValue : false;
+            return flag != null && flag.boolValue;
         }
 
         public int GetIntFlag(string name)
@@ -250,22 +334,43 @@ namespace U3DMobile
         public string GetStringFlag(string name)
         {
             UserFlag flag = GetUserFlag(name, UserFlagType.String);
-            return !string.IsNullOrWhiteSpace(flag?.stringValue) ? flag.stringValue : null;
+            if (flag != null && !string.IsNullOrWhiteSpace(flag.stringValue))
+            {
+                return flag.stringValue;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         private UserFlag GetUserFlag(string name, UserFlagType type)
         {
-            if (_flags == null || _flags.Count == 0)
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                return null;
+            }
+            if (_userFlags == null || _userFlags.Count == 0)
             {
                 return null;
             }
 
-            foreach (UserFlag flag in _flags)
+            foreach (UserFlag item in _userFlags)
             {
-                if (flag.name.Trim() == name && flag.type != type)
+                if (item == null)
                 {
-                    return flag;
+                    continue;
                 }
+                if (item.name == null || item.name.Trim() != name)
+                {
+                    continue;
+                }
+                if (item.type != type)
+                {
+                    continue;
+                }
+
+                return item;
             }
             return null;
         }

@@ -12,4 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7448e96ddea43d4a8e593415b75efc7, type: 3}
   m_Name: GameSettings
   m_EditorClassIdentifier: 
-  _flavor: 
+  _packageSerial:
+    serial: 0
+  _preferredLanguage: 
+  _languages: []
+  _activeChannel: 
+  _channels: []
+  _activeGateway: 
+  _gateways: []
+  _forcedUrls:
+    asset:
+      enabled: 0
+      url: 
+    patch:
+      enabled: 0
+      url: 
+  _assetFlavors: []
+  _userFlags: []
