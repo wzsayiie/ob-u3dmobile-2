@@ -61,11 +61,11 @@ namespace U3DMobileEditor
             var _4 = new Rect(r.x + 205, r.y,  90          , EditorGUIUtility.singleLineHeight);
             var _5 = new Rect(r.x + 300, r.y, r.width - 300, EditorGUIUtility.singleLineHeight);
 
-            SerializedProperty file = property.FindPropertyRelative("fileObj");
-            UnityEngine.Object fObj = file.objectReferenceValue;
+            SerializedProperty fileObj = property.FindPropertyRelative("fileObj");
+            UnityEngine.Object objRef  = fileObj.objectReferenceValue;
 
             EditorGUI.PropertyField(_1, property.FindPropertyRelative("selected"  ), GUIContent.none);
-            EditorGUI.PropertyField(_2, file, GUIContent.none);
+            EditorGUI.PropertyField(_2, fileObj                                    , GUIContent.none);
             EditorGUI.PropertyField(_3, property.FindPropertyRelative("packMode"  ), GUIContent.none);
             EditorGUI.PropertyField(_4, property.FindPropertyRelative("demandMode"), GUIContent.none);
             EditorGUI.PropertyField(_5, property.FindPropertyRelative("carryOpts" ), GUIContent.none);
@@ -75,9 +75,9 @@ namespace U3DMobileEditor
                 r.x    , EditorGUIUtility.singleLineHeight + r.y,
                 r.width, EditorGUIUtility.singleLineHeight
             );
-            if (fObj != null)
+            if (objRef != null)
             {
-                EditorGUI.LabelField(_6, AssetDatabase.GetAssetPath(fObj));
+                EditorGUI.LabelField(_6, AssetDatabase.GetAssetPath(objRef));
             }
         }
     }
@@ -96,20 +96,20 @@ namespace U3DMobileEditor
             var _1 = new Rect(r.x     , r.y, 20          , EditorGUIUtility.singleLineHeight);
             var _2 = new Rect(r.x + 20, r.y, r.width - 20, EditorGUIUtility.singleLineHeight);
 
-            SerializedProperty file = property.FindPropertyRelative("fileObj");
-            UnityEngine.Object fObj = file.objectReferenceValue;
+            SerializedProperty fileObj = property.FindPropertyRelative("fileObj");
+            UnityEngine.Object objRef  = fileObj.objectReferenceValue;
 
             EditorGUI.PropertyField(_1, property.FindPropertyRelative("selected"), GUIContent.none);
-            EditorGUI.PropertyField(_2, file, GUIContent.none);
+            EditorGUI.PropertyField(_2, fileObj, GUIContent.none);
 
             //second line:
             var _3 = new Rect(
                 r.x    , EditorGUIUtility.singleLineHeight + r.y,
                 r.width, EditorGUIUtility.singleLineHeight
             );
-            if (fObj != null)
+            if (objRef != null)
             {
-                EditorGUI.LabelField(_3, AssetDatabase.GetAssetPath(fObj));
+                EditorGUI.LabelField(_3, AssetDatabase.GetAssetPath(objRef));
             }
         }
     }
@@ -117,9 +117,9 @@ namespace U3DMobileEditor
     [CustomEditor(typeof(BuildSettings))]
     internal class BuildSettingsInspector : Editor
     {
-        private SerializedProperty _bundleSerial;
-        private SerializedProperty _activeCarry;
-        private SerializedProperty _carryOptions;
+        private SerializedProperty _bundleSerial ;
+        private SerializedProperty _activeCarry  ;
+        private SerializedProperty _carryOptions ;
         private SerializedProperty _bundleEntries;
         private SerializedProperty _bundlePatches;
 
@@ -135,9 +135,9 @@ namespace U3DMobileEditor
         {
             instance = this;
 
-            _bundleSerial  = serializedObject.FindProperty("_bundleSerial");
-            _activeCarry   = serializedObject.FindProperty("_activeCarry");
-            _carryOptions  = serializedObject.FindProperty("_carryOptions");
+            _bundleSerial  = serializedObject.FindProperty("_bundleSerial" );
+            _activeCarry   = serializedObject.FindProperty("_activeCarry"  );
+            _carryOptions  = serializedObject.FindProperty("_carryOptions" );
             _bundleEntries = serializedObject.FindProperty("_bundleEntries");
             _bundlePatches = serializedObject.FindProperty("_bundlePatches");
         }

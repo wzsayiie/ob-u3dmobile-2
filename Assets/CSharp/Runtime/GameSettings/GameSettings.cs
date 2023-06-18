@@ -107,12 +107,12 @@ namespace U3DMobile
                 return null;
             }
 
-            string cand = _preferredLanguage.Trim();
+            string target = _preferredLanguage.Trim();
             foreach (GameLanguage item in _languages)
             {
-                if (item != null && item.language == cand)
+                if (item != null && item.language == target)
                 {
-                    return cand;
+                    return target;
                 }
             }
 
@@ -130,10 +130,10 @@ namespace U3DMobile
                 return false;
             }
 
-            string cand = language.Trim();
+            string target = language.Trim();
             foreach (GameLanguage item in _languages)
             {
-                if (item != null && item.language == cand)
+                if (item != null && item.language == target)
                 {
                     return true;
                 }
@@ -158,12 +158,12 @@ namespace U3DMobile
                 return null;
             }
 
-            string cand = _activeChannel.Trim();
+            string target = _activeChannel.Trim();
             foreach (StoreChannel item in _channels)
             {
-                if (item != null && item.channel == cand)
+                if (item != null && item.channel == target)
                 {
-                    return cand;
+                    return target;
                 }
             }
 
@@ -181,10 +181,10 @@ namespace U3DMobile
                 return false;
             }
 
-            string cand = channel.Trim();
+            string target = channel.Trim();
             foreach (StoreChannel item in _channels)
             {
-                if (item != null && item.channel == cand)
+                if (item != null && item.channel == target)
                 {
                     return true;
                 }
@@ -208,14 +208,14 @@ namespace U3DMobile
                 return null;
             }
 
-            string cand = _activeGateway.Trim();
+            string target = _activeGateway.Trim();
             foreach (ChannelGateway item in _gateways)
             {
                 if (item == null)
                 {
                     continue;
                 }
-                if (item.channel != cand)
+                if (item.channel != target)
                 {
                     continue;
                 }
@@ -240,7 +240,7 @@ namespace U3DMobile
                 return false;
             }
 
-            string cand = gateway.Trim();
+            string target = gateway.Trim();
             foreach (ChannelGateway item in _gateways)
             {
                 if (item == null)
@@ -251,7 +251,7 @@ namespace U3DMobile
                 {
                     continue;
                 }
-                if (item.gateway != cand)
+                if (item.gateway != target)
                 {
                     continue;
                 }
