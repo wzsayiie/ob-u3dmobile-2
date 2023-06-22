@@ -4,112 +4,92 @@ using UnityEngine;
 namespace U3DMobileEditor
 {
     [CustomPropertyDrawer(typeof(BundleSerial))]
-    internal class BundleSerialDrawer : PropertyDrawer
+    internal class BundleSerialDrawer : BaseItemDrawer
     {
-        public override void OnGUI(Rect r, SerializedProperty property, GUIContent label)
+        protected override void OnDrawFirstLine(SerializedProperty property)
         {
-            var _1 = new Rect(r.x      , r.y, 110          , EditorGUIUtility.singleLineHeight);
-            var _2 = new Rect(r.x + 110, r.y, r.width - 110, EditorGUIUtility.singleLineHeight);
-
-            EditorGUI.LabelField(_1, "Bundle Serial");
-            EditorGUI.PropertyField(_2, property.FindPropertyRelative("serial"), GUIContent.none);
+            Label(110, "Bundle Serial");
+            Field(flx, property.FindPropertyRelative("serial"));
         }
     }
 
     [CustomPropertyDrawer(typeof(CarryOption))]
-    internal class CarryOptionDrawer : PropertyDrawer
+    internal class CarryOptionDrawer : ListItemDrawer
     {
-        public override void OnGUI(Rect r, SerializedProperty property, GUIContent label)
+        protected override void OnDrawFirstLine(SerializedProperty property)
         {
-            var _1 = new Rect(r.x     , r.y, 20          , EditorGUIUtility.singleLineHeight);
-            var _2 = new Rect(r.x + 20, r.y, r.width - 20, EditorGUIUtility.singleLineHeight);
+            var    option  = property.FindPropertyRelative("option");
+            string theItem = option.stringValue;
+            string active  = BuildSettingsInspector.instance.activeCarry;
 
-            SerializedProperty name = property.FindPropertyRelative("option");
+            bool beingOn =
+                !string.IsNullOrWhiteSpace(theItem) &&
+                !string.IsNullOrWhiteSpace(active ) &&
+                theItem.Trim() == active.Trim()
+            ;
+            bool afterOn;
 
-            string cursor = name.stringValue;
-            string active = BuildSettingsInspector.instance.activeCarry;
-            bool oldIsOn = (
-                !string.IsNullOrWhiteSpace(cursor) &&
-                !string.IsNullOrWhiteSpace(active) &&
-                cursor.Trim() == active.Trim()
-            );
+            Radio( 20, beingOn, out afterOn);
+            Field(flx, option);
 
-            //use bold style to remind users that this is a "radio" toggle.
-            bool newIsOn = EditorGUI.Toggle(_1, oldIsOn, GUI.skin.GetStyle("BoldToggle"));
-            if (!oldIsOn && newIsOn)
+            if (!beingOn && afterOn)
             {
-                BuildSettingsInspector.instance.activeCarry = cursor;
+                BuildSettingsInspector.instance.activeCarry = theItem;
             }
-            EditorGUI.PropertyField(_2, name, GUIContent.none);
         }
     }
 
     [CustomPropertyDrawer(typeof(BundleEntry))]
-    internal class BundleEntryDrawer : PropertyDrawer
+    internal class BundleEntryDrawer : ListItemDrawer
     {
-        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+        protected override int OnGetLines()
         {
-            return EditorGUIUtility.singleLineHeight * 2;
+            return 2;
         }
 
-        public override void OnGUI(Rect r, SerializedProperty property, GUIContent label)
+        protected override void OnDrawFirstLine(SerializedProperty property)
         {
-            //first line:
-            var _1 = new Rect(r.x      , r.y,  20          , EditorGUIUtility.singleLineHeight);
-            var _2 = new Rect(r.x +  20, r.y, 110          , EditorGUIUtility.singleLineHeight);
-            var _3 = new Rect(r.x + 135, r.y,  65          , EditorGUIUtility.singleLineHeight);
-            var _4 = new Rect(r.x + 205, r.y,  90          , EditorGUIUtility.singleLineHeight);
-            var _5 = new Rect(r.x + 300, r.y, r.width - 300, EditorGUIUtility.singleLineHeight);
+            Field( 20, property, "selected"  );
+            Field(110, property, "fileObj"   );
+            Field( 65, property, "packMode"  );
+            Field( 90, property, "demandMode");
+            Field(flx, property, "carryOpts" );
+        }
 
+        protected override void OnDrawSecondLine(SerializedProperty property)
+        {
             SerializedProperty fileObj = property.FindPropertyRelative("fileObj");
             UnityEngine.Object objRef  = fileObj.objectReferenceValue;
 
-            EditorGUI.PropertyField(_1, property.FindPropertyRelative("selected"  ), GUIContent.none);
-            EditorGUI.PropertyField(_2, fileObj                                    , GUIContent.none);
-            EditorGUI.PropertyField(_3, property.FindPropertyRelative("packMode"  ), GUIContent.none);
-            EditorGUI.PropertyField(_4, property.FindPropertyRelative("demandMode"), GUIContent.none);
-            EditorGUI.PropertyField(_5, property.FindPropertyRelative("carryOpts" ), GUIContent.none);
-
-            //second line:
-            var _6 = new Rect(
-                r.x    , EditorGUIUtility.singleLineHeight + r.y,
-                r.width, EditorGUIUtility.singleLineHeight
-            );
             if (objRef != null)
             {
-                EditorGUI.LabelField(_6, AssetDatabase.GetAssetPath(objRef));
+                Label(flx, AssetDatabase.GetAssetPath(objRef));
             }
         }
     }
 
     [CustomPropertyDrawer(typeof(PatchEntry))]
-    internal class PatchEntryDrawer : PropertyDrawer
+    internal class PatchEntryDrawer : ListItemDrawer
     {
-        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+        protected override int OnGetLines()
         {
-            return EditorGUIUtility.singleLineHeight * 2;
+            return 2;
         }
 
-        public override void OnGUI(Rect r, SerializedProperty property, GUIContent label)
+        protected override void OnDrawFirstLine(SerializedProperty property)
         {
-            //first line:
-            var _1 = new Rect(r.x     , r.y, 20          , EditorGUIUtility.singleLineHeight);
-            var _2 = new Rect(r.x + 20, r.y, r.width - 20, EditorGUIUtility.singleLineHeight);
+            Field( 20, property, "selected");
+            Field(flx, property, "fileObj" );
+        }
 
+        protected override void OnDrawSecondLine(SerializedProperty property)
+        {
             SerializedProperty fileObj = property.FindPropertyRelative("fileObj");
             UnityEngine.Object objRef  = fileObj.objectReferenceValue;
 
-            EditorGUI.PropertyField(_1, property.FindPropertyRelative("selected"), GUIContent.none);
-            EditorGUI.PropertyField(_2, fileObj, GUIContent.none);
-
-            //second line:
-            var _3 = new Rect(
-                r.x    , EditorGUIUtility.singleLineHeight + r.y,
-                r.width, EditorGUIUtility.singleLineHeight
-            );
             if (objRef != null)
             {
-                EditorGUI.LabelField(_3, AssetDatabase.GetAssetPath(objRef));
+                Label(flx, AssetDatabase.GetAssetPath(objRef));
             }
         }
     }
