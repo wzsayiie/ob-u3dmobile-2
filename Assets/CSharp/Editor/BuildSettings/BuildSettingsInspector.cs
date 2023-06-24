@@ -44,25 +44,31 @@ namespace U3DMobileEditor
     {
         protected override int OnGetLines()
         {
-            return 2;
+            return 3;
         }
 
         protected override void OnDrawFirstLine(SerializedProperty property)
         {
             Field( 20, property, "selected"  );
-            Field(110, property, "fileObj"   );
-            Field( 65, property, "packMode"  );
-            Field( 90, property, "demandMode");
-            Field(flx, property, "carryOpts" );
+            Field(120, property, "fileObj"   );
+            Field( 70, property, "packMode"  );
+            Field(flx, property, "demandMode");
         }
 
         protected override void OnDrawSecondLine(SerializedProperty property)
+        {
+            Label( 20, "");
+            Field(flx, property, "carryOpts");
+        }
+
+        protected override void OnDrawThirdLine(SerializedProperty property)
         {
             SerializedProperty fileObj = property.FindPropertyRelative("fileObj");
             UnityEngine.Object objRef  = fileObj.objectReferenceValue;
 
             if (objRef != null)
             {
+                Label( 20, "");
                 Label(flx, AssetDatabase.GetAssetPath(objRef));
             }
         }

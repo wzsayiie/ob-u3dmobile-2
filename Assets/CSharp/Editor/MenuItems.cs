@@ -11,6 +11,12 @@ namespace U3DMobileEditor
             UIHelper.PingPath<GameSettings>(GameSettings.SavedPath);
         }
 
+        [MenuItem("U3DMobile/Game Options")]
+        private static void OnGameOptions()
+        {
+            UIHelper.PingPath<GameOptions>(GameOptions.SavedPath);
+        }
+
         [MenuItem("U3DMobile/Build Settings")]
         private static void OnBuildSettings()
         {

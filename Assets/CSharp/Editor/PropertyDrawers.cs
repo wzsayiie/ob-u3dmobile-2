@@ -6,7 +6,9 @@ namespace U3DMobileEditor
     internal class BaseItemDrawer : PropertyDrawer
     {
         protected const float flx = 0;
-        private   const float gap = 4;
+
+        private const float columnGap = 4;
+        private const float lineGap   = 2;
 
         private float _x = 0;
         private float _y = 0;
@@ -14,14 +16,14 @@ namespace U3DMobileEditor
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            return EditorGUIUtility.singleLineHeight * OnGetLines();
+            return (EditorGUIUtility.singleLineHeight + lineGap) * OnGetLines();
         }
 
         public override void OnGUI(Rect rect, SerializedProperty property, GUIContent label)
         {
             _w = rect.width + OnGetWidthExtension();
 
-            float lineH  = EditorGUIUtility.singleLineHeight;
+            float lineH  = EditorGUIUtility.singleLineHeight + lineGap;
             int   line   = OnGetLines();
             float indent = OnGetIndent();
 
@@ -63,7 +65,7 @@ namespace U3DMobileEditor
             var rect = new Rect(_x, _y, width, EditorGUIUtility.singleLineHeight);
             delegation(rect);
 
-            _x += width + gap;
+            _x += width + columnGap;
         }
 
         protected void Field(float width, SerializedProperty property, string relativeName)
@@ -80,7 +82,7 @@ namespace U3DMobileEditor
                 EditorGUI.PropertyField(rect, property, GUIContent.none);
             });
         }
-
+        
         protected void Label(float width, string text)
         {
             DrawElement(width, (Rect rect) => {
