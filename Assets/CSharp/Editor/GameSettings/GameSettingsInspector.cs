@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using U3DMobile;
 using UnityEditor;
@@ -30,39 +31,40 @@ namespace U3DMobileEditor
         private GameSettings       _settings ;
         private SerializedProperty _userFlags;
 
-        private string[]   _languages;
-        private string[]   _channels ;
-        private string[][] _gateways ;
-        private string[][] _assetURLs;
-        private string[][] _patchURLs;
+        private string[]   _languageList ;
+        private string[]   _channelList  ;
+        private string[][] _gatewayList  ;
+        private string[][] _assetURLList ;
+        private string[][] _patchURLList ;
 
-        private int _languageIndex;
-        private int _channelIndex ;
-        private int _gatewayIndex ;
-        private int _assetURLIndex;
-        private int _patchURLIndex;
+        private int        _languageIndex;
+        private int        _channelIndex ;
+        private int        _gatewayIndex ;
+        private int        _assetURLIndex;
+        private int        _patchURLIndex;
 
-        private List<string> _totalFlavors    ;
-        private List<bool>   _isFlavorSelected;
-        private bool         _isShowFlavors   ;
+        private string[]   _flavorList   ;
+        private bool[]     _flavorIsOn   ;
+        private bool       _isShowFlavors;
 
         private void OnEnable()
         {
             _settings  = (GameSettings)target;
-            _userFlags = serializedObject.FindProperty("userFlags");
+            _userFlags = serializedObject.FindProperty("_userFlags");
 
             var options = AssetHelper.LoadScriptable<GameOptions>(GameOptions.SavedPath);
 
-            options.GetGameLanguages  (out _languages);
-            options.GetStoreChannels  (out _channels );
-            options.GetChannelGateways(out _gateways );
-            options.GetForcedAssetURLs(out _assetURLs);
-            options.GetForcedPatchURLs(out _patchURLs);
-            _languageIndex = LocateIndex(_languages   , _settings.gameLanguage  );
-            _channelIndex  = LocateIndex(_channels    , _settings.storeChannel  );
-            _gatewayIndex  = LocateIndex(_gateways [1], _settings.channelGateway);
-            _assetURLIndex = LocateIndex(_assetURLs[1], _settings.forcedAssetURL);
-            _patchURLIndex = LocateIndex(_patchURLs[1], _settings.forcedPatchURL);
+            _languageList = options.GetGameLanguages  ();
+            _channelList  = options.GetStoreChannels  ();
+            _gatewayList  = options.GetChannelGateways();
+            _assetURLList = options.GetForcedAssetURLs();
+            _patchURLList = options.GetForcedPatchURLs();
+
+            _languageIndex = LocateIndex(_languageList   , _settings.gameLanguage  );
+            _channelIndex  = LocateIndex(_channelList    , _settings.storeChannel  );
+            _gatewayIndex  = LocateIndex(_gatewayList [1], _settings.channelGateway);
+            _assetURLIndex = LocateIndex(_assetURLList[1], _settings.forcedAssetURL);
+            _patchURLIndex = LocateIndex(_patchURLList[1], _settings.forcedPatchURL);
 
             InitializeAssetFlavors(options);
         }
@@ -86,15 +88,13 @@ namespace U3DMobileEditor
 
         private void InitializeAssetFlavors(GameOptions options)
         {
-            _totalFlavors     = options.GetAssetFlavors();
-            _isFlavorSelected = new List<bool>();
-            _isShowFlavors    = true;
+            _flavorList = options.GetAssetFlavors();
+            _flavorIsOn = new bool[_flavorList.Length];
 
             HashSet<string> selectedFlavors = _settings.GetAssetFlavors();
-            foreach (string item in _totalFlavors)
+            for (int i = 0; i < _flavorList.Length; ++i)
             {
-                bool selected = selectedFlavors.Contains(item);
-                _isFlavorSelected.Add(selected);
+                _flavorIsOn[i] = selectedFlavors.Contains(_flavorList[i]);
             }
         }
 
@@ -102,7 +102,7 @@ namespace U3DMobileEditor
         {
             serializedObject.Update();
             EditorGUI.BeginDisabledGroup(EditorApplication.isPlayingOrWillChangePlaymode);
-
+            
             DrawPackageSerial ();
             DrawGameLanguage  ();
             DrawStoreChannel  ();
@@ -118,37 +118,69 @@ namespace U3DMobileEditor
 
         private void DrawPackageSerial()
         {
-            _settings.packageSerial = EditorGUILayout.IntField("Package Serial", _settings.packageSerial);
-        }
+            int serial = _settings.packageSerial;
+            _settings.packageSerial = EditorGUILayout.IntField("Package Serial", serial);
 
-        private void DrawGameLanguage() { Popup("Game Language", _languages, ref _languageIndex, ref _settings.gameLanguage); }
-        private void DrawStoreChannel() { Popup("Store Channel", _channels , ref _channelIndex , ref _settings.storeChannel); }
-
-        private void Popup(
-            string label, string[] values, ref int index, ref string value)
-        {
-            int newIndex = EditorGUILayout.Popup(label, index, values);
-            if (newIndex != index)
+            if (serial != _settings.packageSerial)
             {
-                value = values[newIndex];
-                index = newIndex;
+                //NOTE: if change the field values of a serialized object through custom properties,
+                //need to set dirty flags.
+                EditorUtility.SetDirty(_settings);
             }
         }
 
-        private void DrawChannelGateway() { Popup("Channel Gateway" , _gateways , ref _gatewayIndex , ref _settings.channelGateway); }
-        private void DrawForcedAssetURL() { Popup("Forced Asset URL", _assetURLs, ref _assetURLIndex, ref _settings.forcedAssetURL); }
-        private void DrawForcedPatchURL() { Popup("Forced Patch URL", _patchURLs, ref _patchURLIndex, ref _settings.forcedPatchURL); }
-
-        private void Popup(
-            string label, string[][] entries, ref int index, ref string value)
+        private void DrawGameLanguage()
         {
-            int newIndex = EditorGUILayout.Popup(label, index, entries[0]);
-            EditorGUILayout.LabelField(" ", entries[1][index]);
+            Popup("Game Language", _languageList, _languageIndex, (int newIndex) =>
+            {
+                _settings.gameLanguage = _languageList[newIndex];
+                _languageIndex = newIndex;
+            });
+        }
 
+        private void DrawStoreChannel()
+        {
+            Popup("Store Channel", _channelList, _channelIndex , (int newIndex) =>
+            {
+                _settings.storeChannel = _channelList[newIndex];
+                _channelIndex = newIndex;
+            });
+        }
+
+        private void DrawChannelGateway()
+        {
+            Popup("Channel Gateway", _gatewayList[0], _gatewayIndex, (int newIndex) =>
+            {
+                _settings.channelGateway = _gatewayList[1][newIndex];
+                _gatewayIndex = newIndex;
+            });
+        }
+        
+        private void DrawForcedAssetURL()
+        {
+            Popup("Forced Asset URL", _assetURLList[0], _assetURLIndex, (int newIndex) =>
+            {
+                _settings.forcedAssetURL = _assetURLList[1][newIndex];
+                _assetURLIndex = newIndex;
+            });
+        }
+        
+        private void DrawForcedPatchURL()
+        {
+            Popup("Forced Patch URL", _patchURLList[0], _patchURLIndex, (int newIndex) =>
+            {
+                _settings.forcedPatchURL = _patchURLList[1][newIndex];
+                _patchURLIndex = newIndex;
+            });
+        }
+
+        private void Popup(string label, string[] list, int index, Action<int> change)
+        {
+            int newIndex = EditorGUILayout.Popup(label, index, list);
             if (newIndex != index)
             {
-                value = entries[1][newIndex];
-                index = newIndex;
+                change(newIndex);
+                EditorUtility.SetDirty(_settings);
             }
         }
 
@@ -159,12 +191,12 @@ namespace U3DMobileEditor
             _isShowFlavors = EditorGUILayout.BeginFoldoutHeaderGroup(_isShowFlavors, "Asset Flavors");
             if (_isShowFlavors)
             {
-                for (int i = 0; i < _totalFlavors.Count; ++i)
+                for (int i = 0; i < _flavorList.Length; ++i)
                 {
-                    bool selected = _isFlavorSelected[i];
-                    _isFlavorSelected[i] = EditorGUILayout.Toggle(_totalFlavors[i], selected);
+                    bool on = _flavorIsOn[i];
+                    _flavorIsOn[i] = EditorGUILayout.Toggle(_flavorList[i], on);
 
-                    changed = changed || (selected != _isFlavorSelected[i]);
+                    changed = changed || (on != _flavorIsOn[i]);
                 }
             }
             EditorGUILayout.EndFoldoutHeaderGroup();
@@ -172,16 +204,15 @@ namespace U3DMobileEditor
             if (changed)
             {
                 var flavors = new HashSet<string>();
-                for (int i = 0; i < _totalFlavors.Count; ++i)
+                for (int i = 0; i < _flavorList.Length; ++i)
                 {
-                    if (_isFlavorSelected[i])
+                    if (_flavorIsOn[i])
                     {
-                        flavors.Add(_totalFlavors[i]);
+                        flavors.Add(_flavorList[i]);
                     }
                 }
                 _settings.SetAssetFlavors(flavors);
 
-                //NOTE:
                 EditorUtility.SetDirty(_settings);
             }
 

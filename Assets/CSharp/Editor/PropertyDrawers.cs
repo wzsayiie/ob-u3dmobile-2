@@ -1,3 +1,4 @@
+using System;
 using UnityEditor;
 using UnityEngine;
 
@@ -53,9 +54,7 @@ namespace U3DMobileEditor
         protected virtual void OnDrawSecondLine(SerializedProperty property) {}
         protected virtual void OnDrawThirdLine (SerializedProperty property) {}
 
-        private delegate void DrawDelegation(Rect rect);
-
-        private void DrawElement(float width, DrawDelegation delegation)
+        private void DrawElement(float width, Action<Rect> delegation)
         {
             if (width == flx && _x < _w)
             {

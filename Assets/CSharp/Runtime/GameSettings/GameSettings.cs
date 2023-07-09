@@ -26,23 +26,30 @@ namespace U3DMobile
     {
         public const string SavedPath = "Assets/Resources/GameSettings.asset";
 
-        [SerializeField] public int    packageSerial ;
-        [SerializeField] public string gameLanguage  ;
-        [SerializeField] public string storeChannel  ;
-        [SerializeField] public string channelGateway;
-        [SerializeField] public string forcedAssetURL;
-        [SerializeField] public string forcedPatchURL;
+        [SerializeField] private int    _packageSerial ;
+        [SerializeField] private string _gameLanguage  ;
+        [SerializeField] private string _storeChannel  ;
+        [SerializeField] private string _channelGateway;
+        [SerializeField] private string _forcedAssetURL;
+        [SerializeField] private string _forcedPatchURL;
 
-        [SerializeField] public List<string>   assetFlavors;
-        [SerializeField] public List<UserFlag> userFlags   ;
+        [SerializeField] private List<string>   _assetFlavors;
+        [SerializeField] private List<UserFlag> _userFlags   ;
+
+        public int    packageSerial  { get { return _packageSerial ; } set { _packageSerial  = value; } }
+        public string gameLanguage   { get { return _gameLanguage  ; } set { _gameLanguage   = value; } }
+        public string storeChannel   { get { return _storeChannel  ; } set { _storeChannel   = value; } }
+        public string channelGateway { get { return _channelGateway; } set { _channelGateway = value; } }
+        public string forcedAssetURL { get { return _forcedAssetURL; } set { _forcedAssetURL = value; } }
+        public string forcedPatchURL { get { return _forcedPatchURL; } set { _forcedPatchURL = value; } }
 
         public HashSet<string> GetAssetFlavors()
         {
             var flavors = new HashSet<string>();
 
-            if (assetFlavors != null)
+            if (_assetFlavors != null)
             {
-                foreach (string item in assetFlavors)
+                foreach (string item in _assetFlavors)
                 {
                     if (!string.IsNullOrWhiteSpace(item))
                     {
@@ -56,7 +63,7 @@ namespace U3DMobile
 
         public void SetAssetFlavors(HashSet<string> flavors)
         {
-            assetFlavors = new List<string>();
+            _assetFlavors = new List<string>();
 
             if (flavors != null)
             {
@@ -64,7 +71,7 @@ namespace U3DMobile
                 {
                     if (!string.IsNullOrWhiteSpace(item))
                     {
-                        assetFlavors.Add(item.Trim());
+                        _assetFlavors.Add(item.Trim());
                     }
                 }
             }
@@ -101,12 +108,12 @@ namespace U3DMobile
             {
                 return null;
             }
-            if (userFlags == null || userFlags.Count == 0)
+            if (_userFlags == null || _userFlags.Count == 0)
             {
                 return null;
             }
 
-            foreach (UserFlag item in userFlags)
+            foreach (UserFlag item in _userFlags)
             {
                 if (item == null)
                 {

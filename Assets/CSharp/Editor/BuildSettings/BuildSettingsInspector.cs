@@ -19,22 +19,20 @@ namespace U3DMobileEditor
         protected override void OnDrawFirstLine(SerializedProperty property)
         {
             var    option  = property.FindPropertyRelative("option");
-            string theItem = option.stringValue;
-            string active  = BuildSettingsInspector.instance.activeCarry;
+            string curItem = option.stringValue;
+            string actItem = BuildSettingsInspector.instance.activeCarry;
 
-            bool beingOn =
-                !string.IsNullOrWhiteSpace(theItem) &&
-                !string.IsNullOrWhiteSpace(active ) &&
-                theItem.Trim() == active.Trim()
-            ;
-            bool afterOn;
+            string curTrim = curItem?.Trim();
+            string actTrim = actItem?.Trim();
+            bool   beingOn = curTrim != null && curTrim == actTrim;
+            bool   afterOn ;
 
             Radio( 20, beingOn, out afterOn);
             Field(flx, option);
 
             if (!beingOn && afterOn)
             {
-                BuildSettingsInspector.instance.activeCarry = theItem;
+                BuildSettingsInspector.instance.activeCarry = curTrim;
             }
         }
     }

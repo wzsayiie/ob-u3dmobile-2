@@ -59,12 +59,10 @@ namespace U3DMobileEditor
         [SerializeField] private List<ForcedURL     > _forcedPatchURLs;
         [SerializeField] private List<AssetFlavor   > _assetFlavors   ;
 
-        internal void GetGameLanguages(out string[] v) { GetItems(_gameLanguages, out v, i => i.language); }
-        internal void GetStoreChannels(out string[] v) { GetItems(_storeChannels, out v, i => i.channel ); }
+        internal string[] GetGameLanguages() { return GetItems(_gameLanguages, i => i?.language); }
+        internal string[] GetStoreChannels() { return GetItems(_storeChannels, i => i?.channel ); }
 
-        private delegate string Picker<T>(T item);
-
-        private void GetItems<T>(List<T> list, out string[] values, Picker<T> pick)
+        private string[] GetItems<T>(List<T> list, Func<T, string> pick)
         {
             //the first item "none" is default.
             var valueList = new List<string> { "none" };
@@ -83,14 +81,14 @@ namespace U3DMobileEditor
                 }
             }
 
-            values = valueList.ToArray();
+            return valueList.ToArray();
         }
 
-        internal void GetChannelGateways(out string[][] e) { GetEntries(_channelGateways, out e, i => i.channel, i => i.gateway); }
-        internal void GetForcedAssetURLs(out string[][] e) { GetEntries(_forcedAssetURLs, out e, i => i.name   , i => i.url    ); }
-        internal void GetForcedPatchURLs(out string[][] e) { GetEntries(_forcedPatchURLs, out e, i => i.name   , i => i.url    ); }
+        internal string[][] GetChannelGateways() { return GetEntries(_channelGateways, i => i?.channel, i => i?.gateway); }
+        internal string[][] GetForcedAssetURLs() { return GetEntries(_forcedAssetURLs, i => i?.name   , i => i?.url    ); }
+        internal string[][] GetForcedPatchURLs() { return GetEntries(_forcedPatchURLs, i => i?.name   , i => i?.url    ); }
 
-        private void GetEntries<T>(List<T> list, out string[][] entries, Picker<T> pickK, Picker<T> pickV)
+        private string[][] GetEntries<T>(List<T> list, Func<T, string> pickK, Func<T, string> pickV)
         {
             //the first item "none" is default.
             var keyList   = new List<string>{ "none" };
@@ -117,12 +115,14 @@ namespace U3DMobileEditor
                 }
             }
 
-            entries = new string[2][];
-            entries[0] = keyList  .ToArray();
-            entries[1] = valueList.ToArray();
+            var entries = new string[2][]; {
+                entries[0] = keyList  .ToArray();
+                entries[1] = valueList.ToArray();
+            }
+            return entries;
         }
 
-        internal List<string> GetAssetFlavors()
+        internal string[] GetAssetFlavors()
         {
             var list = new List<string>();
 
@@ -137,7 +137,7 @@ namespace U3DMobileEditor
                 }
             }
 
-            return list;
+            return list.ToArray();
         }
     }
 }

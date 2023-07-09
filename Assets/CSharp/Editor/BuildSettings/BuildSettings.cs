@@ -86,7 +86,9 @@ namespace U3DMobileEditor
             string target = _activeCarry.Trim();
             foreach (CarryOption item in _carryOptions)
             {
-                if (item != null && item.option == target)
+                if (item               != null   &&
+                    item.option        != null   &&
+                    item.option.Trim() == target )
                 {
                     return target;
                 }
