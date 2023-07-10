@@ -131,56 +131,61 @@ namespace U3DMobileEditor
 
         private void DrawGameLanguage()
         {
-            Popup("Game Language", _languageList, _languageIndex, (int newIndex) =>
+            Popup("Game Language", _languageList, null, ref _languageIndex, (string value) =>
             {
-                _settings.gameLanguage = _languageList[newIndex];
-                _languageIndex = newIndex;
+                _settings.gameLanguage = value;
             });
         }
 
         private void DrawStoreChannel()
         {
-            Popup("Store Channel", _channelList, _channelIndex , (int newIndex) =>
+            Popup("Store Channel", _channelList, null, ref _channelIndex , (string value) =>
             {
-                _settings.storeChannel = _channelList[newIndex];
-                _channelIndex = newIndex;
+                _settings.storeChannel = value;
             });
         }
 
         private void DrawChannelGateway()
         {
-            Popup("Channel Gateway", _gatewayList[0], _gatewayIndex, (int newIndex) =>
+            string[][] list = _gatewayList;
+            Popup("Channel Gateway", list[0], list[1], ref _gatewayIndex, (string value) =>
             {
-                _settings.channelGateway = _gatewayList[1][newIndex];
-                _gatewayIndex = newIndex;
+                _settings.channelGateway = value;
             });
         }
         
         private void DrawForcedAssetURL()
         {
-            Popup("Forced Asset URL", _assetURLList[0], _assetURLIndex, (int newIndex) =>
+            string[][] list = _assetURLList;
+            Popup("Forced Asset URL", list[0], list[1], ref _assetURLIndex, (string value) =>
             {
-                _settings.forcedAssetURL = _assetURLList[1][newIndex];
-                _assetURLIndex = newIndex;
+                _settings.forcedAssetURL = value;
             });
         }
         
         private void DrawForcedPatchURL()
         {
-            Popup("Forced Patch URL", _patchURLList[0], _patchURLIndex, (int newIndex) =>
+            string[][] list = _patchURLList;
+            Popup("Forced Patch URL", list[0], list[1], ref _patchURLIndex, (string value) =>
             {
-                _settings.forcedPatchURL = _patchURLList[1][newIndex];
-                _patchURLIndex = newIndex;
+                _settings.forcedPatchURL = value;
             });
         }
 
-        private void Popup(string label, string[] list, int index, Action<int> change)
+        private void Popup(
+            string label, string[] keys, string[] values, ref int index, Action<string> change)
         {
-            int newIndex = EditorGUILayout.Popup(label, index, list);
+            int newIndex = EditorGUILayout.Popup(label, index, keys);
             if (newIndex != index)
             {
-                change(newIndex);
+                index = newIndex;
+                change(values != null ? values[index] : keys[index]);
                 EditorUtility.SetDirty(_settings);
+            }
+
+            if (values != null)
+            {
+                EditorGUILayout.LabelField(" ", index != 0 ? values[index] : "-");
             }
         }
 
