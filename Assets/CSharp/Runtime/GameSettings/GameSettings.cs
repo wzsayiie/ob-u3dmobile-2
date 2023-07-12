@@ -36,12 +36,39 @@ namespace U3DMobile
         [SerializeField] private List<string>   _assetFlavors;
         [SerializeField] private List<UserFlag> _userFlags   ;
 
+    #if UNITY_EDITOR
         public int    packageSerial  { get { return _packageSerial ; } set { _packageSerial  = value; } }
         public string gameLanguage   { get { return _gameLanguage  ; } set { _gameLanguage   = value; } }
         public string storeChannel   { get { return _storeChannel  ; } set { _storeChannel   = value; } }
         public string channelGateway { get { return _channelGateway; } set { _channelGateway = value; } }
         public string forcedAssetURL { get { return _forcedAssetURL; } set { _forcedAssetURL = value; } }
         public string forcedPatchURL { get { return _forcedPatchURL; } set { _forcedPatchURL = value; } }
+    #else
+        public int    packageSerial  { get { return _packageSerial ; } }
+        public string gameLanguage   { get { return _gameLanguage  ; } }
+        public string storeChannel   { get { return _storeChannel  ; } }
+        public string channelGateway { get { return _channelGateway; } }
+        public string forcedAssetURL { get { return _forcedAssetURL; } }
+        public string forcedPatchURL { get { return _forcedPatchURL; } }
+    #endif
+
+    #if UNITY_EDITOR
+        public void SetAssetFlavors(HashSet<string> flavors)
+        {
+            _assetFlavors = new List<string>();
+
+            if (flavors != null)
+            {
+                foreach (string item in flavors)
+                {
+                    if (!string.IsNullOrWhiteSpace(item))
+                    {
+                        _assetFlavors.Add(item.Trim());
+                    }
+                }
+            }
+        }
+    #endif
 
         public HashSet<string> GetAssetFlavors()
         {
@@ -61,21 +88,52 @@ namespace U3DMobile
             return flavors;
         }
 
-        public void SetAssetFlavors(HashSet<string> flavors)
-        {
-            _assetFlavors = new List<string>();
+    #if UNITY_EDITOR
 
-            if (flavors != null)
+        public bool SetBoolFlag(string name, bool value)
+        {
+            //NOTE: setting can not change field types.
+            UserFlag flag = GetUserFlag(name, UserFlagType.Bool);
+            if (flag != null)
             {
-                foreach (string item in flavors)
-                {
-                    if (!string.IsNullOrWhiteSpace(item))
-                    {
-                        _assetFlavors.Add(item.Trim());
-                    }
-                }
+                flag.boolValue = value;
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
+
+        public bool SetIntFlag(string name, int value)
+        {
+            UserFlag flag = GetUserFlag(name, UserFlagType.Int);
+            if (flag != null)
+            {
+                flag.intValue = value;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool SetStringFlag(string name, string value)
+        {
+            UserFlag flag = GetUserFlag(name, UserFlagType.String);
+            if (flag != null)
+            {
+                flag.stringValue = value;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+    #endif
 
         public bool GetBoolFlag(string name)
         {
