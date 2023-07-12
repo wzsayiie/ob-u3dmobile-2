@@ -27,7 +27,7 @@ namespace U3DMobile
         public const string SavedPath = "Assets/Resources/GameSettings.asset";
 
         [SerializeField] private int    _packageSerial ;
-        [SerializeField] private string _gameLanguage  ;
+        [SerializeField] private string _firstLanguage ;
         [SerializeField] private string _storeChannel  ;
         [SerializeField] private string _channelGateway;
         [SerializeField] private string _forcedAssetURL;
@@ -38,14 +38,14 @@ namespace U3DMobile
 
     #if UNITY_EDITOR
         public int    packageSerial  { get { return _packageSerial ; } set { _packageSerial  = value; } }
-        public string gameLanguage   { get { return _gameLanguage  ; } set { _gameLanguage   = value; } }
+        public string firstLanguage  { get { return _firstLanguage ; } set { _firstLanguage  = value; } }
         public string storeChannel   { get { return _storeChannel  ; } set { _storeChannel   = value; } }
         public string channelGateway { get { return _channelGateway; } set { _channelGateway = value; } }
         public string forcedAssetURL { get { return _forcedAssetURL; } set { _forcedAssetURL = value; } }
         public string forcedPatchURL { get { return _forcedPatchURL; } set { _forcedPatchURL = value; } }
     #else
         public int    packageSerial  { get { return _packageSerial ; } }
-        public string gameLanguage   { get { return _gameLanguage  ; } }
+        public string firstLanguage  { get { return _firstLanguage ; } }
         public string storeChannel   { get { return _storeChannel  ; } }
         public string channelGateway { get { return _channelGateway; } }
         public string forcedAssetURL { get { return _forcedAssetURL; } }

@@ -60,7 +60,7 @@ namespace U3DMobileEditor
             _assetURLList = options.GetForcedAssetURLs();
             _patchURLList = options.GetForcedPatchURLs();
 
-            _languageIndex = LocateIndex(_languageList   , _settings.gameLanguage  );
+            _languageIndex = LocateIndex(_languageList   , _settings.firstLanguage );
             _channelIndex  = LocateIndex(_channelList    , _settings.storeChannel  );
             _gatewayIndex  = LocateIndex(_gatewayList [1], _settings.channelGateway);
             _assetURLIndex = LocateIndex(_assetURLList[1], _settings.forcedAssetURL);
@@ -88,8 +88,9 @@ namespace U3DMobileEditor
 
         private void InitializeAssetFlavors(GameOptions options)
         {
-            _flavorList = options.GetAssetFlavors();
-            _flavorIsOn = new bool[_flavorList.Length];
+            _flavorList    = options.GetAssetFlavors();
+            _flavorIsOn    = new bool[_flavorList.Length];
+            _isShowFlavors = true;
 
             HashSet<string> selectedFlavors = _settings.GetAssetFlavors();
             for (int i = 0; i < _flavorList.Length; ++i)
@@ -104,7 +105,7 @@ namespace U3DMobileEditor
             EditorGUI.BeginDisabledGroup(EditorApplication.isPlayingOrWillChangePlaymode);
             
             DrawPackageSerial ();
-            DrawGameLanguage  ();
+            DrawFirstLanguage ();
             DrawStoreChannel  ();
             DrawChannelGateway();
             DrawForcedAssetURL();
@@ -129,11 +130,11 @@ namespace U3DMobileEditor
             }
         }
 
-        private void DrawGameLanguage()
+        private void DrawFirstLanguage()
         {
-            Popup("Game Language", _languageList, null, ref _languageIndex, (string value) =>
+            Popup("First Language", _languageList, null, ref _languageIndex, (string value) =>
             {
-                _settings.gameLanguage = value;
+                _settings.firstLanguage = value;
             });
         }
 
