@@ -6,9 +6,9 @@
 ::set "android" or "ios".
 set _target_platform=android
 
-::if build for android, options are "apk", "aab" and "abs",
-::else for ios, options are "ipa" and "abs".
-::"abs" means "asset bundles".
+::if build for android, options are "apk", "aab" and "bundle",
+::else for ios, options are "ipa" and "bundle".
+::"bundle" means "asset bundles".
 set _target_product=apk
 
 ::installation package signing key files.
@@ -22,13 +22,14 @@ set _app_version_num=1
 
 ::GameSettings parameters.
 set   _package_serial=1
+set   _first_language=chinese
 set    _store_channel=googleplay
 set  _channel_gateway=googleplay
-set _forced_asset_url=https://xx.com
-set _forced_patch_url=https://xx.com
-set     _asset_flavor=master
-set       _user_flags=UID:1;GM:true
+set _forced_asset_url=http://localhost.com
+set _forced_patch_url=http://localhost.com
+set    _asset_flavors=normal
+set       _user_flags=UID:12;GM:true
 
 ::BuildSettings parameters.
 set _bundle_serial=1
-set  _carry_option=none
+set  _carry_option=full

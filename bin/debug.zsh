@@ -6,9 +6,9 @@
 #set "android" or "ios".
 export _target_platform="android"
 
-#if build for android, options are "apk", "aab" and "abs",
-#else for ios, options are "ipa" and "abs".
-#"abs" means "asset bundles".
+#if build for android, options are "apk", "aab" and "bundle",
+#else for ios, options are "ipa" and "bundle".
+#"bundle" means "asset bundles".
 export _target_product="apk"
 
 #installation package signing key files.
@@ -22,13 +22,14 @@ export _app_version_num=1
 
 #GameSettings parameters.
 export   _package_serial=1
+export   _first_language=chinese
 export    _store_channel="googleplay"
 export  _channel_gateway="googleplay"
-export _forced_asset_url="https://xx.com"
-export _forced_patch_url="https://xx.com"
-export     _asset_flavor="master"
-export       _user_flags="UID:1;GM:true"
+export _forced_asset_url="http://localhost.com"
+export _forced_patch_url="http://localhost.com"
+export     _asset_flavor="normal"
+export       _user_flags="UID:12;GM:true"
 
 #BuildSettings parameters.
 export _bundle_serial=1
-export  _carry_option="none"
+export  _carry_option="full"
