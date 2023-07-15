@@ -1,153 +1,196 @@
 using System;
 using System.Collections.Generic;
 using U3DMobile;
-using UnityEditor.PackageManager;
-using UnityEngine;
 
 namespace U3DMobileEditor
 {
-    //internal static class BuildEnvironment
-    //{
-    //    //target.
-    //    internal static string targetPlatform;
-    //    internal static string targetProduct ;
+    internal class EnvironmentArguments
+    {
+        //platform.
+        public string targetPlatform;
+        public string targetProduct ;
 
-    //    //asset bundle serial.
-    //    internal static int bundleSerial;
+        //keys.
+        public string apkKeystore   ;
+        public string ipaProvision  ;
 
-    //    //package settings:
-    //    internal static int    packageSerial ;
-    //    internal static string storeChannel  ;
-    //    internal static string channelGateway;
-    //    internal static string forcedAssetURL;
-    //    internal static string forcedPatchURL;
-    //    internal static string assetFlavor   ;
-    //    internal static string carryOption   ;
+        //application information.
+        public string appPackageId  ;
+        public string appVersionStr ;
+        public int    appVersionNum ;
 
-    //    internal static Dictionary<string, List<string>> userFlags;
+        //game setting.
+        public int    packageSerial ;
+        public string firstLanguage ;
+        public string storeChannel  ;
+        public string channelGateway;
+        public string forcedAssetURL;
+        public string forcedPatchURL;
 
-    //    //apk/aab keystore.
-    //    internal static string jksFile;
-    //    internal static string jksFilePassword;
-    //    internal static string jksKey;
-    //    internal static string jksKeyPassword;
+        public HashSet<string>            assetFlavors;
+        public Dictionary<string, object> userFlags;
 
-    //    //ipa mobileprovision.
-    //    internal static string mobileProvision;
+        //build settings.
+        public int    bundleSerial  ;
+        public string carryOption   ;
+    }
 
-    //    //app information.
-    //    internal static string appPackageID ;
-    //    internal static string appVersionStr;
-    //    internal static string appVersionNum;
+    internal static class BuildEnvironment
+    {
+        internal static EnvironmentArguments ParseEnvironment()
+        {
+            var args = new EnvironmentArguments();
 
-    //    internal static List<string> loadErrors = new List<string>();
+            args.targetPlatform = GetEnvString("_target_platform" , "");
+            args.targetProduct  = GetEnvString("_target_product"  , "");
 
-    //    internal static void Load()
-    //    {
-    //        loadErrors.Clear();
+            args.apkKeystore    = GetEnvString("_apk_keystore"    , "");
+            args.ipaProvision   = GetEnvString("_ipa_provision"   , "");
 
-    //        //target platform:
-    //        targetPlatform = GetEnvironmentString("_target_platform");
+            args.appPackageId   = GetEnvString("_app_package_id"  , "com.enterprise.game");
+            args.appVersionStr  = GetEnvString("_app_verison_str" , "1.0.0");
+            args.appVersionNum  = GetEnvInt   ("_app_version_num" , 1 );
 
-    //        if (targetPlatform != "android" &&
-    //            targetPlatform != "ios"     )
-    //        {
-    //            loadErrors.Add($"unexpected platform '{targetPlatform}'");
-    //            return;
-    //        }
+            args.packageSerial  = GetEnvInt   ("_package_serial"  , 0 );
+            args.firstLanguage  = GetEnvString("_first_language"  , "");
+            args.storeChannel   = GetEnvString("_store_channel"   , "");
+            args.channelGateway = GetEnvString("_channel_gateway" , "");
+            args.forcedAssetURL = GetEnvString("_forced_asset_url", "none");
+            args.forcedPatchURL = GetEnvString("_forced_patch_url", "none");
+            args.assetFlavors   = GetStringSet("_asset_flavors"   );
+            args.userFlags      = GetObjDict  ("_user_flags"      );
 
-    //        //target product:
-    //        targetProduct = GetEnvironmentString("_target_product");
+            args.bundleSerial   = GetEnvInt   ("_bundle_serial"   , 0 );
+            args.carryOption    = GetEnvString("_carry_option"    , "");
 
-    //        if (targetPlatform == "android" &&
-    //            targetProduct  != "apk"     &&
-    //            targetProduct  != "aab"     &&
-    //            targetProduct  != "bundle"  )
-    //        {
-    //            loadErrors.Add(
-    //                $"unexpected product '{targetProduct}' for platform '{targetPlatform}'"
-    //            );
-    //            return;
-    //        }
+            Log.Info("_target_platform : {0}", args.targetPlatform);
+            Log.Info("_target_product  : {0}", args.targetProduct );
+            Log.Info("_apk_keystore    : {0}", args.apkKeystore   );
+            Log.Info("_ipa_provision   : {0}", args.ipaProvision  );
+            Log.Info("_app_package_id  : {0}", args.appPackageId  );
+            Log.Info("_app_verison_str : {0}", args.appVersionStr );
+            Log.Info("_app_version_num : {0}", args.appVersionNum );
+            Log.Info("_package_serial  : {0}", args.packageSerial );
+            Log.Info("_first_language  : {0}", args.firstLanguage );
+            Log.Info("_store_channel   : {0}", args.storeChannel  );
+            Log.Info("_channel_gateway : {0}", args.channelGateway);
+            Log.Info("_forced_asset_url: {0}", args.forcedAssetURL);
+            Log.Info("_forced_patch_url: {0}", args.forcedPatchURL);
 
-    //        if (targetPlatform == "ios"    &&
-    //            targetProduct  != "ipa"    &&
-    //            targetProduct  != "bundle" )
-    //        {
-    //            loadErrors.Add(
-    //                $"unexpected product '{targetProduct}' for platform '{targetPlatform}'"
-    //            );
-    //            return;
-    //        }
+            int flavorCount = args.assetFlavors.Count;
+            int flavorIndex = 0;
+            Log.Info("_aaset_flavors count: {0}", flavorCount);
+            foreach (string item in args.assetFlavors)
+            {
+                Log.Info("_asset_flavors {0}/{1}: {2}", ++flavorIndex, flavorCount, item);
+            }
 
-    //        //asset bundle serial:
-    //        string bundleSerialStr = GetEnvironmentString("_bundle_serial");
-    //        try
-    //        {
-    //            bundleSerial = int.Parse(bundleSerialStr);
-    //        }
-    //        catch
-    //        {
-    //            loadErrors.Add($"unexpected bundle serial '{bundleSerialStr}'");
-    //        }
+            int flagCount = args.userFlags.Count;
+            int flagIndex = 0;
+            Log.Info("_user_flags count: {0}", flagCount);
+            foreach (KeyValuePair<string, object> entry in args.userFlags)
+            {
+                Log.Info("_user_flags {0}/{1}: {2}: {3}", ++flagIndex, flagCount, entry.Key, entry.Value);
+            }
 
-    //        //package settings:
-    //        bool needAndroidPackage = targetProduct == "apk" || targetProduct == "aab";
-    //        bool needIOSPackage     = targetProduct == "ipa" ;
+            Log.Info("_bundle_serial: {0}", args.bundleSerial);
+            Log.Info("_carry_option : {0}", args.carryOption );
 
-    //        if (needAndroidPackage || needIOSPackage)
-    //        {
-    //            //package serial.
-    //            string packageSerialStr = GetEnvironmentString("_package_serial");
-    //            try
-    //            {
-    //                packageSerial = int.Parse(packageSerialStr);
-    //            }
-    //            catch
-    //            {
-    //                loadErrors.Add($"unexpected package serial '{packageSerialStr}'");
-    //            }
+            return args;
+        }
 
-    //            //store channel:
-    //            storeChannel = GetEnvironmentString("_store_channel");
+        private static string GetEnvString(string name, string defaultValue)
+        {
+            string value = Environment.GetEnvironmentVariable(name);
+            return !string.IsNullOrWhiteSpace(value) ? value.Trim() : defaultValue;
+        }
 
-    //            var gameSettings = AssetHelper.LoadScriptable<GameSettings>(GameSettings.SavedPath);
-    //            if (!gameSettings.IsLegalChannel(storeChannel))
-    //            {
-    //                loadErrors.Add($"illegal store channel '{storeChannel}'");
-    //            }
+        private static int GetEnvInt(string name, int defaultValue)
+        {
+            string value = Environment.GetEnvironmentVariable(name);
+            try
+            {
+                return int.Parse(value);
+            }
+            catch
+            {
+                return defaultValue;
+            }
+        }
 
-    //            //channel gateway.
-    //            channelGateway = GetEnvironmentString("_channel_gateway");
-    //            if (!gameSettings.IsLegalGateway(channelGateway))
-    //            {
-    //                loadErrors.Add($"illegal channel gateway '{channelGateway}'");
-    //            }
+        private static HashSet<string> GetStringSet(string name)
+        {
+            var set = new HashSet<string>();
 
-    //            //forced asset/patch url.
-    //            forcedAssetURL = GetEnvironmentString("_forced_asset_url");
-    //            forcedPatchURL = GetEnvironmentString("_forced_patch_url");
-    //        }
-    //    }
+            string raw = Environment.GetEnvironmentVariable(name);
+            if (string.IsNullOrWhiteSpace(raw))
+            {
+                return set;
+            }
 
-    //    internal static void Reset()
-    //    {
-    //        if (loadErrors.Count > 0)
-    //        {
-    //            Debug.Log("can not reset settings cause load error");
-    //            return;
-    //        }
-    //    }
+            string[] items = raw.Split(';');
+            foreach (string item in items)
+            {
+                if (!string.IsNullOrWhiteSpace(item))
+                {
+                    set.Add(item);
+                }
+            }
 
-    //    private static string GetEnvironmentString(string name)
-    //    {
-    //        string value = Environment.GetEnvironmentVariable(name);
-    //        return value != null ? value.Trim() : null;
-    //    }
+            return set;
+        }
 
-    //    private static HashSet<string> GetEnvironmentHashSet(string name)
-    //    {
-    //        return null;
-    //    }
-    //}
+        private static Dictionary<string, object> GetObjDict(string name)
+        {
+            var dict = new Dictionary<string, object>();
+
+            string raw = Environment.GetEnvironmentVariable(name);
+            if (string.IsNullOrWhiteSpace(raw))
+            {
+                return dict;
+            }
+
+            string[] entries = raw.Split(";");
+            foreach (string entry in entries)
+            {
+                if (string.IsNullOrWhiteSpace(entry))
+                {
+                    continue;
+                }
+
+                string[] pair = entry.Split(":");
+                if (pair.Length != 2                   ||
+                    string.IsNullOrWhiteSpace(pair[0]) ||
+                    string.IsNullOrWhiteSpace(pair[1]) )
+                {
+                    continue;
+                }
+
+                string key   = pair[0].Trim();
+                string value = pair[1].Trim();
+
+                if (bool.TryParse(value, out bool boolValue))
+                {
+                    dict[key] = boolValue;
+                }
+                else if (int.TryParse(value, out int intValue))
+                {
+                    dict[key] = intValue;
+                }
+                else
+                {
+                    dict[key] = value;
+                }
+            }
+
+            return dict;
+        }
+
+        internal static List<string> CheckEnvironment(EnvironmentArguments args)
+        {
+            var errors = new List<string>();
+
+            return errors;
+        }
+    }
 }
