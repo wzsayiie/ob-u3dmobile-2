@@ -15,6 +15,9 @@ obj/
 *.csproj
 *.sln
 
+# keep.
+!.gitkeep
+
 #bin tools local files:
 bin/bundletool-all.jar
 
@@ -22,5 +25,5 @@ bin/csv/BUILD/
 bin/csv/node_modules/
 bin/csv/package-lock.json
 
-# keep.
-!.gitkeep
+#build output files.
+BUILD/
