@@ -6,7 +6,7 @@ namespace U3DMobileEditor
     [CustomPropertyDrawer(typeof(BundleSerial))]
     internal class BundleSerialDrawer : BaseItemDrawer
     {
-        protected override void OnDrawFirstLine(SerializedProperty property)
+        protected override void OnDrawLine(int _, SerializedProperty property)
         {
             Label(110, "Bundle Serial");
             Field(flx, property.FindPropertyRelative("serial"));
@@ -16,7 +16,7 @@ namespace U3DMobileEditor
     [CustomPropertyDrawer(typeof(CarryOption))]
     internal class CarryOptionDrawer : ListItemDrawer
     {
-        protected override void OnDrawFirstLine(SerializedProperty property)
+        protected override void OnDrawLine(int _, SerializedProperty property)
         {
             var    option  = property.FindPropertyRelative("option");
             string curItem = option.stringValue;
@@ -45,7 +45,17 @@ namespace U3DMobileEditor
             return 3;
         }
 
-        protected override void OnDrawFirstLine(SerializedProperty property)
+        protected override void OnDrawLine(int line, SerializedProperty property)
+        {
+            switch (line)
+            {
+                case 0: DrawFileEntry(property); break;
+                case 1: DrawCarryOpts(property); break;
+                case 2: DrawFilePath (property); break;
+            }
+        }
+
+        private void DrawFileEntry(SerializedProperty property)
         {
             Field( 20, property, "selected"  );
             Field(120, property, "fileObj"   );
@@ -53,13 +63,13 @@ namespace U3DMobileEditor
             Field(flx, property, "demandMode");
         }
 
-        protected override void OnDrawSecondLine(SerializedProperty property)
+        private void DrawCarryOpts(SerializedProperty property)
         {
             Label( 20, "");
             Field(flx, property, "carryOpts");
         }
 
-        protected override void OnDrawThirdLine(SerializedProperty property)
+        private void DrawFilePath(SerializedProperty property)
         {
             SerializedProperty fileObj = property.FindPropertyRelative("fileObj");
             UnityEngine.Object objRef  = fileObj.objectReferenceValue;
@@ -80,13 +90,22 @@ namespace U3DMobileEditor
             return 2;
         }
 
-        protected override void OnDrawFirstLine(SerializedProperty property)
+        protected override void OnDrawLine(int line, SerializedProperty property)
+        {
+            switch (line)
+            {
+                case 0: DrawFileObj (property); break;
+                case 1: DrawFilePath(property); break;
+            }
+        }
+
+        private void DrawFileObj(SerializedProperty property)
         {
             Field( 20, property, "selected");
             Field(flx, property, "fileObj" );
         }
 
-        protected override void OnDrawSecondLine(SerializedProperty property)
+        private void DrawFilePath(SerializedProperty property)
         {
             SerializedProperty fileObj = property.FindPropertyRelative("fileObj");
             UnityEngine.Object objRef  = fileObj.objectReferenceValue;

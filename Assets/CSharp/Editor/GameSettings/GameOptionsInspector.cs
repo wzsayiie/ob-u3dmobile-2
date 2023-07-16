@@ -6,7 +6,7 @@ namespace U3DMobileEditor
     [CustomPropertyDrawer(typeof(GameLanguage))]
     internal class GameLanguageDrawer : ListItemDrawer
     {
-        protected override void OnDrawFirstLine(SerializedProperty property)
+        protected override void OnDrawLine(int _, SerializedProperty property)
         {
             Label( 60, "Language");
             Field(flx, property, "language");
@@ -16,7 +16,7 @@ namespace U3DMobileEditor
     [CustomPropertyDrawer(typeof(StoreChannel))]
     internal class StoreChannelDrawer : ListItemDrawer
     {
-        protected override void OnDrawFirstLine(SerializedProperty property)
+        protected override void OnDrawLine(int _, SerializedProperty property)
         {
             Label( 60, "Channel");
             Field(flx, property, "channel");
@@ -26,7 +26,7 @@ namespace U3DMobileEditor
     [CustomPropertyDrawer(typeof(ChannelGateway))]
     internal class ChannelGatewayDrawer : ListItemDrawer
     {
-        protected override void OnDrawFirstLine(SerializedProperty property)
+        protected override void OnDrawLine(int _, SerializedProperty property)
         {
             Field( 90, property, "channel");
             Label( 30, "URL");
@@ -37,7 +37,7 @@ namespace U3DMobileEditor
     [CustomPropertyDrawer(typeof(ForcedURL))]
     internal class ForcedURLDrawer : ListItemDrawer
     {
-        protected override void OnDrawFirstLine(SerializedProperty property)
+        protected override void OnDrawLine(int _, SerializedProperty property)
         {
             Field( 90, property, "name");
             Label( 30, "URL");
@@ -48,7 +48,7 @@ namespace U3DMobileEditor
     [CustomPropertyDrawer(typeof(AssetFlavor))]
     internal class AssetFlavorDrawer : ListItemDrawer
     {
-        protected override void OnDrawFirstLine(SerializedProperty property)
+        protected override void OnDrawLine(int _, SerializedProperty property)
         {
             Label( 60, "Flavor");
             Field(flx, property, "flavor");

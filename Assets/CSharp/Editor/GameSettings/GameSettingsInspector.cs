@@ -9,7 +9,7 @@ namespace U3DMobileEditor
     [CustomPropertyDrawer(typeof(UserFlag))]
     internal class UserFlagDrawer : ListItemDrawer
     {
-        protected override void OnDrawFirstLine(SerializedProperty property)
+        protected override void OnDrawLine(int _, SerializedProperty property)
         {
             SerializedProperty type = property.FindPropertyRelative("type");
 

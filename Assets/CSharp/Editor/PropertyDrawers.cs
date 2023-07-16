@@ -15,22 +15,25 @@ namespace U3DMobileEditor
         private float _y = 0;
         private float _w = 0;
 
-        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+        public override sealed float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
             return (EditorGUIUtility.singleLineHeight + lineGap) * OnGetLines();
         }
 
-        public override void OnGUI(Rect rect, SerializedProperty property, GUIContent label)
+        public override sealed void OnGUI(Rect rect, SerializedProperty property, GUIContent label)
         {
             _w = rect.width + OnGetWidthExtension();
 
-            float lineH  = EditorGUIUtility.singleLineHeight + lineGap;
+            float height = EditorGUIUtility.singleLineHeight + lineGap;
             int   line   = OnGetLines();
             float indent = OnGetIndent();
 
-            if (line >= 1) { _x = rect.x + indent; _y = rect.y            ; OnDrawFirstLine (property); }
-            if (line >= 2) { _x = rect.x + indent; _y = rect.y + lineH * 1; OnDrawSecondLine(property); }
-            if (line >= 3) { _x = rect.x + indent; _y = rect.y + lineH * 2; OnDrawThirdLine (property); }
+            for (int i = 0; i < line; ++i)
+            {
+                _x = rect.x + indent;
+                _y = rect.y + height * i;
+                OnDrawLine(i, property);
+            }
         }
 
         protected virtual int OnGetLines()
@@ -50,21 +53,8 @@ namespace U3DMobileEditor
             return 18;
         }
 
-        protected virtual void OnDrawFirstLine (SerializedProperty property) {}
-        protected virtual void OnDrawSecondLine(SerializedProperty property) {}
-        protected virtual void OnDrawThirdLine (SerializedProperty property) {}
-
-        private void DrawElement(float width, Action<Rect> delegation)
+        protected virtual void OnDrawLine(int line, SerializedProperty property)
         {
-            if (width == flx && _x < _w)
-            {
-                width = _w - _x;
-            }
-
-            var rect = new Rect(_x, _y, width, EditorGUIUtility.singleLineHeight);
-            delegation(rect);
-
-            _x += width + columnGap;
         }
 
         protected void Field(float width, SerializedProperty property, string relativeName)
@@ -98,6 +88,19 @@ namespace U3DMobileEditor
             });
 
             afterOn = on;
+        }
+
+        private void DrawElement(float width, Action<Rect> delegation)
+        {
+            if (width == flx && _x < _w)
+            {
+                width = _w - _x;
+            }
+
+            var rect = new Rect(_x, _y, width, EditorGUIUtility.singleLineHeight);
+            delegation(rect);
+
+            _x += width + columnGap;
         }
     }
 
