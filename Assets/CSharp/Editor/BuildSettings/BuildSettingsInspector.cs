@@ -13,6 +13,26 @@ namespace U3DMobileEditor
         }
     }
 
+    [CustomPropertyDrawer(typeof(ForceRebuildCheck))]
+    internal class ForceRebuildCheckDrawer : BaseItemDrawer
+    {
+        protected override void OnDrawLine(int _, SerializedProperty property)
+        {
+            Label(110, "Force Rebuild");
+            Field(flx, property.FindPropertyRelative("forceRebuild"));
+        }
+    }
+
+    [CustomPropertyDrawer(typeof(UsePastBundleCheck))]
+    internal class UsePastCacheCheckDrawer : BaseItemDrawer
+    {
+        protected override void OnDrawLine(int _, SerializedProperty property)
+        {
+            Label(110, "Use Past Bundle");
+            Field(flx, property.FindPropertyRelative("usePastBundle"));
+        }
+    }
+
     [CustomPropertyDrawer(typeof(CarryOption))]
     internal class CarryOptionDrawer : ListItemDrawer
     {
@@ -20,7 +40,7 @@ namespace U3DMobileEditor
         {
             var    option  = property.FindPropertyRelative("option");
             string curItem = option.stringValue;
-            string actItem = BuildSettingsInspector.instance.activeCarry;
+            string actItem = BuildSettingsInspector.instance.currentCarry;
 
             string curTrim = curItem?.Trim();
             string actTrim = actItem?.Trim();
@@ -32,7 +52,7 @@ namespace U3DMobileEditor
 
             if (!beingOn && afterOn)
             {
-                BuildSettingsInspector.instance.activeCarry = curTrim;
+                BuildSettingsInspector.instance.currentCarry = curTrim;
             }
         }
     }
@@ -121,17 +141,19 @@ namespace U3DMobileEditor
     internal class BuildSettingsInspector : Editor
     {
         private SerializedProperty _bundleSerial ;
-        private SerializedProperty _activeCarry  ;
+        private SerializedProperty _forceRebuild ;
+        private SerializedProperty _usePastBundle;
+        private SerializedProperty _currentCarry ;
         private SerializedProperty _carryOptions ;
         private SerializedProperty _bundleEntries;
         private SerializedProperty _bundlePatches;
 
         internal static BuildSettingsInspector instance;
 
-        internal string activeCarry
+        internal string currentCarry
         {
-            get { return _activeCarry.stringValue ; }
-            set { _activeCarry.stringValue = value; }
+            get { return _currentCarry.stringValue ; }
+            set { _currentCarry.stringValue = value; }
         }
 
         private void OnEnable()
@@ -139,7 +161,9 @@ namespace U3DMobileEditor
             instance = this;
 
             _bundleSerial  = serializedObject.FindProperty("_bundleSerial" );
-            _activeCarry   = serializedObject.FindProperty("_activeCarry"  );
+            _forceRebuild  = serializedObject.FindProperty("_forceRebuild" );
+            _usePastBundle = serializedObject.FindProperty("_usePastBundle");
+            _currentCarry  = serializedObject.FindProperty("_currentCarry" );
             _carryOptions  = serializedObject.FindProperty("_carryOptions" );
             _bundleEntries = serializedObject.FindProperty("_bundleEntries");
             _bundlePatches = serializedObject.FindProperty("_bundlePatches");
@@ -149,8 +173,10 @@ namespace U3DMobileEditor
         {
             serializedObject.Update();
 
-            EditorGUILayout.PropertyField(_bundleSerial, new GUIContent("Bundle Serial"));
-            EditorGUILayout.PropertyField(_carryOptions, new GUIContent("Package Carry Options"));
+            EditorGUILayout.PropertyField(_bundleSerial , new GUIContent("Bundle Serial"  ));
+            EditorGUILayout.PropertyField(_forceRebuild , new GUIContent("Force Rebuild"  ));
+            EditorGUILayout.PropertyField(_usePastBundle, new GUIContent("Use Past Bundle"));
+            EditorGUILayout.PropertyField(_carryOptions , new GUIContent("Carry Options"  ));
 
             EditorGUILayout.PropertyField(_bundleEntries, new GUIContent("Bundle Entries"));
             if (GUILayout.Button("Pack Selected (for Android)"))

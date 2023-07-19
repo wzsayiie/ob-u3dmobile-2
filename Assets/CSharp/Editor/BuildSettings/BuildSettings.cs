@@ -4,11 +4,23 @@ using UnityEngine;
 
 namespace U3DMobileEditor
 {
-    //bundle serial.
+    //build parameters:
     [Serializable]
     internal class BundleSerial
     {
         public int serial;
+    }
+
+    [Serializable]
+    internal class ForceRebuildCheck
+    {
+        public bool forceRebuild;
+    }
+
+    [Serializable]
+    internal class UsePastBundleCheck
+    {
+        public bool usePastBundle;
     }
 
     //bundle carry option.
@@ -61,39 +73,85 @@ namespace U3DMobileEditor
         [SerializeField]
         private BundleSerial _bundleSerial;
 
+        internal void SetBundleSerial(int serial)
+        {
+            _bundleSerial ??= new BundleSerial();
+            _bundleSerial.serial = serial;
+        }
+
         internal int GetBundleSerial()
         {
             return _bundleSerial != null ? _bundleSerial.serial : 0;
         }
 
+        //force unity rebuild asset bundles.
+        [SerializeField]
+        private ForceRebuildCheck _forceRebuild;
+
+        internal void SetForceRebuild(bool forceRebuild)
+        {
+            _forceRebuild ??= new ForceRebuildCheck();
+            _forceRebuild.forceRebuild = forceRebuild;
+        }
+
+        internal bool IsForceRebuild()
+        {
+            return _forceRebuild != null && _forceRebuild.forceRebuild;
+        }
+
+        //use past asset bundle cache.
+        [SerializeField]
+        private UsePastBundleCheck _usePastBundle;
+
+        internal void SetUsePastCache(bool usePastBundle)
+        {
+            _usePastBundle ??= new UsePastBundleCheck();
+            _usePastBundle.usePastBundle = usePastBundle;
+        }
+
+        internal bool IsUsePastCache()
+        {
+            return _usePastBundle != null && _usePastBundle.usePastBundle;
+        }
+
         //for different distribution channels,
         //the asset bundles put into the installation package may be different.
         //use the "CarryOption" to control this point.
-        [SerializeField] private string _activeCarry;
+        [SerializeField] private string _currentCarry;
         [SerializeField] private List<CarryOption> _carryOptions;
 
-        internal string GetCarryOption()
+        internal bool IsValidCarryOption(string option)
         {
-            if (string.IsNullOrWhiteSpace(_activeCarry))
+            if (string.IsNullOrWhiteSpace(option))
             {
-                return null;
+                return false;
             }
             if (_carryOptions == null || _carryOptions.Count == 0)
             {
-                return null;
+                return false;
             }
 
-            string target = _activeCarry.Trim();
+            option = option.Trim();
             foreach (CarryOption item in _carryOptions)
             {
-                if (item               != null   &&
-                    item.option        != null   &&
-                    item.option.Trim() == target )
+                if (item               != null  &&
+                    item.option        != null  &&
+                    item.option.Trim() == option)
                 {
-                    return target;
+                    return true;
                 }
             }
-            return null;
+            return false;
+        }
+
+        internal void SetCurrentCarry(string option)
+        {
+            _currentCarry = !string.IsNullOrWhiteSpace(option) ? option.Trim(): "";
+        }
+
+        internal string GetActiveCarry()
+        {
+            return !string.IsNullOrWhiteSpace(_currentCarry) ? _currentCarry.Trim() : null;
         }
 
         //asset bundle entries.

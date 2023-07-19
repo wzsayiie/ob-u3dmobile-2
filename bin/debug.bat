@@ -31,5 +31,7 @@ set    _asset_flavors=normal
 set       _user_flags=UID:12;GM:true
 
 ::BuildSettings parameters.
-set _bundle_serial=1
-set  _carry_option=full
+set   _bundle_serial=1
+set   _force_rebuild=false
+set _use_past_bundle=true
+set   _current_carry=full

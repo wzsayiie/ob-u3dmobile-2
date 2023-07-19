@@ -32,7 +32,9 @@ namespace U3DMobileEditor
 
         //build settings.
         public int    bundleSerial  ;
-        public string carryOption   ;
+        public bool   forceRebuild  ;
+        public bool   usePastBundle ;
+        public string currentCarry  ;
     }
 
     internal static class BuildEnvironment
@@ -49,19 +51,21 @@ namespace U3DMobileEditor
 
             args.appPackageId   = GetEnvString("_app_package_id"  , "com.enterprise.game");
             args.appVersionStr  = GetEnvString("_app_verison_str" , "1.0.0");
-            args.appVersionNum  = GetEnvInt   ("_app_version_num" , 1 );
+            args.appVersionNum  = GetEnvInt   ("_app_version_num" , 1);
 
-            args.packageSerial  = GetEnvInt   ("_package_serial"  , 0 );
-            args.firstLanguage  = GetEnvString("_first_language"  , "");
-            args.storeChannel   = GetEnvString("_store_channel"   , "");
-            args.channelGateway = GetEnvString("_channel_gateway" , "");
+            args.packageSerial  = GetEnvInt   ("_package_serial"  , 0     );
+            args.firstLanguage  = GetEnvString("_first_language"  , ""    );
+            args.storeChannel   = GetEnvString("_store_channel"   , ""    );
+            args.channelGateway = GetEnvString("_channel_gateway" , ""    );
             args.forcedAssetURL = GetEnvString("_forced_asset_url", "none");
             args.forcedPatchURL = GetEnvString("_forced_patch_url", "none");
             args.assetFlavors   = GetStringSet("_asset_flavors"   );
             args.userFlags      = GetObjDict  ("_user_flags"      );
 
-            args.bundleSerial   = GetEnvInt   ("_bundle_serial"   , 0 );
-            args.carryOption    = GetEnvString("_carry_option"    , "");
+            args.bundleSerial   = GetEnvInt   ("_bundle_serial"   , 0    );
+            args.forceRebuild   = GetEnvBool  ("_force_rebuild"   , false);
+            args.usePastBundle  = GetEnvBool  ("_use_past_bundle" , true );
+            args.currentCarry   = GetEnvString("_currentCarry"    , ""   );
 
             Log.Info("_target_platform : {0}", args.targetPlatform);
             Log.Info("_target_product  : {0}", args.targetProduct );
@@ -79,7 +83,7 @@ namespace U3DMobileEditor
 
             int flavorCount = args.assetFlavors.Count;
             int flavorIndex = 0;
-            Log.Info("_aaset_flavors count: {0}", flavorCount);
+            Log.Info("_asset_flavors count: {0}", flavorCount);
             foreach (string item in args.assetFlavors)
             {
                 Log.Info("_asset_flavors {0}/{1}: {2}", ++flavorIndex, flavorCount, item);
@@ -93,8 +97,10 @@ namespace U3DMobileEditor
                 Log.Info("_user_flags {0}/{1}: {2}: {3}", ++flagIndex, flagCount, entry.Key, entry.Value);
             }
 
-            Log.Info("_bundle_serial: {0}", args.bundleSerial);
-            Log.Info("_carry_option : {0}", args.carryOption );
+            Log.Info("_bundle_serial  : {0}", args.bundleSerial );
+            Log.Info("_force_rebuild  : {0}", args.forceRebuild );
+            Log.Info("_use_past_bundle: {0}", args.usePastBundle);
+            Log.Info("_current_carry  : {0}", args.currentCarry );
 
             return args;
         }
@@ -111,6 +117,19 @@ namespace U3DMobileEditor
             try
             {
                 return int.Parse(value);
+            }
+            catch
+            {
+                return defaultValue;
+            }
+        }
+
+        private static bool GetEnvBool(string name, bool defaultValue)
+        {
+            string value = Environment.GetEnvironmentVariable(name);
+            try
+            {
+                return bool.Parse(value);
             }
             catch
             {

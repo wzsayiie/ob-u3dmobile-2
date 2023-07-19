@@ -31,5 +31,7 @@ export     _asset_flavor="normal"
 export       _user_flags="UID:12;GM:true"
 
 #BuildSettings parameters.
-export _bundle_serial=1
-export  _carry_option="full"
+export   _bundle_serial=1
+export   _force_rebuild=false
+export _use_past_bundle=true
+export   _current_carry="full"

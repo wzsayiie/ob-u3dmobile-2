@@ -90,6 +90,10 @@ namespace U3DMobile
 
     #if UNITY_EDITOR
 
+        public bool HasBoolFlag  (string name) { return GetUserFlag(name, UserFlagType.Bool  ) != null; }
+        public bool HasIntFlag   (string name) { return GetUserFlag(name, UserFlagType.Int   ) != null; }
+        public bool HasStringFlag(string name) { return GetUserFlag(name, UserFlagType.String) != null; }
+
         public bool SetBoolFlag(string name, bool value)
         {
             //NOTE: setting can not change field types.
