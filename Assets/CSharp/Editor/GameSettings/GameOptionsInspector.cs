@@ -61,8 +61,8 @@ namespace U3DMobileEditor
         private SerializedProperty _gameLanguages  ;
         private SerializedProperty _storeChannels  ;
         private SerializedProperty _channelGateways;
-        private SerializedProperty _forcedAssetURLs;
-        private SerializedProperty _forcedPatchURLs;
+        private SerializedProperty _assetURLs      ;
+        private SerializedProperty _patchURLs      ;
         private SerializedProperty _assetFlavors   ;
 
         private void OnEnable()
@@ -70,8 +70,8 @@ namespace U3DMobileEditor
             _gameLanguages   = serializedObject.FindProperty("_gameLanguages"  );
             _storeChannels   = serializedObject.FindProperty("_storeChannels"  );
             _channelGateways = serializedObject.FindProperty("_channelGateways");
-            _forcedAssetURLs = serializedObject.FindProperty("_forcedAssetURLs");
-            _forcedPatchURLs = serializedObject.FindProperty("_forcedPatchURLs");
+            _assetURLs       = serializedObject.FindProperty("_assetURLs"      );
+            _patchURLs       = serializedObject.FindProperty("_patchURLs"      );
             _assetFlavors    = serializedObject.FindProperty("_assetFlavors"   );
         }
 
@@ -82,8 +82,8 @@ namespace U3DMobileEditor
             EditorGUILayout.PropertyField(_gameLanguages  , new GUIContent("Game Languages"  ));
             EditorGUILayout.PropertyField(_storeChannels  , new GUIContent("Store Channels"  ));
             EditorGUILayout.PropertyField(_channelGateways, new GUIContent("Channel Gateways"));
-            EditorGUILayout.PropertyField(_forcedAssetURLs, new GUIContent("Asset URLs"      ));
-            EditorGUILayout.PropertyField(_forcedPatchURLs, new GUIContent("Patch URLs"      ));
+            EditorGUILayout.PropertyField(_assetURLs      , new GUIContent("Asset URLs"      ));
+            EditorGUILayout.PropertyField(_patchURLs      , new GUIContent("Patch URLs"      ));
             EditorGUILayout.PropertyField(_assetFlavors   , new GUIContent("Asset Flavors"   ));
 
             serializedObject.ApplyModifiedProperties();

@@ -30,8 +30,8 @@ namespace U3DMobile
         [SerializeField] private string _firstLanguage ;
         [SerializeField] private string _storeChannel  ;
         [SerializeField] private string _channelGateway;
-        [SerializeField] private string _forcedAssetURL;
-        [SerializeField] private string _forcedPatchURL;
+        [SerializeField] private string _assetURL      ;
+        [SerializeField] private string _patchURL      ;
 
         [SerializeField] private List<string>   _assetFlavors;
         [SerializeField] private List<UserFlag> _userFlags   ;
@@ -41,15 +41,15 @@ namespace U3DMobile
         public string firstLanguage  { get { return _firstLanguage ; } set { _firstLanguage  = value; } }
         public string storeChannel   { get { return _storeChannel  ; } set { _storeChannel   = value; } }
         public string channelGateway { get { return _channelGateway; } set { _channelGateway = value; } }
-        public string forcedAssetURL { get { return _forcedAssetURL; } set { _forcedAssetURL = value; } }
-        public string forcedPatchURL { get { return _forcedPatchURL; } set { _forcedPatchURL = value; } }
+        public string assetURL       { get { return _assetURL      ; } set { _assetURL       = value; } }
+        public string patchURL       { get { return _patchURL      ; } set { _patchURL       = value; } }
     #else
         public int    packageSerial  { get { return _packageSerial ; } }
         public string firstLanguage  { get { return _firstLanguage ; } }
         public string storeChannel   { get { return _storeChannel  ; } }
         public string channelGateway { get { return _channelGateway; } }
-        public string forcedAssetURL { get { return _forcedAssetURL; } }
-        public string forcedPatchURL { get { return _forcedPatchURL; } }
+        public string assetURL       { get { return _assetURL      ; } }
+        public string patchURL       { get { return _patchURL      ; } }
     #endif
 
     #if UNITY_EDITOR
@@ -90,51 +90,59 @@ namespace U3DMobile
 
     #if UNITY_EDITOR
 
-        public bool HasBoolFlag  (string name) { return GetUserFlag(name, UserFlagType.Bool  ) != null; }
-        public bool HasIntFlag   (string name) { return GetUserFlag(name, UserFlagType.Int   ) != null; }
-        public bool HasStringFlag(string name) { return GetUserFlag(name, UserFlagType.String) != null; }
-
-        public bool SetBoolFlag(string name, bool value)
+        public bool IsValidUserFlags(Dictionary<string, object> targets, out HashSet<string> illegals)
         {
-            //NOTE: setting can not change field types.
-            UserFlag flag = GetUserFlag(name, UserFlagType.Bool);
-            if (flag != null)
+            if (targets == null || targets.Count == 0)
             {
-                flag.boolValue = value;
+                illegals = null;
                 return true;
             }
-            else
-            {
-                return false;
-            }
-        }
 
-        public bool SetIntFlag(string name, int value)
-        {
-            UserFlag flag = GetUserFlag(name, UserFlagType.Int);
-            if (flag != null)
+            var legals = new Dictionary<string, UserFlag>();
+            if (_userFlags != null && _userFlags.Count > 0)
             {
-                flag.intValue = value;
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+                foreach (UserFlag item in _userFlags)
+                {
+                    if (item == null)
+                    {
+                        continue;
+                    }
+                    if (string.IsNullOrWhiteSpace(item.name))
+                    {
+                        continue;
+                    }
 
-        public bool SetStringFlag(string name, string value)
-        {
-            UserFlag flag = GetUserFlag(name, UserFlagType.String);
-            if (flag != null)
-            {
-                flag.stringValue = value;
-                return true;
+                    legals[item.name.Trim()] = item;
+                }
             }
-            else
+
+            illegals = new HashSet<string>();
+            foreach (KeyValuePair<string, object> pair in targets)
             {
-                return false;
+                if (!legals.ContainsKey(pair.Key))
+                {
+                    illegals.Add(pair.Key);
+                    continue;
+                }
+                
+                UserFlag flag = legals[pair.Key];
+                if (flag.type == UserFlagType.Bool && pair.Value is not bool)
+                {
+                    illegals.Add(pair.Key);
+                    continue;
+                }
+                if (flag.type == UserFlagType.Int && pair.Value is not int)
+                {
+                    illegals.Add(pair.Key);
+                    continue;
+                }
+                if (flag.type == UserFlagType.String && pair.Value is not string)
+                {
+                    illegals.Add(pair.Key);
+                    continue;
+                }
             }
+            return illegals.Count == 0;
         }
 
     #endif

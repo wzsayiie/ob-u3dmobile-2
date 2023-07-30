@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
-using System.IO;
-using UnityEngine;
+using U3DMobile;
 
 namespace U3DMobileEditor
 {
@@ -9,7 +7,19 @@ namespace U3DMobileEditor
     {
         internal static void Launch()
         {
-            BuildEnvironment.ParseEnvironment();
+            //parse arguments.
+            BuildArguments args = BuildEnvironment.ParseEnvironment();
+
+            //check arguments.
+            List<string> errors = BuildEnvironment.CheckEnvironment(args);
+            if (errors != null && errors.Count > 0)
+            {
+                for (int i = 0; i < errors.Count; ++i)
+                {
+                    Log.Error("Argument Error ({0}/{1}): {2}", i + 1, errors.Count, errors[i]);
+                }
+                return;
+            }
         }
     }
 }

@@ -54,17 +54,17 @@ namespace U3DMobileEditor
 
             var options = AssetHelper.LoadScriptable<GameOptions>(GameOptions.SavedPath);
 
-            _languageList = options.GetGameLanguages  ();
-            _channelList  = options.GetStoreChannels  ();
-            _gatewayList  = options.GetChannelGateways();
-            _assetURLList = options.GetForcedAssetURLs();
-            _patchURLList = options.GetForcedPatchURLs();
+            _languageList = options.GameLanguages  ();
+            _channelList  = options.StoreChannels  ();
+            _gatewayList  = options.ChannelGateways();
+            _assetURLList = options.AssetURLs      ();
+            _patchURLList = options.PatchURLs      ();
 
             _languageIndex = LocateIndex(_languageList   , _settings.firstLanguage );
             _channelIndex  = LocateIndex(_channelList    , _settings.storeChannel  );
             _gatewayIndex  = LocateIndex(_gatewayList [1], _settings.channelGateway);
-            _assetURLIndex = LocateIndex(_assetURLList[1], _settings.forcedAssetURL);
-            _patchURLIndex = LocateIndex(_patchURLList[1], _settings.forcedPatchURL);
+            _assetURLIndex = LocateIndex(_assetURLList[1], _settings.assetURL      );
+            _patchURLIndex = LocateIndex(_patchURLList[1], _settings.patchURL      );
 
             InitializeAssetFlavors(options);
         }
@@ -88,7 +88,7 @@ namespace U3DMobileEditor
 
         private void InitializeAssetFlavors(GameOptions options)
         {
-            _flavorList    = options.GetAssetFlavors();
+            _flavorList    = options.AssetFlavors();
             _flavorIsOn    = new bool[_flavorList.Length];
             _isShowFlavors = true;
 
@@ -108,8 +108,8 @@ namespace U3DMobileEditor
             DrawFirstLanguage ();
             DrawStoreChannel  ();
             DrawChannelGateway();
-            DrawForcedAssetURL();
-            DrawForcedPatchURL();
+            DrawAssetURL      ();
+            DrawPatchURL      ();
             DrawAssetFlavors  ();
             DrawUserFlags     ();
 
@@ -155,21 +155,21 @@ namespace U3DMobileEditor
             });
         }
         
-        private void DrawForcedAssetURL()
+        private void DrawAssetURL()
         {
             string[][] list = _assetURLList;
             Popup("Forced Asset URL", list[0], list[1], ref _assetURLIndex, (string value) =>
             {
-                _settings.forcedAssetURL = value;
+                _settings.assetURL = value;
             });
         }
         
-        private void DrawForcedPatchURL()
+        private void DrawPatchURL()
         {
             string[][] list = _patchURLList;
             Popup("Forced Patch URL", list[0], list[1], ref _patchURLIndex, (string value) =>
             {
-                _settings.forcedPatchURL = value;
+                _settings.patchURL = value;
             });
         }
 

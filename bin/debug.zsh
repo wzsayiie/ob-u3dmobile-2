@@ -21,14 +21,14 @@ export _app_version_str="1.0.0"
 export _app_version_num=1
 
 #GameSettings parameters.
-export   _package_serial=1
-export   _first_language=chinese
-export    _store_channel="googleplay"
-export  _channel_gateway="googleplay"
-export _forced_asset_url="http://localhost.com"
-export _forced_patch_url="http://localhost.com"
-export     _asset_flavor="normal"
-export       _user_flags="UID:12;GM:true"
+export  _package_serial=1
+export  _first_language=chinese
+export   _store_channel="googleplay"
+export _channel_gateway="googleplay"
+export       _asset_url="http://localhost.com"
+export       _patch_url="http://localhost.com"
+export    _asset_flavor="normal"
+export      _user_flags="UID:12;GM:true"
 
 #BuildSettings parameters.
 export   _bundle_serial=1

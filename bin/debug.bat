@@ -21,14 +21,14 @@ set _app_version_str=1.0.0
 set _app_version_num=1
 
 ::GameSettings parameters.
-set   _package_serial=1
-set   _first_language=chinese
-set    _store_channel=googleplay
-set  _channel_gateway=googleplay
-set _forced_asset_url=http://localhost.com
-set _forced_patch_url=http://localhost.com
-set    _asset_flavors=normal
-set       _user_flags=UID:12;GM:true
+set  _package_serial=1
+set  _first_language=chinese
+set   _store_channel=googleplay
+set _channel_gateway=googleplay
+set       _asset_url=http://localhost.com
+set       _patch_url=http://localhost.com
+set   _asset_flavors=normal
+set      _user_flags=UID:12;GM:true
 
 ::BuildSettings parameters.
 set   _bundle_serial=1

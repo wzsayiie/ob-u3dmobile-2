@@ -1,10 +1,22 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using U3DMobile;
 
 namespace U3DMobileEditor
 {
-    internal class EnvironmentArguments
+    internal static class BuildKeys
+    {
+        internal static string APKJKSFile      (string name) { return $"keystores/android/{name}.jks"        ; }
+        internal static string APKJKSPassFile  (string name) { return $"keystores/android/{name}.jkspass.txt"; }
+        internal static string APKKeyFile      (string name) { return $"keystores/android/{name}.key.txt"    ; }
+        internal static string APKKeyPassFile  (string name) { return $"keystores/android/{name}.keypass.txt"; }
+
+        internal static string IPAPrivKeyFile  (string name) { return $"keystone/ios/{name}.privkey.txt"     ; }
+        internal static string IPAProvisionFile(string name) { return $"keystone/ios/{name}.mobileprovision" ; }
+    }
+
+    internal class BuildArguments
     {
         //platform.
         public string targetPlatform;
@@ -24,8 +36,8 @@ namespace U3DMobileEditor
         public string firstLanguage ;
         public string storeChannel  ;
         public string channelGateway;
-        public string forcedAssetURL;
-        public string forcedPatchURL;
+        public string assetURL      ;
+        public string patchURL      ;
 
         public HashSet<string>            assetFlavors;
         public Dictionary<string, object> userFlags;
@@ -39,9 +51,9 @@ namespace U3DMobileEditor
 
     internal static class BuildEnvironment
     {
-        internal static EnvironmentArguments ParseEnvironment()
+        internal static BuildArguments ParseEnvironment()
         {
-            var args = new EnvironmentArguments();
+            var args = new BuildArguments();
 
             args.targetPlatform = GetEnvString("_target_platform" , "");
             args.targetProduct  = GetEnvString("_target_product"  , "");
@@ -57,8 +69,8 @@ namespace U3DMobileEditor
             args.firstLanguage  = GetEnvString("_first_language"  , ""    );
             args.storeChannel   = GetEnvString("_store_channel"   , ""    );
             args.channelGateway = GetEnvString("_channel_gateway" , ""    );
-            args.forcedAssetURL = GetEnvString("_forced_asset_url", "none");
-            args.forcedPatchURL = GetEnvString("_forced_patch_url", "none");
+            args.assetURL       = GetEnvString("_asset_url"       , "none");
+            args.patchURL       = GetEnvString("_patch_url"       , "none");
             args.assetFlavors   = GetStringSet("_asset_flavors"   );
             args.userFlags      = GetObjDict  ("_user_flags"      );
 
@@ -78,8 +90,8 @@ namespace U3DMobileEditor
             Log.Info("_first_language  : {0}", args.firstLanguage );
             Log.Info("_store_channel   : {0}", args.storeChannel  );
             Log.Info("_channel_gateway : {0}", args.channelGateway);
-            Log.Info("_forced_asset_url: {0}", args.forcedAssetURL);
-            Log.Info("_forced_patch_url: {0}", args.forcedPatchURL);
+            Log.Info("_asset_url       : {0}", args.assetURL      );
+            Log.Info("_patch_url       : {0}", args.patchURL      );
 
             int flavorCount = args.assetFlavors.Count;
             int flavorIndex = 0;
@@ -152,7 +164,7 @@ namespace U3DMobileEditor
             {
                 if (!string.IsNullOrWhiteSpace(item))
                 {
-                    set.Add(item);
+                    set.Add(item.Trim());
                 }
             }
 
@@ -205,9 +217,127 @@ namespace U3DMobileEditor
             return dict;
         }
 
-        internal static List<string> CheckEnvironment(EnvironmentArguments args)
+        internal static List<string> CheckEnvironment(BuildArguments args)
         {
             var errors = new List<string>();
+
+            //platform.
+            if (args.targetPlatform == "android")
+            {
+                if (args.targetProduct != "apk"    &&
+                    args.targetProduct != "aab"    &&
+                    args.targetProduct != "bundle" )
+                {
+                    errors.Add("target product only can be 'apk', 'aab' or 'bundle' on android platform");
+                }
+            }
+            else if (args.targetPlatform == "ios")
+            {
+                if (args.targetProduct != "ipa"    &&
+                    args.targetProduct != "bundle" )
+                {
+                    errors.Add("target product only can be 'ipa' or 'bundle' on ios platform");
+                }
+            }
+            else
+            {
+                errors.Add("target platform only can be 'android' or 'ios'");
+            }
+
+            //keys.
+            if (args.targetProduct == "apk" || args.targetProduct == "aab")
+            {
+                if (!string.IsNullOrWhiteSpace(args.apkKeystore))
+                {
+                    string jksFile     = BuildKeys.APKJKSFile    (args.apkKeystore);
+                    string jksPassFile = BuildKeys.APKJKSPassFile(args.apkKeystore);
+                    string keyFile     = BuildKeys.APKKeyFile    (args.apkKeystore);
+                    string keyPassFile = BuildKeys.APKKeyPassFile(args.apkKeystore);
+
+                    if (!File.Exists(jksFile    )) { errors.Add($"not found jks file: {jksFile}"             ); }
+                    if (!File.Exists(jksPassFile)) { errors.Add($"not found jks password file: {jksPassFile}"); }
+                    if (!File.Exists(keyFile    )) { errors.Add($"not found key file: {keyFile}"             ); }
+                    if (!File.Exists(keyPassFile)) { errors.Add($"not found key password file: {keyPassFile}"); }
+                }
+                else
+                {
+                    errors.Add("no apk keystore set");
+                }
+            }
+            else if (args.targetProduct == "ipa")
+            {
+                if (!string.IsNullOrWhiteSpace(args.ipaProvision))
+                {
+                    string privKeyFile   = BuildKeys.IPAPrivKeyFile  (args.apkKeystore);
+                    string provisionFile = BuildKeys.IPAProvisionFile(args.apkKeystore);
+
+                    if (!File.Exists(privKeyFile  )) { errors.Add($"not found private key file: {privKeyFile}"); }
+                    if (!File.Exists(provisionFile)) { errors.Add($"not found provision file: {provisionFile}"); }
+                }
+                else
+                {
+                    errors.Add("no ipa provision set");
+                }
+            }
+
+            //application information.
+            if (string.IsNullOrWhiteSpace(args.appPackageId))
+            {
+                errors.Add("application package id is empty");
+            }
+            if (string.IsNullOrWhiteSpace(args.appVersionStr))
+            {
+                errors.Add("application version string is empty");
+            }
+            if (args.appVersionNum <= 0)
+            {
+                errors.Add($"illegal application version number {args.appVersionNum}");
+            }
+
+            //game settings:
+            if (args.packageSerial <= 0)
+            {
+                errors.Add($"illegal package serial {args.packageSerial}");
+            }
+
+            var gameOptions = AssetHelper.LoadScriptable<GameOptions>(GameOptions.SavedPath);
+
+            if (!gameOptions.IsValidGameLanguage  (args.firstLanguage )) { errors.Add($"unknown first language {args.firstLanguage}"  ); }
+            if (!gameOptions.IsValidStoreChannel  (args.storeChannel  )) { errors.Add($"unknown store channel {args.storeChannel}"    ); }
+            if (!gameOptions.IsValidChannelGateway(args.channelGateway)) { errors.Add($"unknown channel gateway {args.channelGateway}"); }
+            if (!gameOptions.IsValidAssetURL      (args.assetURL      )) { errors.Add($"unknown asset url {args.assetURL}"            ); }
+            if (!gameOptions.IsValidPatchURL      (args.patchURL      )) { errors.Add($"unknown patch url {args.patchURL}"            ); }
+
+            if (!gameOptions.IsValidAssetFlavors(args.assetFlavors, out HashSet<string> illegalFlavors))
+            {
+                int index = 0;
+                foreach (string item in illegalFlavors)
+                {
+                    errors.Add($"unknown asset flavor({++index}/{illegalFlavors.Count}): {item}");
+                }
+            }
+
+            var gameSetting = AssetHelper.LoadScriptable<GameSettings>(GameSettings.SavedPath);
+            if (!gameSetting.IsValidUserFlags(args.userFlags, out HashSet<string> illegalFlags))
+            {
+                int index = 0;
+                foreach (string item in illegalFlags)
+                {
+                    errors.Add($"illegal user flag({++index}/{illegalFlags.Count}): {item}");
+                }
+            }
+
+            //build settings:
+            if (args.bundleSerial <= 0)
+            {
+                errors.Add($"illegal bundle serial {args.bundleSerial}");
+            }
+
+            var buildSettings = AssetHelper.LoadScriptable<BuildSettings>(BuildSettings.SavedPath);
+            if (buildSettings.IsValidCarry(args.currentCarry))
+            {
+                errors.Add($"illegal carry option {args.currentCarry}");
+            }
 
             return errors;
         }

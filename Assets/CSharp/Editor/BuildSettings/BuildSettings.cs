@@ -120,7 +120,7 @@ namespace U3DMobileEditor
         [SerializeField] private string _currentCarry;
         [SerializeField] private List<CarryOption> _carryOptions;
 
-        internal bool IsValidCarryOption(string option)
+        internal bool IsValidCarry(string option)
         {
             if (string.IsNullOrWhiteSpace(option))
             {
@@ -149,7 +149,7 @@ namespace U3DMobileEditor
             _currentCarry = !string.IsNullOrWhiteSpace(option) ? option.Trim(): "";
         }
 
-        internal string GetActiveCarry()
+        internal string CurrentCarry()
         {
             return !string.IsNullOrWhiteSpace(_currentCarry) ? _currentCarry.Trim() : null;
         }

@@ -55,12 +55,12 @@ namespace U3DMobileEditor
         [SerializeField] private List<GameLanguage  > _gameLanguages  ;
         [SerializeField] private List<StoreChannel  > _storeChannels  ;
         [SerializeField] private List<ChannelGateway> _channelGateways;
-        [SerializeField] private List<ForcedURL     > _forcedAssetURLs;
-        [SerializeField] private List<ForcedURL     > _forcedPatchURLs;
+        [SerializeField] private List<ForcedURL     > _assetURLs      ;
+        [SerializeField] private List<ForcedURL     > _patchURLs      ;
         [SerializeField] private List<AssetFlavor   > _assetFlavors   ;
 
-        internal string[] GetGameLanguages() { return GetItems(_gameLanguages, i => i?.language); }
-        internal string[] GetStoreChannels() { return GetItems(_storeChannels, i => i?.channel ); }
+        internal string[] GameLanguages() { return GetItems(_gameLanguages, i => i?.language); }
+        internal string[] StoreChannels() { return GetItems(_storeChannels, i => i?.channel ); }
 
         private string[] GetItems<T>(List<T> list, Func<T, string> pick)
         {
@@ -84,9 +84,9 @@ namespace U3DMobileEditor
             return valueList.ToArray();
         }
 
-        internal string[][] GetChannelGateways() { return GetEntries(_channelGateways, i => i?.channel, i => i?.gateway); }
-        internal string[][] GetForcedAssetURLs() { return GetEntries(_forcedAssetURLs, i => i?.name   , i => i?.url    ); }
-        internal string[][] GetForcedPatchURLs() { return GetEntries(_forcedPatchURLs, i => i?.name   , i => i?.url    ); }
+        internal string[][] ChannelGateways() { return GetEntries(_channelGateways, i => i?.channel, i => i?.gateway); }
+        internal string[][] AssetURLs      () { return GetEntries(_assetURLs      , i => i?.name   , i => i?.url    ); }
+        internal string[][] PatchURLs      () { return GetEntries(_patchURLs      , i => i?.name   , i => i?.url    ); }
 
         private string[][] GetEntries<T>(List<T> list, Func<T, string> pickK, Func<T, string> pickV)
         {
@@ -122,7 +122,7 @@ namespace U3DMobileEditor
             return entries;
         }
 
-        internal string[] GetAssetFlavors()
+        internal string[] AssetFlavors()
         {
             var list = new List<string>();
 
@@ -138,6 +138,58 @@ namespace U3DMobileEditor
             }
 
             return list.ToArray();
+        }
+
+        internal bool IsValidGameLanguage  (string target) { return IsOneOf(GameLanguages  ()   , target); }
+        internal bool IsValidStoreChannel  (string target) { return IsOneOf(StoreChannels  ()   , target); }
+        internal bool IsValidChannelGateway(string target) { return IsOneOf(ChannelGateways()[0], target); }
+        internal bool IsValidAssetURL      (string target) { return IsOneOf(AssetURLs      ()[0], target); }
+        internal bool IsValidPatchURL      (string target) { return IsOneOf(PatchURLs      ()[0], target); }
+
+        private static bool IsOneOf(string[] options, string target)
+        {
+            if (options == null || options.Length == 0)
+            {
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(target))
+            {
+                return false;
+            }
+
+            foreach (string item in options)
+            {
+                if (item == target)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        internal bool IsValidAssetFlavors(HashSet<string> targets, out HashSet<string> illegals)
+        {
+            if (targets == null || targets.Count == 0)
+            {
+                illegals = null;
+                return true;
+            }
+
+            var legals = new HashSet<string>();
+            foreach (string item in AssetFlavors())
+            {
+                legals.Add(item);
+            }
+
+            illegals = new HashSet<string>();
+            foreach (string item in targets)
+            {
+                if (!legals.Contains(item))
+                {
+                    illegals.Add(item);
+                }
+            }
+            return illegals.Count == 0;
         }
     }
 }
