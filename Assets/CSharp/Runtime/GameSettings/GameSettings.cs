@@ -145,6 +145,10 @@ namespace U3DMobile
             return illegals.Count == 0;
         }
 
+        public void SetUserFlags(Dictionary<string, object> flags)
+        {
+        }
+
     #endif
 
         public bool GetBoolFlag(string name)

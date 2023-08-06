@@ -103,13 +103,13 @@ namespace U3DMobileEditor
         [SerializeField]
         private UsePastBundleCheck _usePastBundle;
 
-        internal void SetUsePastCache(bool usePastBundle)
+        internal void SetUsePastBundle(bool usePastBundle)
         {
             _usePastBundle ??= new UsePastBundleCheck();
             _usePastBundle.usePastBundle = usePastBundle;
         }
 
-        internal bool IsUsePastCache()
+        internal bool IsUsePastBundle()
         {
             return _usePastBundle != null && _usePastBundle.usePastBundle;
         }
