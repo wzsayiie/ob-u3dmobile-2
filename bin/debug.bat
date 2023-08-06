@@ -25,8 +25,8 @@ set  _package_serial=1
 set  _first_language=chinese
 set   _store_channel=googleplay
 set _channel_gateway=googleplay
-set       _asset_url=http://localhost.com
-set       _patch_url=http://localhost.com
+set       _asset_url=local
+set       _patch_url=local
 set   _asset_flavors=normal
 set      _user_flags=UID:12;GM:true
 

@@ -25,9 +25,9 @@ export  _package_serial=1
 export  _first_language=chinese
 export   _store_channel="googleplay"
 export _channel_gateway="googleplay"
-export       _asset_url="http://localhost.com"
-export       _patch_url="http://localhost.com"
-export    _asset_flavor="normal"
+export       _asset_url="local"
+export       _patch_url="local"
+export   _asset_flavors="normal"
 export      _user_flags="UID:12;GM:true"
 
 #BuildSettings parameters.
