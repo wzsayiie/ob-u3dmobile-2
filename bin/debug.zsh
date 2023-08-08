@@ -4,12 +4,12 @@
 #if necessary, to "source" this script to get these parameters.
 
 #set "android" or "ios".
-export _target_platform="android"
+export _target_platform="ios"
 
 #if build for android, options are "apk", "aab" and "bundle",
 #else for ios, options are "ipa" and "bundle".
 #"bundle" means "asset bundles".
-export _target_product="apk"
+export _target_product="ipa"
 
 #installation package signing key files.
 export  _apk_keystore="master"
@@ -23,8 +23,8 @@ export _app_version_num=1
 #GameSettings parameters.
 export  _package_serial=1
 export  _first_language=chinese
-export   _store_channel="googleplay"
-export _channel_gateway="googleplay"
+export   _store_channel="appstore"
+export _channel_gateway="appstore"
 export       _asset_url="local"
 export       _patch_url="local"
 export   _asset_flavors="normal"

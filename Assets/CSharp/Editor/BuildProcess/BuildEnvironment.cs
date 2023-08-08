@@ -13,8 +13,8 @@ namespace U3DMobileEditor
         internal static string APKKeyFile      (string name) { return $"keystores/android/{name}.key.txt"    ; }
         internal static string APKKeyPassFile  (string name) { return $"keystores/android/{name}.keypass.txt"; }
 
-        internal static string IPAPrivKeyFile  (string name) { return $"keystone/ios/{name}.privkey.txt"     ; }
-        internal static string IPAProvisionFile(string name) { return $"keystone/ios/{name}.mobileprovision" ; }
+        internal static string IPAPrivKeyFile  (string name) { return $"keystores/ios/{name}.privkey.txt"    ; }
+        internal static string IPAProvisionFile(string name) { return $"keystores/ios/{name}.mobileprovision"; }
     }
 
     internal class BuildArguments
@@ -360,6 +360,7 @@ namespace U3DMobileEditor
             }
             else if (args.targetProduct == "ipa")
             {
+                //set signature information in the export xcode project.
             }
 
             //application information.

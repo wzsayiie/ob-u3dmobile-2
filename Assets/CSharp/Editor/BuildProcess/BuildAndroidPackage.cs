@@ -37,7 +37,7 @@ namespace U3DMobileEditor
                 PlayerSettings.Android.useAPKExpansionFiles = false;
             }
 
-            options.scenes = new[] { "Assets/Game.unity" }; 
+            options.scenes = new []{ "Assets/Game.unity" }; 
             options.target = BuildTarget.Android;
 
             //build:
@@ -53,8 +53,8 @@ namespace U3DMobileEditor
             {
                 foreach (BuildStepMessage message in step.messages)
                 {
-                    if (message.type != LogType.Exception &&
-                        message.type != LogType.Error     )
+                    if (message.type == LogType.Exception ||
+                        message.type == LogType.Error     )
                     {
                         errors.Add($"{step.name}: {message.content}");
                     }
