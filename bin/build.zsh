@@ -28,7 +28,7 @@ declare _unity_logs=$_output_dir/log.txt
 
 "/Applications/Unity/Hub/Editor/2021.3.22f1c1/Unity.app/Contents/MacOS/Unity"   \
     -projectPath   .                                                            \
-    -executeMethod U3DMobileEditor.BuildProcess.Launch                          \
+    -executeMethod U3DMobileEditor.BuildHelper.Launch                           \
     -logFile       $_unity_logs                                                 \
     -batchmode                                                                  \
     -quit

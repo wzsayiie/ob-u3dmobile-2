@@ -32,7 +32,7 @@ set _unity_logs=%_output_dir%\log.txt
 
 "C:\Program Files\Unity\Hub\Editor\2021.3.22f1c1\Editor\Unity.exe"  ^
     -projectPath   .                                                ^
-    -executeMethod U3DMobileEditor.BuildProcess.Launch              ^
+    -executeMethod U3DMobileEditor.BuildHelper.Launch               ^
     -logFile       %_unity_logs%                                    ^
     -batchmode                                                      ^
     -quit

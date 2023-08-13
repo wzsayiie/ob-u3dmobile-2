@@ -6,17 +6,6 @@ using UnityEditor;
 
 namespace U3DMobileEditor
 {
-    internal static class BuildKeys
-    {
-        internal static string APKJKSFile      (string name) { return $"keystores/android/{name}.jks"        ; }
-        internal static string APKJKSPassFile  (string name) { return $"keystores/android/{name}.jkspass.txt"; }
-        internal static string APKKeyFile      (string name) { return $"keystores/android/{name}.key.txt"    ; }
-        internal static string APKKeyPassFile  (string name) { return $"keystores/android/{name}.keypass.txt"; }
-
-        internal static string IPAPrivKeyFile  (string name) { return $"keystores/ios/{name}.privkey.txt"    ; }
-        internal static string IPAProvisionFile(string name) { return $"keystores/ios/{name}.mobileprovision"; }
-    }
-
     internal class BuildArguments
     {
         //platform.
@@ -52,7 +41,7 @@ namespace U3DMobileEditor
 
     internal static class BuildEnvironment
     {
-        internal static BuildArguments ParseEnvironment()
+        internal static BuildArguments ParseArguments()
         {
             var args = new BuildArguments();
 
@@ -221,7 +210,7 @@ namespace U3DMobileEditor
             return dict;
         }
 
-        internal static void CheckEnvironment(BuildArguments args, List<string> errors)
+        internal static void CheckArguments(BuildArguments args, List<string> errors)
         {
             //platform.
             if (args.targetPlatform == "android")
@@ -251,10 +240,10 @@ namespace U3DMobileEditor
             {
                 if (!string.IsNullOrWhiteSpace(args.apkKeystore))
                 {
-                    string jksFile     = BuildKeys.APKJKSFile    (args.apkKeystore);
-                    string jksPassFile = BuildKeys.APKJKSPassFile(args.apkKeystore);
-                    string keyFile     = BuildKeys.APKKeyFile    (args.apkKeystore);
-                    string keyPassFile = BuildKeys.APKKeyPassFile(args.apkKeystore);
+                    string jksFile     = BuildKey.APKJKSFile    (args.apkKeystore);
+                    string jksPassFile = BuildKey.APKJKSPassFile(args.apkKeystore);
+                    string keyFile     = BuildKey.APKKeyFile    (args.apkKeystore);
+                    string keyPassFile = BuildKey.APKKeyPassFile(args.apkKeystore);
 
                     if (!File.Exists(jksFile    )) { errors.Add($"not found jks file: {jksFile}"             ); }
                     if (!File.Exists(jksPassFile)) { errors.Add($"not found jks password file: {jksPassFile}"); }
@@ -270,8 +259,8 @@ namespace U3DMobileEditor
             {
                 if (!string.IsNullOrWhiteSpace(args.ipaProvision))
                 {
-                    string privKeyFile   = BuildKeys.IPAPrivKeyFile  (args.apkKeystore);
-                    string provisionFile = BuildKeys.IPAProvisionFile(args.apkKeystore);
+                    string privKeyFile   = BuildKey.IPAPrivKeyFile  (args.apkKeystore);
+                    string provisionFile = BuildKey.IPAProvisionFile(args.apkKeystore);
 
                     if (!File.Exists(privKeyFile  )) { errors.Add($"not found private key file: {privKeyFile}"); }
                     if (!File.Exists(provisionFile)) { errors.Add($"not found provision file: {provisionFile}"); }
@@ -342,27 +331,6 @@ namespace U3DMobileEditor
 
         internal static void UpdateSettings(BuildArguments args)
         {
-            //keys.
-            if (args.targetProduct == "aab" ||
-                args.targetProduct == "apk" )
-            {
-                string name = args.apkKeystore;
-
-                string jksName = BuildKeys.APKJKSFile(name);
-                string jksPass = File.ReadAllText(BuildKeys.APKJKSPassFile(name));
-                string keyName = File.ReadAllText(BuildKeys.APKKeyFile    (name));
-                string keyPass = File.ReadAllText(BuildKeys.APKKeyPassFile(name));
-
-                PlayerSettings.Android.keystoreName = jksName ;
-                PlayerSettings.Android.keystorePass = jksPass != null ? jksPass.Trim() : "";
-                PlayerSettings.Android.keyaliasName = keyName != null ? keyName.Trim() : "";
-                PlayerSettings.Android.keyaliasPass = keyPass != null ? keyPass.Trim() : "";
-            }
-            else if (args.targetProduct == "ipa")
-            {
-                //set signature information in the export xcode project.
-            }
-
             //application information.
             if (args.targetPlatform == "android")
             {
@@ -403,19 +371,6 @@ namespace U3DMobileEditor
 
             //NOTE: remember to save.
             AssetDatabase.SaveAssets();
-        }
-
-        internal static string GetOutputDirectory()
-        {
-            const string defaultPath = "BUILD/local";
-
-            string path = GetEnvString("_output_dir", defaultPath);
-            if (!Directory.Exists(path))
-            {
-                Directory.CreateDirectory(path);
-            }
-
-            return path;
         }
     }
 }
