@@ -222,8 +222,9 @@ namespace U3DMobileEditor
                 EditorUtility.SetDirty(_settings);
             }
 
-            if (GUILayout.Button("Copy Selected Flavors"))
+            if (GUILayout.Button("Switch Asset Flavors"))
             {
+                MenuItems.SwitchAssetFlavors();
             }
         }
 

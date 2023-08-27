@@ -22,7 +22,7 @@ namespace U3DMobileEditor
             BuildEnvironment.UpdateSettings(args);
 
             errors.Clear();
-            BuildAssetBundle.SwitchAssetFlavors(args.assetFlavors);
+            BuildAssetBundles.SwitchAssetFlavors(args.assetFlavors, errors);
             if (errors.Count > 0)
             {
                 throw WriteErrors("Switch Asset Flavors Error", errors);
@@ -32,7 +32,7 @@ namespace U3DMobileEditor
             errors.Clear();
             if (args.targetPlatform == "android")
             {
-                BuildAssetBundle.PackForAndroid(errors);
+                BuildAssetBundles.PackForAndroid(errors);
                 if (errors.Count > 0)
                 {
                     throw WriteErrors("Pack Android Bundles Error", errors);
@@ -40,7 +40,7 @@ namespace U3DMobileEditor
             }
             else if (args.targetPlatform == "ios")
             {
-                BuildAssetBundle.PackForIOS(errors);
+                BuildAssetBundles.PackForIOS(errors);
                 if (errors.Count > 0)
                 {
                     throw WriteErrors("Pack iOS Bundles Error", errors);
@@ -72,6 +72,49 @@ namespace U3DMobileEditor
                 {
                     throw WriteErrors("Export iOS Xcode Project Error", errors);
                 }
+            }
+        }
+
+        internal static void SwitchAssetFlavors()
+        {
+            var settings = AssetHelper.LoadScriptable<GameSettings>(GameSettings.SavedPath);
+            HashSet<string> flavors = settings.GetAssetFlavors();
+
+            var errors = new List<string>();
+            BuildAssetBundles.SwitchAssetFlavors(flavors, errors);
+            if (errors.Count > 0)
+            {
+                WriteErrors("Switch Asset Flavors Error", errors);
+            }
+        }
+
+        internal static void PackBundlesForAndroid()
+        {
+            var errors = new List<string>();
+            BuildAssetBundles.PackForAndroid(errors);
+            if (errors.Count > 0)
+            {
+                WriteErrors("Pack Bundles for Android Error", errors);
+            }
+        }
+
+        internal static void PackBundlesForIOS()
+        {
+            var errors = new List<string>();
+            BuildAssetBundles.PackForIOS(errors);
+            if (errors.Count > 0)
+            {
+                WriteErrors("Pack Bundles for iOS Error", errors);
+            }
+        }
+
+        internal static void CopyPatches()
+        {
+            var errors = new List<string>();
+            BuildPatches.Copy(errors);
+            if (errors.Count > 0)
+            {
+                WriteErrors("Copy Patches Error", errors);
             }
         }
 

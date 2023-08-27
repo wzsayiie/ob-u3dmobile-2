@@ -10,31 +10,77 @@ namespace U3DMobileEditor
         private const int ExportPackageMenu = 300;
 
         [MenuItem("U3DMobile/Game Settings", false, GameSettingsMenu)]
-        private static void OnGameSettings()
+        internal static void ShowGameSettings()
         {
             UIHelper.PingPath<GameSettings>(GameSettings.SavedPath);
         }
 
         [MenuItem("U3DMobile/Game Options", false, GameSettingsMenu)]
-        private static void OnGameOptions()
+        internal static void ShowGameOptions()
         {
             UIHelper.PingPath<GameOptions>(GameOptions.SavedPath);
         }
+        
+        [MenuItem("U3DMobile/Switch Asset Flavors", false, GameSettingsMenu)]
+        internal static void SwitchAssetFlavors()
+        {
+            BuildHelper.SwitchAssetFlavors();
+        }
 
         [MenuItem("U3DMobile/Build Settings", false, BuildSettingsMenu)]
-        private static void OnBuildSettings()
+        internal static void ShowBuildSettings()
         {
             UIHelper.PingPath<BuildSettings>(BuildSettings.SavedPath);
         }
 
+        [MenuItem("U3DMobile/Pack Bundles for Android", false, BuildSettingsMenu)]
+        internal static void PackBundlesForAndroid()
+        {
+            //NOTE: show a dialog for secondary confirmation,
+            //to prevent time-consuming tasks caused by accidental touches
+            bool yes = EditorUtility.DisplayDialog(
+                $"Pack Bundles for Android",
+                $"Pack Bundles for Android to '{BuildPath.outputDirectory}'",
+                $"Yes",
+                $"No"
+            );
+
+            if (yes)
+            {
+                BuildHelper.PackBundlesForAndroid();
+            }
+        }
+
+        [MenuItem("U3DMobile/Pack Bundles for iOS", false, BuildSettingsMenu)]
+        internal static void PackBundlesForIOS()
+        {
+            bool yes = EditorUtility.DisplayDialog(
+                $"Pack Bundles for iOS",
+                $"Pack Bundles for iOS to '{BuildPath.outputDirectory}'",
+                $"Yes",
+                $"No"
+            );
+
+            if (yes)
+            {
+                BuildHelper.PackBundlesForIOS();
+            }
+        }
+
+        [MenuItem("U3DMobile/Copy Patches", false, BuildSettingsMenu)]
+        internal static void CopyPatches()
+        {
+            BuildHelper.CopyPatches();
+        }
+
         [MenuItem("U3DMobile/Export Android AAB", false, ExportPackageMenu)]
-        private static void OnExportAndroidAAB()
+        internal static void ExportAndroidAAB()
         {
             //NOTE: show a dialog for secondary confirmation,
             //to prevent time-consuming tasks caused by accidental touches
             bool yes = EditorUtility.DisplayDialog(
                 $"Export Android AAB",
-                $"Export Android AAB to '{BuildPath.GetOutputDirectory()}'",
+                $"Export Android AAB to '{BuildPath.outputDirectory}'",
                 $"Yes",
                 $"No"
             );
@@ -46,11 +92,11 @@ namespace U3DMobileEditor
         }
 
         [MenuItem("U3DMobile/Export Android APK", false, ExportPackageMenu)]
-        private static void OnExportAndroidAPK()
+        internal static void ExportAndroidAPK()
         {
             bool yes = EditorUtility.DisplayDialog(
                 $"Export Android APK",
-                $"Export Android APK to '{BuildPath.GetOutputDirectory()}'",
+                $"Export Android APK to '{BuildPath.outputDirectory}'",
                 $"Yes",
                 $"No"
             );
@@ -62,11 +108,11 @@ namespace U3DMobileEditor
         }
 
         [MenuItem("U3DMobile/Export iOS Xcode Project", false, ExportPackageMenu)]
-        private static void OnExportIOSProject()
+        internal static void ExportIOSProject()
         {
             bool yes = EditorUtility.DisplayDialog(
                 $"Export iOS Xcode Project",
-                $"Export iOS Xcode Project to '{BuildPath.GetOutputDirectory()}'",
+                $"Export iOS Xcode Project to '{BuildPath.outputDirectory}'",
                 $"Yes",
                 $"No"
             );

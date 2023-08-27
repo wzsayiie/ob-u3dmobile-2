@@ -68,14 +68,14 @@ namespace U3DMobileEditor
 
             if (product == "aab")
             {
-                options.locationPathName = $"{BuildPath.GetOutputDirectory()}/package.aab";
+                options.locationPathName = $"{BuildPath.outputDirectory}/package.aab";
 
                 EditorUserBuildSettings.buildAppBundle      = true;
                 PlayerSettings.Android.useAPKExpansionFiles = true;
             }
             else //apk.
             {
-                options.locationPathName = $"{BuildPath.GetOutputDirectory()}/package.apk";
+                options.locationPathName = $"{BuildPath.outputDirectory}/package.apk";
 
                 EditorUserBuildSettings.buildAppBundle      = false;
                 PlayerSettings.Android.useAPKExpansionFiles = false;

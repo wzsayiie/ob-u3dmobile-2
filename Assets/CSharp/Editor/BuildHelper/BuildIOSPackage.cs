@@ -24,7 +24,7 @@ namespace U3DMobileEditor
             //build options.
             var options = new BuildPlayerOptions
             {
-                locationPathName = $"{BuildPath.GetOutputDirectory()}/xcproject",
+                locationPathName = $"{BuildPath.outputDirectory}/xcproject",
                 scenes           = new []{ "Assets/Game.unity" },
                 target           = BuildTarget.iOS,
             };

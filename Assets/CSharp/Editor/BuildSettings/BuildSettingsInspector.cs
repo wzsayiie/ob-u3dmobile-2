@@ -77,15 +77,13 @@ namespace U3DMobileEditor
 
         private void DrawFileEntry(SerializedProperty property)
         {
-            Field( 20, property, "selected"  );
-            Field(120, property, "fileObj"   );
+            Field(140, property, "fileObj"   );
             Field( 70, property, "packMode"  );
             Field(flx, property, "demandMode");
         }
 
         private void DrawCarryOpts(SerializedProperty property)
         {
-            Label( 20, "");
             Field(flx, property, "carryOpts");
         }
 
@@ -96,7 +94,6 @@ namespace U3DMobileEditor
 
             if (objRef != null)
             {
-                Label( 20, "");
                 Label(flx, AssetDatabase.GetAssetPath(objRef));
             }
         }
@@ -121,7 +118,6 @@ namespace U3DMobileEditor
 
         private void DrawFileObj(SerializedProperty property)
         {
-            Field( 20, property, "selected");
             Field(flx, property, "fileObj" );
         }
 
@@ -178,17 +174,25 @@ namespace U3DMobileEditor
             EditorGUILayout.PropertyField(_usePastBundle, new GUIContent("Use Past Bundle"));
             EditorGUILayout.PropertyField(_carryOptions , new GUIContent("Carry Options"  ));
 
+            var alignmentButton = new GUIStyle(GUI.skin.button)
+            {
+                alignment = TextAnchor.MiddleLeft
+            };
+
             EditorGUILayout.PropertyField(_bundleEntries, new GUIContent("Bundle Entries"));
-            if (GUILayout.Button("Pack Selected (for Android)"))
+            if (GUILayout.Button(new string(' ', 8) + "Pack Bundles (for Android)", alignmentButton))
             {
+                MenuItems.PackBundlesForAndroid();
             }
-            if (GUILayout.Button("Pack Selected (for iOS)"))
+            if (GUILayout.Button(new string(' ', 8) + "Pack Bundles (for iOS)", alignmentButton))
             {
+                MenuItems.PackBundlesForIOS();
             }
 
             EditorGUILayout.PropertyField(_bundlePatches, new GUIContent("Patch Entries"));
-            if (GUILayout.Button("Copy Selected Patches"))
+            if (GUILayout.Button(new string(' ', 8) + "Copy Patches", alignmentButton))
             {
+                MenuItems.CopyPatches();
             }
 
             serializedObject.ApplyModifiedProperties();

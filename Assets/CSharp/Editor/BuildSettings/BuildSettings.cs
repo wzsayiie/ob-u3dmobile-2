@@ -49,7 +49,6 @@ namespace U3DMobileEditor
     [Serializable]
     internal class BundleEntry
     {
-        public bool               selected  ;
         public UnityEngine.Object fileObj   ;
         public PackMode           packMode  ;
         public DemandMode         demandMode;
@@ -60,8 +59,7 @@ namespace U3DMobileEditor
     [Serializable]
     internal class PatchEntry
     {
-        public bool               selected;
-        public UnityEngine.Object fileObj ;
+        public UnityEngine.Object fileObj;
     }
 
     //build settings.

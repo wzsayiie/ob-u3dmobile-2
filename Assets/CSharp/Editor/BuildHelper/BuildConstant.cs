@@ -16,23 +16,34 @@ namespace U3DMobileEditor
 
     internal static class BuildPath
     {
-        internal static string GetOutputDirectory()
+        internal static string outputDirectory
         {
-            //user-specified path.
-            string path = Environment.GetEnvironmentVariable("_output_dir");
-            //default path.
-            if (string.IsNullOrWhiteSpace(path))
+            get
             {
-                path = "BUILD/local";
-            }
+                //user-specified path.
+                string path = Environment.GetEnvironmentVariable("_output_dir");
+                //default path.
+                if (string.IsNullOrWhiteSpace(path))
+                {
+                    path = "BUILD/Local";
+                }
 
-            //make sure the directory exists.
-            if (!Directory.Exists(path))
+                //make sure the directory exists.
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+
+                return path;
+            }
+        }
+
+        internal static string assetFlavorDirectory
+        {
+            get
             {
-                Directory.CreateDirectory(path);
+                return "AssetFlavors";
             }
-
-            return path;
         }
     }
 }
