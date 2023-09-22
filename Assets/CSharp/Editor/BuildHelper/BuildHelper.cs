@@ -6,7 +6,7 @@ namespace U3DMobileEditor
 {
     internal static class BuildHelper
     {
-        internal static void Launch()
+        internal static void LaunchWithEnvironment()
         {
             //parse arguments:
             BuildArguments args = BuildEnvironment.ParseArguments();
