@@ -120,7 +120,7 @@ namespace U3DMobileEditor
         private void DrawPackageSerial()
         {
             int serial = _profile.packageSerial;
-            _profile.packageSerial = EditorGUILayout.IntField("Package Serial", serial);
+            _profile.packageSerial = EditorGUILayout.IntField(I18N.PackageSerial, serial);
 
             if (serial != _profile.packageSerial)
             {
@@ -132,7 +132,7 @@ namespace U3DMobileEditor
 
         private void DrawFirstLanguage()
         {
-            Popup("First Language", _languageList, null, ref _languageIndex, (string value) =>
+            Popup(I18N.FirstLanguage, _languageList, null, ref _languageIndex, (string value) =>
             {
                 _profile.firstLanguage = value;
             });
@@ -140,7 +140,7 @@ namespace U3DMobileEditor
 
         private void DrawStoreChannel()
         {
-            Popup("Store Channel", _channelList, null, ref _channelIndex , (string value) =>
+            Popup(I18N.StoreChannel, _channelList, null, ref _channelIndex , (string value) =>
             {
                 _profile.storeChannel = value;
             });
@@ -149,7 +149,7 @@ namespace U3DMobileEditor
         private void DrawChannelGateway()
         {
             string[][] list = _gatewayList;
-            Popup("Channel Gateway", list[0], list[1], ref _gatewayIndex, (string value) =>
+            Popup(I18N.ChannelGateway, list[0], list[1], ref _gatewayIndex, (string value) =>
             {
                 _profile.channelGateway = value;
             });
@@ -158,7 +158,7 @@ namespace U3DMobileEditor
         private void DrawAssetURL()
         {
             string[][] list = _assetURLList;
-            Popup("Forced Asset URL", list[0], list[1], ref _assetURLIndex, (string value) =>
+            Popup(I18N.AssetURL, list[0], list[1], ref _assetURLIndex, (string value) =>
             {
                 _profile.assetURL = value;
             });
@@ -167,7 +167,7 @@ namespace U3DMobileEditor
         private void DrawPatchURL()
         {
             string[][] list = _patchURLList;
-            Popup("Forced Patch URL", list[0], list[1], ref _patchURLIndex, (string value) =>
+            Popup(I18N.PatchURL, list[0], list[1], ref _patchURLIndex, (string value) =>
             {
                 _profile.patchURL = value;
             });
@@ -194,7 +194,7 @@ namespace U3DMobileEditor
         {
             bool changed = false;
 
-            _isShowFlavors = EditorGUILayout.BeginFoldoutHeaderGroup(_isShowFlavors, "Asset Flavors");
+            _isShowFlavors = EditorGUILayout.BeginFoldoutHeaderGroup(_isShowFlavors, I18N.AssetFlavor);
             if (_isShowFlavors)
             {
                 for (int i = 0; i < _flavorList.Length; ++i)
@@ -222,15 +222,15 @@ namespace U3DMobileEditor
                 EditorUtility.SetDirty(_profile);
             }
 
-            if (GUILayout.Button("Switch Asset Flavors"))
+            if (GUILayout.Button(I18N.SwitchAssetFlavor))
             {
-                MenuItems.SwitchAssetFlavors();
+                FunctionMenu.SwitchAssetFlavor();
             }
         }
 
         private void DrawUserFlags()
         {
-            EditorGUILayout.PropertyField(_userFlags, new GUIContent("User Flags"));
+            EditorGUILayout.PropertyField(_userFlags, new GUIContent(I18N.UserFlag));
         }
     }
 }

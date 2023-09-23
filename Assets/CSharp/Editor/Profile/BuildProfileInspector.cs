@@ -8,7 +8,7 @@ namespace U3DMobileEditor
     {
         protected override void OnDrawLine(int _, SerializedProperty property)
         {
-            Label(110, "Bundle Serial");
+            Label(110, I18N.BundleSerial);
             Field(flx, property.FindPropertyRelative("serial"));
         }
     }
@@ -18,7 +18,7 @@ namespace U3DMobileEditor
     {
         protected override void OnDrawLine(int _, SerializedProperty property)
         {
-            Label(110, "Force Rebuild");
+            Label(110, I18N.ForceRebuild);
             Field(flx, property.FindPropertyRelative("forceRebuild"));
         }
     }
@@ -28,7 +28,7 @@ namespace U3DMobileEditor
     {
         protected override void OnDrawLine(int _, SerializedProperty property)
         {
-            Label(110, "Use Past Bundle");
+            Label(110, I18N.UsePastBundle);
             Field(flx, property.FindPropertyRelative("usePastBundle"));
         }
     }
@@ -169,30 +169,30 @@ namespace U3DMobileEditor
         {
             serializedObject.Update();
 
-            EditorGUILayout.PropertyField(_bundleSerial , new GUIContent("Bundle Serial"  ));
-            EditorGUILayout.PropertyField(_forceRebuild , new GUIContent("Force Rebuild"  ));
-            EditorGUILayout.PropertyField(_usePastBundle, new GUIContent("Use Past Bundle"));
-            EditorGUILayout.PropertyField(_carryOptions , new GUIContent("Carry Options"  ));
+            EditorGUILayout.PropertyField(_bundleSerial , new GUIContent(I18N.BundleSerial ));
+            EditorGUILayout.PropertyField(_forceRebuild , new GUIContent(I18N.ForceRebuild ));
+            EditorGUILayout.PropertyField(_usePastBundle, new GUIContent(I18N.UsePastBundle));
+            EditorGUILayout.PropertyField(_carryOptions , new GUIContent(I18N.CarryOptions ));
 
             var alignmentButton = new GUIStyle(GUI.skin.button)
             {
                 alignment = TextAnchor.MiddleLeft
             };
 
-            EditorGUILayout.PropertyField(_bundleEntries, new GUIContent("Bundle Entries"));
-            if (GUILayout.Button(new string(' ', 8) + "Pack Bundles (for Android)", alignmentButton))
+            EditorGUILayout.PropertyField(_bundleEntries, new GUIContent(I18N.BundleEntries));
+            if (GUILayout.Button(new string(' ', 8) + I18N.PackBundleForAndroid, alignmentButton))
             {
-                MenuItems.PackBundlesForAndroid();
+                FunctionMenu.PackBundleForAndroid();
             }
-            if (GUILayout.Button(new string(' ', 8) + "Pack Bundles (for iOS)", alignmentButton))
+            if (GUILayout.Button(new string(' ', 8) + I18N.PackBundleForIOS, alignmentButton))
             {
-                MenuItems.PackBundlesForIOS();
+                FunctionMenu.PackBundleForIOS();
             }
 
-            EditorGUILayout.PropertyField(_bundlePatches, new GUIContent("Patch Entries"));
-            if (GUILayout.Button(new string(' ', 8) + "Copy Patches", alignmentButton))
+            EditorGUILayout.PropertyField(_bundlePatches, new GUIContent(I18N.PatchEntries));
+            if (GUILayout.Button(new string(' ', 8) + I18N.CopyPatch, alignmentButton))
             {
-                MenuItems.CopyPatches();
+                FunctionMenu.CopyPatches();
             }
 
             serializedObject.ApplyModifiedProperties();

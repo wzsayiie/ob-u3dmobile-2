@@ -79,12 +79,12 @@ namespace U3DMobileEditor
         {
             serializedObject.Update();
 
-            EditorGUILayout.PropertyField(_gameLanguages  , new GUIContent("Game Languages"  ));
-            EditorGUILayout.PropertyField(_storeChannels  , new GUIContent("Store Channels"  ));
-            EditorGUILayout.PropertyField(_channelGateways, new GUIContent("Channel Gateways"));
-            EditorGUILayout.PropertyField(_assetURLs      , new GUIContent("Asset URLs"      ));
-            EditorGUILayout.PropertyField(_patchURLs      , new GUIContent("Patch URLs"      ));
-            EditorGUILayout.PropertyField(_assetFlavors   , new GUIContent("Asset Flavors"   ));
+            EditorGUILayout.PropertyField(_gameLanguages  , new GUIContent(I18N.GameLanguages  ));
+            EditorGUILayout.PropertyField(_storeChannels  , new GUIContent(I18N.StoreChannels  ));
+            EditorGUILayout.PropertyField(_channelGateways, new GUIContent(I18N.ChannelGateways));
+            EditorGUILayout.PropertyField(_assetURLs      , new GUIContent(I18N.AssetURLs      ));
+            EditorGUILayout.PropertyField(_patchURLs      , new GUIContent(I18N.PatchURLs      ));
+            EditorGUILayout.PropertyField(_assetFlavors   , new GUIContent(I18N.AssetFlavors   ));
 
             serializedObject.ApplyModifiedProperties();
         }

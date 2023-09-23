@@ -3,46 +3,45 @@ using UnityEditor;
 
 namespace U3DMobileEditor
 {
-    internal static class MenuItems
+    internal static class FunctionMenu
     {
         private const int GameProfileMenu   = 100;
         private const int BuildProfileMenu  = 200;
         private const int ExportPackageMenu = 300;
 
-        [MenuItem("U3DMobile/Game Settings", false, GameProfileMenu)]
+        [MenuItem(I18N.U3DMobile_GameProfile, false, GameProfileMenu)]
         internal static void ShowGameProfile()
         {
             UIHelper.PingPath<GameProfile>(GameProfile.SavedPath);
         }
 
-        [MenuItem("U3DMobile/Game Options", false, GameProfileMenu)]
+        [MenuItem(I18N.U3DMobile_GameProfileOpt, false, GameProfileMenu)]
         internal static void ShowGameProfileOpt()
         {
             UIHelper.PingPath<GameProfileOpt>(GameProfileOpt.SavedPath);
         }
         
-        [MenuItem("U3DMobile/Switch Asset Flavors", false, GameProfileMenu)]
-        internal static void SwitchAssetFlavors()
+        [MenuItem(I18N.U3DMobile_SwitchAssetFlavor, false, GameProfileMenu)]
+        internal static void SwitchAssetFlavor()
         {
             BuildHelper.SwitchAssetFlavors();
         }
 
-        [MenuItem("U3DMobile/Build Settings", false, BuildProfileMenu)]
+        [MenuItem(I18N.U3DMobile_BuildProfile, false, BuildProfileMenu)]
         internal static void ShowBuildProfile()
         {
             UIHelper.PingPath<BuildProfile>(BuildProfile.SavedPath);
         }
 
-        [MenuItem("U3DMobile/Pack Bundles for Android", false, BuildProfileMenu)]
-        internal static void PackBundlesForAndroid()
+        [MenuItem(I18N.U3DMobile_PackBundleForAndroid, false, BuildProfileMenu)]
+        internal static void PackBundleForAndroid()
         {
-            //NOTE: show a dialog for secondary confirmation,
-            //to prevent time-consuming tasks caused by accidental touches
+            //显示二次确认的对话框, 防止误触导致耗时操作.
             bool yes = EditorUtility.DisplayDialog(
-                $"Pack Bundles for Android",
-                $"Pack Bundles for Android to '{BuildPath.outputDirectory}'",
-                $"Yes",
-                $"No"
+                I18N.Tips,
+                I18N.PackBundleForAndroid,
+                I18N.Yes,
+                I18N.No
             );
 
             if (yes)
@@ -51,14 +50,14 @@ namespace U3DMobileEditor
             }
         }
 
-        [MenuItem("U3DMobile/Pack Bundles for iOS", false, BuildProfileMenu)]
-        internal static void PackBundlesForIOS()
+        [MenuItem(I18N.U3DMobile_PackBundleForIOS, false, BuildProfileMenu)]
+        internal static void PackBundleForIOS()
         {
             bool yes = EditorUtility.DisplayDialog(
-                $"Pack Bundles for iOS",
-                $"Pack Bundles for iOS to '{BuildPath.outputDirectory}'",
-                $"Yes",
-                $"No"
+                I18N.Tips,
+                I18N.PackBundleForIOS,
+                I18N.Yes,
+                I18N.No
             );
 
             if (yes)
@@ -67,22 +66,20 @@ namespace U3DMobileEditor
             }
         }
 
-        [MenuItem("U3DMobile/Copy Patches", false, BuildProfileMenu)]
+        [MenuItem(I18N.U3DMobile_CopyPatch, false, BuildProfileMenu)]
         internal static void CopyPatches()
         {
             BuildHelper.CopyPatches();
         }
 
-        [MenuItem("U3DMobile/Export Android AAB", false, ExportPackageMenu)]
+        [MenuItem(I18N.U3DMobile_ExportAndroidAAB, false, ExportPackageMenu)]
         internal static void ExportAndroidAAB()
         {
-            //NOTE: show a dialog for secondary confirmation,
-            //to prevent time-consuming tasks caused by accidental touches
             bool yes = EditorUtility.DisplayDialog(
-                $"Export Android AAB",
-                $"Export Android AAB to '{BuildPath.outputDirectory}'",
-                $"Yes",
-                $"No"
+                I18N.Tips,
+                I18N.ExportAndroidAAB,
+                I18N.Yes,
+                I18N.No
             );
 
             if (yes)
@@ -91,14 +88,14 @@ namespace U3DMobileEditor
             }
         }
 
-        [MenuItem("U3DMobile/Export Android APK", false, ExportPackageMenu)]
+        [MenuItem(I18N.U3DMobile_ExportAndroidAPK, false, ExportPackageMenu)]
         internal static void ExportAndroidAPK()
         {
             bool yes = EditorUtility.DisplayDialog(
-                $"Export Android APK",
-                $"Export Android APK to '{BuildPath.outputDirectory}'",
-                $"Yes",
-                $"No"
+                I18N.Tips,
+                I18N.ExportAndroidAPK,
+                I18N.Yes,
+                I18N.No
             );
 
             if (yes)
@@ -107,14 +104,14 @@ namespace U3DMobileEditor
             }
         }
 
-        [MenuItem("U3DMobile/Export iOS Xcode Project", false, ExportPackageMenu)]
+        [MenuItem(I18N.U3DMobile_ExportIOSProject, false, ExportPackageMenu)]
         internal static void ExportIOSProject()
         {
             bool yes = EditorUtility.DisplayDialog(
-                $"Export iOS Xcode Project",
-                $"Export iOS Xcode Project to '{BuildPath.outputDirectory}'",
-                $"Yes",
-                $"No"
+                I18N.Tips,
+                I18N.ExportIOSProject,
+                I18N.Yes,
+                I18N.No
             );
 
             if (yes)
