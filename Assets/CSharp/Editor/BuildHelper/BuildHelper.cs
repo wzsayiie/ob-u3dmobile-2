@@ -15,7 +15,7 @@ namespace U3DMobileEditor
             BuildEnvironment.CheckArguments(args, errors);
             if (errors.Count > 0)
             {
-                throw WriteErrors("Argument Error", errors);
+                throw WriteErrors(I18N.ErrorWhenParseEnvironment, errors);
             }
 
             //更新设置:
@@ -25,7 +25,7 @@ namespace U3DMobileEditor
             BuildAssetBundle.SwitchAssetFlavors(args.assetFlavors, errors);
             if (errors.Count > 0)
             {
-                throw WriteErrors("Switch Asset Flavors Error", errors);
+                throw WriteErrors(I18N.ErrorWhenSwitchAssetFlavor, errors);
             }
 
             //打包资产.
@@ -35,7 +35,7 @@ namespace U3DMobileEditor
                 BuildAssetBundle.PackForAndroid(errors);
                 if (errors.Count > 0)
                 {
-                    throw WriteErrors("Pack Android Bundles Error", errors);
+                    throw WriteErrors(I18N.ErrorWhenPackBundleForAndroid, errors);
                 }
             }
             else if (args.targetPlatform == "ios")
@@ -43,7 +43,7 @@ namespace U3DMobileEditor
                 BuildAssetBundle.PackForIOS(errors);
                 if (errors.Count > 0)
                 {
-                    throw WriteErrors("Pack iOS Bundles Error", errors);
+                    throw WriteErrors(I18N.ErrorWhenPackBundleForIOS, errors);
                 }
             }
 
@@ -54,7 +54,7 @@ namespace U3DMobileEditor
                 BuildAndroidPackage.ExportAAB(args.apkKeystore, errors);
                 if (errors.Count > 0)
                 {
-                    throw WriteErrors("Export Android AAB Error", errors);
+                    throw WriteErrors(I18N.ErrorWhenExportAndroidAAB, errors);
                 }
             }
             else if (args.targetProduct == "apk")
@@ -62,7 +62,7 @@ namespace U3DMobileEditor
                 BuildAndroidPackage.ExportAPK(args.apkKeystore, errors);
                 if (errors.Count > 0)
                 {
-                    throw WriteErrors("Export Android APK Error", errors);
+                    throw WriteErrors(I18N.ErrorWhenExportAndroidAPK, errors);
                 }
             }
             else if (args.targetProduct == "ipa")
@@ -70,7 +70,7 @@ namespace U3DMobileEditor
                 BuildIOSPackage.ExportXCProject(args.ipaProvision, errors);
                 if (errors.Count > 0)
                 {
-                    throw WriteErrors("Export iOS Xcode Project Error", errors);
+                    throw WriteErrors(I18N.ErrorWhenExportIOSProject, errors);
                 }
             }
         }
@@ -84,7 +84,7 @@ namespace U3DMobileEditor
             BuildAssetBundle.SwitchAssetFlavors(flavors, errors);
             if (errors.Count > 0)
             {
-                WriteErrors("Switch Asset Flavors Error", errors);
+                WriteErrors(I18N.ErrorWhenSwitchAssetFlavor, errors);
             }
         }
 
@@ -94,7 +94,7 @@ namespace U3DMobileEditor
             BuildAssetBundle.PackForAndroid(errors);
             if (errors.Count > 0)
             {
-                WriteErrors("Pack Bundles for Android Error", errors);
+                WriteErrors(I18N.ErrorWhenPackBundleForAndroid, errors);
             }
         }
 
@@ -104,7 +104,7 @@ namespace U3DMobileEditor
             BuildAssetBundle.PackForIOS(errors);
             if (errors.Count > 0)
             {
-                WriteErrors("Pack Bundles for iOS Error", errors);
+                WriteErrors(I18N.ErrorWhenPackBundleForIOS, errors);
             }
         }
 
@@ -114,7 +114,7 @@ namespace U3DMobileEditor
             BuildPatch.Copy(errors);
             if (errors.Count > 0)
             {
-                WriteErrors("Copy Patches Error", errors);
+                WriteErrors(I18N.ErrorWhenCopyPatch, errors);
             }
         }
 
@@ -125,7 +125,7 @@ namespace U3DMobileEditor
 
             if (errors.Count > 0)
             {
-                WriteErrors("Export Android AAB Error", errors);
+                WriteErrors(I18N.ErrorWhenExportAndroidAAB, errors);
             }
         }
 
@@ -136,7 +136,7 @@ namespace U3DMobileEditor
 
             if (errors.Count > 0)
             {
-                WriteErrors("Export Android APK Error", errors);
+                WriteErrors(I18N.ErrorWhenExportAndroidAPK, errors);
             }
         }
 
@@ -147,7 +147,7 @@ namespace U3DMobileEditor
 
             if (errors.Count > 0)
             {
-                WriteErrors("Export iOS Xcode Project Error", errors);
+                WriteErrors(I18N.ErrorWhenExportIOSProject, errors);
             }
         }
 
@@ -158,7 +158,7 @@ namespace U3DMobileEditor
                 Log.Error(brief);
                 for (int i = 0; i < errors.Count; ++i)
                 {
-                    Log.Error("Error ({0}/{1}): {2}", i + 1, errors.Count, errors[i]);
+                    Log.Error($"{I18N.Error} ({i + 1}/{errors.Count}): {errors[i]}");
                 }
             });
 

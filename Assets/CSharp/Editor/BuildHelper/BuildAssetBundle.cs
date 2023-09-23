@@ -17,7 +17,7 @@ namespace U3DMobileEditor
             }
             if (directories.Count == 0)
             {
-                errors.Add("no asset flavors specified");
+                errors.Add(I18N.NoAssetFlavor);
                 return;
             }
 
@@ -25,7 +25,7 @@ namespace U3DMobileEditor
             {
                 if (!Directory.Exists(directory))
                 {
-                    errors.Add($"asset flavor directory '{directory}' does not exist");
+                    errors.Add($"{I18N.NoFlavorDirectory}: {directory}");
                 }
             }
             if (errors.Count > 0)

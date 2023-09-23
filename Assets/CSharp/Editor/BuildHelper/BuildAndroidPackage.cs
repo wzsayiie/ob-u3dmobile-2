@@ -16,12 +16,12 @@ namespace U3DMobileEditor
             //检查参数:
             if (EditorUserBuildSettings.activeBuildTarget != BuildTarget.Android)
             {
-                errors.Add("active build target is not android");
+                errors.Add(I18N.TargetIsNotAndroid);
             }
 
             if (string.IsNullOrWhiteSpace(keystore))
             {
-                errors.Add("no keystore specified");
+                errors.Add(I18N.NoKeystoreName);
             }
 
             string jksFile     = null;
@@ -36,10 +36,10 @@ namespace U3DMobileEditor
                 keyFile     = BuildKey.APKKeyFile    (keystore);
                 keyPassFile = BuildKey.APKKeyPassFile(keystore);
 
-                if (!File.Exists(jksFile    )) { errors.Add($"not found jks file: {jksFile}"             ); }
-                if (!File.Exists(jksPassFile)) { errors.Add($"not found jks password file: {jksPassFile}"); }
-                if (!File.Exists(keyFile    )) { errors.Add($"not found key file: {keyFile}"             ); }
-                if (!File.Exists(keyPassFile)) { errors.Add($"not found key password file: {keyPassFile}"); }
+                if (!File.Exists(jksFile    )) { errors.Add($"{I18N.NoJKSFile    }: {jksFile    }"); }
+                if (!File.Exists(jksPassFile)) { errors.Add($"{I18N.NoJKSPassFile}: {jksPassFile}"); }
+                if (!File.Exists(keyFile    )) { errors.Add($"{I18N.NoKeyFile    }: {keyFile    }"); }
+                if (!File.Exists(keyPassFile)) { errors.Add($"{I18N.NoKeyPassFile}: {keyPassFile}"); }
             }
 
             if (errors.Count > 0)
@@ -92,7 +92,7 @@ namespace U3DMobileEditor
                         if (message.type == LogType.Exception ||
                             message.type == LogType.Error     )
                         {
-                            errors.Add($"{step.name}: {message.content}");
+                            errors.Add($"{I18N.Error} {step.name}: {message.content}");
                         }
                     }
                 }

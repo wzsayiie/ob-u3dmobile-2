@@ -13,7 +13,7 @@ namespace U3DMobileEditor
             //检查参数:
             if (EditorUserBuildSettings.activeBuildTarget != BuildTarget.iOS)
             {
-                errors.Add("active build target is not ios");
+                errors.Add(I18N.TargetIsNotIOS);
             }
 
             if (errors.Count > 0)
@@ -40,7 +40,7 @@ namespace U3DMobileEditor
                         if (message.type == LogType.Exception ||
                             message.type == LogType.Error     )
                         {
-                            errors.Add($"{step.name}: {message.content}");
+                            errors.Add($"{I18N.Error} {step.name}: {message.content}");
                         }
                     }
                 }

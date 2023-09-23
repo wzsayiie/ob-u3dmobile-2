@@ -219,7 +219,7 @@ namespace U3DMobileEditor
                     args.targetProduct != "apk"    &&
                     args.targetProduct != "bundle" )
                 {
-                    errors.Add("target product only can be 'aab', 'apk' or 'bundle' on android platform");
+                    errors.Add(I18N.OnAndroidProductShouldBe);
                 }
             }
             else if (args.targetPlatform == "ios")
@@ -227,12 +227,12 @@ namespace U3DMobileEditor
                 if (args.targetProduct != "ipa"    &&
                     args.targetProduct != "bundle" )
                 {
-                    errors.Add("target product only can be 'ipa' or 'bundle' on ios platform");
+                    errors.Add(I18N.OnIOSProductShouldBe);
                 }
             }
             else
             {
-                errors.Add("target platform only can be 'android' or 'ios'");
+                errors.Add(I18N.TargetPlatformShouldBe);
             }
 
             //签名.
@@ -245,14 +245,14 @@ namespace U3DMobileEditor
                     string keyFile     = BuildKey.APKKeyFile    (args.apkKeystore);
                     string keyPassFile = BuildKey.APKKeyPassFile(args.apkKeystore);
 
-                    if (!File.Exists(jksFile    )) { errors.Add($"not found jks file: {jksFile}"             ); }
-                    if (!File.Exists(jksPassFile)) { errors.Add($"not found jks password file: {jksPassFile}"); }
-                    if (!File.Exists(keyFile    )) { errors.Add($"not found key file: {keyFile}"             ); }
-                    if (!File.Exists(keyPassFile)) { errors.Add($"not found key password file: {keyPassFile}"); }
+                    if (!File.Exists(jksFile    )) { errors.Add($"{I18N.NoJKSFile    }: {jksFile    }"); }
+                    if (!File.Exists(jksPassFile)) { errors.Add($"{I18N.NoJKSPassFile}: {jksPassFile}"); }
+                    if (!File.Exists(keyFile    )) { errors.Add($"{I18N.NoKeyFile    }: {keyFile    }"); }
+                    if (!File.Exists(keyPassFile)) { errors.Add($"{I18N.NoKeyPassFile}: {keyPassFile}"); }
                 }
                 else
                 {
-                    errors.Add("no apk keystore set");
+                    errors.Add(I18N.NoKeystoreName);
                 }
             }
             else if (args.targetProduct == "ipa")
@@ -262,48 +262,48 @@ namespace U3DMobileEditor
                     string privKeyFile   = BuildKey.IPAPrivKeyFile  (args.apkKeystore);
                     string provisionFile = BuildKey.IPAProvisionFile(args.apkKeystore);
 
-                    if (!File.Exists(privKeyFile  )) { errors.Add($"not found private key file: {privKeyFile}"); }
-                    if (!File.Exists(provisionFile)) { errors.Add($"not found provision file: {provisionFile}"); }
+                    if (!File.Exists(privKeyFile  )) { errors.Add($"{I18N.NoPrivKeyFile  }: {privKeyFile  }"); }
+                    if (!File.Exists(provisionFile)) { errors.Add($"{I18N.NoProvisionFile}: {provisionFile}"); }
                 }
                 else
                 {
-                    errors.Add("no ipa provision set");
+                    errors.Add(I18N.NoProvisionName);
                 }
             }
 
             //应用程序信息.
             if (string.IsNullOrWhiteSpace(args.appPackageId))
             {
-                errors.Add("application package id is empty");
+                errors.Add(I18N.IllegalAppPackageID);
             }
             if (string.IsNullOrWhiteSpace(args.appVersionStr))
             {
-                errors.Add("application version string is empty");
+                errors.Add(I18N.IllegalAppVersionStr);
             }
             if (args.appVersionNum <= 0)
             {
-                errors.Add($"illegal application version number: {args.appVersionNum}");
+                errors.Add($"{I18N.IllegalAppVersionNum}: {args.appVersionNum}");
             }
 
             //游戏设置:
             if (args.packageSerial <= 0)
             {
-                errors.Add($"illegal package serial: {args.packageSerial}");
+                errors.Add($"{I18N.IllegalPackageSerial}: {args.packageSerial}");
             }
 
             var gameOptions = AssetHelper.LoadScriptable<GameProfileOpt>(GameProfileOpt.SavedPath);
 
-            if (!gameOptions.IsValidGameLanguage  (args.firstLanguage )) { errors.Add($"unknown first language: {args.firstLanguage}"  ); }
-            if (!gameOptions.IsValidStoreChannel  (args.storeChannel  )) { errors.Add($"unknown store channel: {args.storeChannel}"    ); }
-            if (!gameOptions.IsValidChannelGateway(args.channelGateway)) { errors.Add($"unknown channel gateway: {args.channelGateway}"); }
-            if (!gameOptions.IsValidAssetURL      (args.assetURL      )) { errors.Add($"unknown asset url: {args.assetURL}"            ); }
-            if (!gameOptions.IsValidPatchURL      (args.patchURL      )) { errors.Add($"unknown patch url: {args.patchURL}"            ); }
+            if (!gameOptions.IsValidGameLanguage  (args.firstLanguage )) { errors.Add($"{I18N.UnknownFirstLanguage }: {args.firstLanguage }"); }
+            if (!gameOptions.IsValidStoreChannel  (args.storeChannel  )) { errors.Add($"{I18N.UnknownStoreChannel  }: {args.storeChannel  }"); }
+            if (!gameOptions.IsValidChannelGateway(args.channelGateway)) { errors.Add($"{I18N.UnknownChannelGateway}: {args.channelGateway}"); }
+            if (!gameOptions.IsValidAssetURL      (args.assetURL      )) { errors.Add($"{I18N.UnknownAssetURL      }: {args.assetURL      }"); }
+            if (!gameOptions.IsValidPatchURL      (args.patchURL      )) { errors.Add($"{I18N.UnknownPatchURL      }: {args.patchURL      }"); }
 
             if (!gameOptions.IsValidAssetFlavors(args.assetFlavors, out HashSet<string> illegalFlavors))
             {
                 foreach (string item in illegalFlavors)
                 {
-                    errors.Add($"unknown asset flavor: {item}");
+                    errors.Add($"{I18N.UnknownAssetFlavor}: {item}");
                 }
             }
 
@@ -312,20 +312,20 @@ namespace U3DMobileEditor
             {
                 foreach (string item in illegalFlags)
                 {
-                    errors.Add($"illegal user flag: {item}");
+                    errors.Add($"{I18N.UnknownUserFlag}: {item}");
                 }
             }
 
             //构建设置:
             if (args.bundleSerial <= 0)
             {
-                errors.Add($"illegal bundle serial: {args.bundleSerial}");
+                errors.Add($"{I18N.IllegalBundleSerial}: {args.bundleSerial}");
             }
 
             var buildProfile = AssetHelper.LoadScriptable<BuildProfile>(BuildProfile.SavedPath);
             if (!buildProfile.IsValidCarry(args.currentCarry))
             {
-                errors.Add($"illegal carry option: {args.currentCarry}");
+                errors.Add($"{I18N.UnknownCarryOption}: {args.currentCarry}");
             }
         }
 
