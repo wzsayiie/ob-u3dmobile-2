@@ -5,35 +5,35 @@ namespace U3DMobileEditor
 {
     internal static class MenuItems
     {
-        private const int GameSettingsMenu  = 100;
-        private const int BuildSettingsMenu = 200;
+        private const int GameProfileMenu   = 100;
+        private const int BuildProfileMenu  = 200;
         private const int ExportPackageMenu = 300;
 
-        [MenuItem("U3DMobile/Game Settings", false, GameSettingsMenu)]
-        internal static void ShowGameSettings()
+        [MenuItem("U3DMobile/Game Settings", false, GameProfileMenu)]
+        internal static void ShowGameProfile()
         {
-            UIHelper.PingPath<GameSettings>(GameSettings.SavedPath);
+            UIHelper.PingPath<GameProfile>(GameProfile.SavedPath);
         }
 
-        [MenuItem("U3DMobile/Game Options", false, GameSettingsMenu)]
-        internal static void ShowGameOptions()
+        [MenuItem("U3DMobile/Game Options", false, GameProfileMenu)]
+        internal static void ShowGameProfileOpt()
         {
-            UIHelper.PingPath<GameOptions>(GameOptions.SavedPath);
+            UIHelper.PingPath<GameProfileOpt>(GameProfileOpt.SavedPath);
         }
         
-        [MenuItem("U3DMobile/Switch Asset Flavors", false, GameSettingsMenu)]
+        [MenuItem("U3DMobile/Switch Asset Flavors", false, GameProfileMenu)]
         internal static void SwitchAssetFlavors()
         {
             BuildHelper.SwitchAssetFlavors();
         }
 
-        [MenuItem("U3DMobile/Build Settings", false, BuildSettingsMenu)]
-        internal static void ShowBuildSettings()
+        [MenuItem("U3DMobile/Build Settings", false, BuildProfileMenu)]
+        internal static void ShowBuildProfile()
         {
-            UIHelper.PingPath<BuildSettings>(BuildSettings.SavedPath);
+            UIHelper.PingPath<BuildProfile>(BuildProfile.SavedPath);
         }
 
-        [MenuItem("U3DMobile/Pack Bundles for Android", false, BuildSettingsMenu)]
+        [MenuItem("U3DMobile/Pack Bundles for Android", false, BuildProfileMenu)]
         internal static void PackBundlesForAndroid()
         {
             //NOTE: show a dialog for secondary confirmation,
@@ -51,7 +51,7 @@ namespace U3DMobileEditor
             }
         }
 
-        [MenuItem("U3DMobile/Pack Bundles for iOS", false, BuildSettingsMenu)]
+        [MenuItem("U3DMobile/Pack Bundles for iOS", false, BuildProfileMenu)]
         internal static void PackBundlesForIOS()
         {
             bool yes = EditorUtility.DisplayDialog(
@@ -67,7 +67,7 @@ namespace U3DMobileEditor
             }
         }
 
-        [MenuItem("U3DMobile/Copy Patches", false, BuildSettingsMenu)]
+        [MenuItem("U3DMobile/Copy Patches", false, BuildProfileMenu)]
         internal static void CopyPatches()
         {
             BuildHelper.CopyPatches();

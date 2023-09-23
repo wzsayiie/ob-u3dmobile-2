@@ -18,11 +18,11 @@ namespace U3DMobileEditor
                 throw WriteErrors("Argument Error", errors);
             }
 
-            //update settings:
-            BuildEnvironment.UpdateSettings(args);
+            //update profile:
+            BuildEnvironment.UpdateProfile(args);
 
             errors.Clear();
-            BuildAssetBundles.SwitchAssetFlavors(args.assetFlavors, errors);
+            BuildAssetBundle.SwitchAssetFlavors(args.assetFlavors, errors);
             if (errors.Count > 0)
             {
                 throw WriteErrors("Switch Asset Flavors Error", errors);
@@ -32,7 +32,7 @@ namespace U3DMobileEditor
             errors.Clear();
             if (args.targetPlatform == "android")
             {
-                BuildAssetBundles.PackForAndroid(errors);
+                BuildAssetBundle.PackForAndroid(errors);
                 if (errors.Count > 0)
                 {
                     throw WriteErrors("Pack Android Bundles Error", errors);
@@ -40,7 +40,7 @@ namespace U3DMobileEditor
             }
             else if (args.targetPlatform == "ios")
             {
-                BuildAssetBundles.PackForIOS(errors);
+                BuildAssetBundle.PackForIOS(errors);
                 if (errors.Count > 0)
                 {
                     throw WriteErrors("Pack iOS Bundles Error", errors);
@@ -77,11 +77,11 @@ namespace U3DMobileEditor
 
         internal static void SwitchAssetFlavors()
         {
-            var settings = AssetHelper.LoadScriptable<GameSettings>(GameSettings.SavedPath);
-            HashSet<string> flavors = settings.GetAssetFlavors();
+            var profile = AssetHelper.LoadScriptable<GameProfile>(GameProfile.SavedPath);
+            HashSet<string> flavors = profile.GetAssetFlavors();
 
             var errors = new List<string>();
-            BuildAssetBundles.SwitchAssetFlavors(flavors, errors);
+            BuildAssetBundle.SwitchAssetFlavors(flavors, errors);
             if (errors.Count > 0)
             {
                 WriteErrors("Switch Asset Flavors Error", errors);
@@ -91,7 +91,7 @@ namespace U3DMobileEditor
         internal static void PackBundlesForAndroid()
         {
             var errors = new List<string>();
-            BuildAssetBundles.PackForAndroid(errors);
+            BuildAssetBundle.PackForAndroid(errors);
             if (errors.Count > 0)
             {
                 WriteErrors("Pack Bundles for Android Error", errors);
@@ -101,7 +101,7 @@ namespace U3DMobileEditor
         internal static void PackBundlesForIOS()
         {
             var errors = new List<string>();
-            BuildAssetBundles.PackForIOS(errors);
+            BuildAssetBundle.PackForIOS(errors);
             if (errors.Count > 0)
             {
                 WriteErrors("Pack Bundles for iOS Error", errors);
@@ -111,7 +111,7 @@ namespace U3DMobileEditor
         internal static void CopyPatches()
         {
             var errors = new List<string>();
-            BuildPatches.Copy(errors);
+            BuildPatch.Copy(errors);
             if (errors.Count > 0)
             {
                 WriteErrors("Copy Patches Error", errors);

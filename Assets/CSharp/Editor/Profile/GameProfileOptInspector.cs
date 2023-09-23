@@ -55,8 +55,8 @@ namespace U3DMobileEditor
         }
     }
 
-    [CustomEditor(typeof(GameOptions))]
-    internal class GameOptionsInspector : Editor
+    [CustomEditor(typeof(GameProfileOpt))]
+    internal class GameProfileOptInspector : Editor
     {
         private SerializedProperty _gameLanguages  ;
         private SerializedProperty _storeChannels  ;

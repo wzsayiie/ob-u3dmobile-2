@@ -21,7 +21,7 @@ namespace U3DMobileEditor
         public string appVersionStr ;
         public int    appVersionNum ;
 
-        //game setting.
+        //game profile.
         public int    packageSerial ;
         public string firstLanguage ;
         public string storeChannel  ;
@@ -32,7 +32,7 @@ namespace U3DMobileEditor
         public HashSet<string>            assetFlavors;
         public Dictionary<string, object> userFlags;
 
-        //build settings.
+        //build profile.
         public int    bundleSerial  ;
         public bool   forceRebuild  ;
         public bool   usePastBundle ;
@@ -285,13 +285,13 @@ namespace U3DMobileEditor
                 errors.Add($"illegal application version number: {args.appVersionNum}");
             }
 
-            //game settings:
+            //game profile:
             if (args.packageSerial <= 0)
             {
                 errors.Add($"illegal package serial: {args.packageSerial}");
             }
 
-            var gameOptions = AssetHelper.LoadScriptable<GameOptions>(GameOptions.SavedPath);
+            var gameOptions = AssetHelper.LoadScriptable<GameProfileOpt>(GameProfileOpt.SavedPath);
 
             if (!gameOptions.IsValidGameLanguage  (args.firstLanguage )) { errors.Add($"unknown first language: {args.firstLanguage}"  ); }
             if (!gameOptions.IsValidStoreChannel  (args.storeChannel  )) { errors.Add($"unknown store channel: {args.storeChannel}"    ); }
@@ -307,8 +307,8 @@ namespace U3DMobileEditor
                 }
             }
 
-            var gameSetting = AssetHelper.LoadScriptable<GameSettings>(GameSettings.SavedPath);
-            if (!gameSetting.IsValidUserFlags(args.userFlags, out HashSet<string> illegalFlags))
+            var gameProfile = AssetHelper.LoadScriptable<GameProfile>(GameProfile.SavedPath);
+            if (!gameProfile.IsValidUserFlags(args.userFlags, out HashSet<string> illegalFlags))
             {
                 foreach (string item in illegalFlags)
                 {
@@ -316,20 +316,20 @@ namespace U3DMobileEditor
                 }
             }
 
-            //build settings:
+            //build profile:
             if (args.bundleSerial <= 0)
             {
                 errors.Add($"illegal bundle serial: {args.bundleSerial}");
             }
 
-            var buildSettings = AssetHelper.LoadScriptable<BuildSettings>(BuildSettings.SavedPath);
-            if (!buildSettings.IsValidCarry(args.currentCarry))
+            var buildProfile = AssetHelper.LoadScriptable<BuildProfile>(BuildProfile.SavedPath);
+            if (!buildProfile.IsValidCarry(args.currentCarry))
             {
                 errors.Add($"illegal carry option: {args.currentCarry}");
             }
         }
 
-        internal static void UpdateSettings(BuildArguments args)
+        internal static void UpdateProfile(BuildArguments args)
         {
             //application information.
             if (args.targetPlatform == "android")
@@ -344,30 +344,30 @@ namespace U3DMobileEditor
             }
             PlayerSettings.bundleVersion = args.appVersionStr;
 
-            //game settings:
-            var gameSettings = AssetHelper.LoadScriptable<GameSettings>(GameSettings.SavedPath);
+            //game profile:
+            var gameProfile = AssetHelper.LoadScriptable<GameProfile>(GameProfile.SavedPath);
 
-            gameSettings.packageSerial  = args.packageSerial ;
-            gameSettings.firstLanguage  = args.firstLanguage ;
-            gameSettings.storeChannel   = args.storeChannel  ;
-            gameSettings.channelGateway = args.channelGateway;
-            gameSettings.assetURL       = args.assetURL      ;
-            gameSettings.patchURL       = args.patchURL      ;
+            gameProfile.packageSerial  = args.packageSerial ;
+            gameProfile.firstLanguage  = args.firstLanguage ;
+            gameProfile.storeChannel   = args.storeChannel  ;
+            gameProfile.channelGateway = args.channelGateway;
+            gameProfile.assetURL       = args.assetURL      ;
+            gameProfile.patchURL       = args.patchURL      ;
 
-            gameSettings.SetAssetFlavors(args.assetFlavors);
-            gameSettings.SetUserFlags(args.userFlags);
+            gameProfile.SetAssetFlavors(args.assetFlavors);
+            gameProfile.SetUserFlags(args.userFlags);
 
-            EditorUtility.SetDirty(gameSettings);
+            EditorUtility.SetDirty(gameProfile);
 
-            //build settings:
-            var buildSettings = AssetHelper.LoadScriptable<BuildSettings>(BuildSettings.SavedPath);
+            //build profile:
+            var buildProfile = AssetHelper.LoadScriptable<BuildProfile>(BuildProfile.SavedPath);
 
-            buildSettings.SetBundleSerial (args.bundleSerial );
-            buildSettings.SetForceRebuild (args.forceRebuild );
-            buildSettings.SetUsePastBundle(args.usePastBundle);
-            buildSettings.SetCurrentCarry (args.currentCarry );
+            buildProfile.SetBundleSerial (args.bundleSerial );
+            buildProfile.SetForceRebuild (args.forceRebuild );
+            buildProfile.SetUsePastBundle(args.usePastBundle);
+            buildProfile.SetCurrentCarry (args.currentCarry );
 
-            EditorUtility.SetDirty(buildSettings);
+            EditorUtility.SetDirty(buildProfile);
 
             //NOTE: remember to save.
             AssetDatabase.SaveAssets();

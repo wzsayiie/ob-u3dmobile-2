@@ -48,9 +48,9 @@ namespace U3DMobileEditor
         public string flavor;
     }
 
-    internal class GameOptions : ScriptableObject
+    internal class GameProfileOpt : ScriptableObject
     {
-        internal const string SavedPath = "Assets/GameOptions.asset";
+        internal const string SavedPath = "Assets/GameProfileOpt.asset";
 
         [SerializeField] private List<GameLanguage  > _gameLanguages  ;
         [SerializeField] private List<StoreChannel  > _storeChannels  ;

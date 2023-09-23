@@ -62,10 +62,10 @@ namespace U3DMobileEditor
         public UnityEngine.Object fileObj;
     }
 
-    //build settings.
-    internal class BuildSettings : ScriptableObject
+    //build profile.
+    internal class BuildProfile : ScriptableObject
     {
-        internal const string SavedPath = "Assets/BuildSettings.asset";
+        internal const string SavedPath = "Assets/BuildProfile.asset";
 
         //asset bundle set serial.
         [SerializeField]

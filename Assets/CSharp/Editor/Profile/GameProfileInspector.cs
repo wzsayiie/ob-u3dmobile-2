@@ -25,10 +25,10 @@ namespace U3DMobileEditor
         }
     }
 
-    [CustomEditor(typeof(GameSettings))]
-    internal class GameSettingsInspector : Editor
+    [CustomEditor(typeof(GameProfile))]
+    internal class GameProfileInspector : Editor
     {
-        private GameSettings       _settings ;
+        private GameProfile        _profile  ;
         private SerializedProperty _userFlags;
 
         private string[]   _languageList ;
@@ -49,24 +49,24 @@ namespace U3DMobileEditor
 
         private void OnEnable()
         {
-            _settings  = (GameSettings)target;
+            _profile   = (GameProfile)target;
             _userFlags = serializedObject.FindProperty("_userFlags");
 
-            var options = AssetHelper.LoadScriptable<GameOptions>(GameOptions.SavedPath);
+            var opt = AssetHelper.LoadScriptable<GameProfileOpt>(GameProfileOpt.SavedPath);
 
-            _languageList = options.GameLanguages  ();
-            _channelList  = options.StoreChannels  ();
-            _gatewayList  = options.ChannelGateways();
-            _assetURLList = options.AssetURLs      ();
-            _patchURLList = options.PatchURLs      ();
+            _languageList = opt.GameLanguages  ();
+            _channelList  = opt.StoreChannels  ();
+            _gatewayList  = opt.ChannelGateways();
+            _assetURLList = opt.AssetURLs      ();
+            _patchURLList = opt.PatchURLs      ();
 
-            _languageIndex = LocateIndex(_languageList   , _settings.firstLanguage );
-            _channelIndex  = LocateIndex(_channelList    , _settings.storeChannel  );
-            _gatewayIndex  = LocateIndex(_gatewayList [1], _settings.channelGateway);
-            _assetURLIndex = LocateIndex(_assetURLList[1], _settings.assetURL      );
-            _patchURLIndex = LocateIndex(_patchURLList[1], _settings.patchURL      );
+            _languageIndex = LocateIndex(_languageList   , _profile.firstLanguage );
+            _channelIndex  = LocateIndex(_channelList    , _profile.storeChannel  );
+            _gatewayIndex  = LocateIndex(_gatewayList [1], _profile.channelGateway);
+            _assetURLIndex = LocateIndex(_assetURLList[1], _profile.assetURL      );
+            _patchURLIndex = LocateIndex(_patchURLList[1], _profile.patchURL      );
 
-            InitializeAssetFlavors(options);
+            InitializeAssetFlavors(opt);
         }
 
         private int LocateIndex(string[] list, string target)
@@ -86,13 +86,13 @@ namespace U3DMobileEditor
             return 0;
         }
 
-        private void InitializeAssetFlavors(GameOptions options)
+        private void InitializeAssetFlavors(GameProfileOpt opt)
         {
-            _flavorList    = options.AssetFlavors();
+            _flavorList    = opt.AssetFlavors();
             _flavorIsOn    = new bool[_flavorList.Length];
             _isShowFlavors = true;
 
-            HashSet<string> selectedFlavors = _settings.GetAssetFlavors();
+            HashSet<string> selectedFlavors = _profile.GetAssetFlavors();
             for (int i = 0; i < _flavorList.Length; ++i)
             {
                 _flavorIsOn[i] = selectedFlavors.Contains(_flavorList[i]);
@@ -119,14 +119,14 @@ namespace U3DMobileEditor
 
         private void DrawPackageSerial()
         {
-            int serial = _settings.packageSerial;
-            _settings.packageSerial = EditorGUILayout.IntField("Package Serial", serial);
+            int serial = _profile.packageSerial;
+            _profile.packageSerial = EditorGUILayout.IntField("Package Serial", serial);
 
-            if (serial != _settings.packageSerial)
+            if (serial != _profile.packageSerial)
             {
                 //NOTE: if change the field values of a serialized object through custom properties,
                 //need to set dirty flags.
-                EditorUtility.SetDirty(_settings);
+                EditorUtility.SetDirty(_profile);
             }
         }
 
@@ -134,7 +134,7 @@ namespace U3DMobileEditor
         {
             Popup("First Language", _languageList, null, ref _languageIndex, (string value) =>
             {
-                _settings.firstLanguage = value;
+                _profile.firstLanguage = value;
             });
         }
 
@@ -142,7 +142,7 @@ namespace U3DMobileEditor
         {
             Popup("Store Channel", _channelList, null, ref _channelIndex , (string value) =>
             {
-                _settings.storeChannel = value;
+                _profile.storeChannel = value;
             });
         }
 
@@ -151,7 +151,7 @@ namespace U3DMobileEditor
             string[][] list = _gatewayList;
             Popup("Channel Gateway", list[0], list[1], ref _gatewayIndex, (string value) =>
             {
-                _settings.channelGateway = value;
+                _profile.channelGateway = value;
             });
         }
         
@@ -160,7 +160,7 @@ namespace U3DMobileEditor
             string[][] list = _assetURLList;
             Popup("Forced Asset URL", list[0], list[1], ref _assetURLIndex, (string value) =>
             {
-                _settings.assetURL = value;
+                _profile.assetURL = value;
             });
         }
         
@@ -169,7 +169,7 @@ namespace U3DMobileEditor
             string[][] list = _patchURLList;
             Popup("Forced Patch URL", list[0], list[1], ref _patchURLIndex, (string value) =>
             {
-                _settings.patchURL = value;
+                _profile.patchURL = value;
             });
         }
 
@@ -181,7 +181,7 @@ namespace U3DMobileEditor
             {
                 index = newIndex;
                 change(values != null ? values[index] : keys[index]);
-                EditorUtility.SetDirty(_settings);
+                EditorUtility.SetDirty(_profile);
             }
 
             if (values != null)
@@ -217,9 +217,9 @@ namespace U3DMobileEditor
                         flavors.Add(_flavorList[i]);
                     }
                 }
-                _settings.SetAssetFlavors(flavors);
+                _profile.SetAssetFlavors(flavors);
 
-                EditorUtility.SetDirty(_settings);
+                EditorUtility.SetDirty(_profile);
             }
 
             if (GUILayout.Button("Switch Asset Flavors"))

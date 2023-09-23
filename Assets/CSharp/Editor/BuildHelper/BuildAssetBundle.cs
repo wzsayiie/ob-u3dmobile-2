@@ -3,7 +3,7 @@ using System.IO;
 
 namespace U3DMobileEditor
 {
-    internal static class BuildAssetBundles
+    internal static class BuildAssetBundle
     {
         internal static void SwitchAssetFlavors(HashSet<string> flavors, List<string> errors)
         {

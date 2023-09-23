@@ -22,9 +22,9 @@ namespace U3DMobile
         public string       stringValue;
     }
 
-    public class GameSettings : ScriptableObject
+    public class GameProfile : ScriptableObject
     {
-        public const string SavedPath = "Assets/Resources/GameSettings.asset";
+        public const string SavedPath = "Assets/Resources/GameProfile.asset";
 
         [SerializeField] private int    _packageSerial ;
         [SerializeField] private string _firstLanguage ;

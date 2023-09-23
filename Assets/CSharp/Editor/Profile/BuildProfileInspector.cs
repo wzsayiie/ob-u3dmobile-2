@@ -40,7 +40,7 @@ namespace U3DMobileEditor
         {
             var    option  = property.FindPropertyRelative("option");
             string curItem = option.stringValue;
-            string actItem = BuildSettingsInspector.instance.currentCarry;
+            string actItem = BuildProfileInspector.instance.currentCarry;
 
             string curTrim = curItem?.Trim();
             string actTrim = actItem?.Trim();
@@ -52,7 +52,7 @@ namespace U3DMobileEditor
 
             if (!beingOn && afterOn)
             {
-                BuildSettingsInspector.instance.currentCarry = curTrim;
+                BuildProfileInspector.instance.currentCarry = curTrim;
             }
         }
     }
@@ -133,8 +133,8 @@ namespace U3DMobileEditor
         }
     }
 
-    [CustomEditor(typeof(BuildSettings))]
-    internal class BuildSettingsInspector : Editor
+    [CustomEditor(typeof(BuildProfile))]
+    internal class BuildProfileInspector : Editor
     {
         private SerializedProperty _bundleSerial ;
         private SerializedProperty _forceRebuild ;
@@ -144,7 +144,7 @@ namespace U3DMobileEditor
         private SerializedProperty _bundleEntries;
         private SerializedProperty _bundlePatches;
 
-        internal static BuildSettingsInspector instance;
+        internal static BuildProfileInspector instance;
 
         internal string currentCarry
         {
