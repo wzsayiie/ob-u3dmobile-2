@@ -82,7 +82,7 @@ namespace U3DMobileEditor
                 }
             }
 
-            //the first item is default "none".
+            //第一项"none"是默认值.
             return 0;
         }
 
@@ -119,13 +119,12 @@ namespace U3DMobileEditor
 
         private void DrawPackageSerial()
         {
-            int serial = _profile.packageSerial;
-            _profile.packageSerial = EditorGUILayout.IntField(I18N.PackageSerial, serial);
+            int oldSerial = _profile.packageSerial;
+            _profile.packageSerial = EditorGUILayout.IntField(I18N.PackageSerial, oldSerial);
 
-            if (serial != _profile.packageSerial)
+            if (oldSerial != _profile.packageSerial)
             {
-                //NOTE: if change the field values of a serialized object through custom properties,
-                //need to set dirty flags.
+                //手动设置可序列化对象的实例, 需要标记"脏"记号才能保存.
                 EditorUtility.SetDirty(_profile);
             }
         }
@@ -194,7 +193,7 @@ namespace U3DMobileEditor
         {
             bool changed = false;
 
-            _isShowFlavors = EditorGUILayout.BeginFoldoutHeaderGroup(_isShowFlavors, I18N.AssetFlavor);
+            _isShowFlavors = EditorGUILayout.BeginFoldoutHeaderGroup(_isShowFlavors, I18N.AssetFlavors);
             if (_isShowFlavors)
             {
                 for (int i = 0; i < _flavorList.Length; ++i)
@@ -222,15 +221,15 @@ namespace U3DMobileEditor
                 EditorUtility.SetDirty(_profile);
             }
 
-            if (GUILayout.Button(I18N.SwitchAssetFlavor))
+            if (GUILayout.Button(I18N.SwitchAssetFlavors))
             {
-                FunctionMenu.SwitchAssetFlavor();
+                FunctionMenu.SwitchAssetFlavors();
             }
         }
 
         private void DrawUserFlags()
         {
-            EditorGUILayout.PropertyField(_userFlags, new GUIContent(I18N.UserFlag));
+            EditorGUILayout.PropertyField(_userFlags, new GUIContent(I18N.UserFlags));
         }
     }
 }

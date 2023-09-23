@@ -10,7 +10,7 @@ namespace U3DMobileEditor
     {
         internal static void ExportXCProject(string provision, List<string> errors)
         {
-            //check arguments:
+            //检查参数:
             if (EditorUserBuildSettings.activeBuildTarget != BuildTarget.iOS)
             {
                 errors.Add("active build target is not ios");
@@ -21,7 +21,7 @@ namespace U3DMobileEditor
                 return;
             }
 
-            //build options.
+            //构建参数.
             var options = new BuildPlayerOptions
             {
                 locationPathName = $"{BuildPath.outputDirectory}/xcproject",
@@ -29,7 +29,7 @@ namespace U3DMobileEditor
                 target           = BuildTarget.iOS,
             };
 
-            //build.
+            //构建.
             BuildReport report = BuildPipeline.BuildPlayer(options);
             if (report.summary.result != BuildResult.Succeeded)
             {

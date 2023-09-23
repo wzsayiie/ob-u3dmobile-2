@@ -4,25 +4,24 @@ using UnityEngine;
 
 namespace U3DMobileEditor
 {
-    //generally speaking, there is no need to dynamically switch languages within a game.
-    //however, games released in southeast asia are an exception,
-    //as there is a large population of chinese and english speakers in the region.
+    //一般而言游戏内不需要动态切换语言.
+    //但如果上架东南亚则是个例外, 因为那里有大量汉语和英语人口.
     [Serializable]
     internal class GameLanguage
     {
         public string language;
     }
 
-    //games will be distributed to different "channel"s,
-    //such as different app stores, and different testing environments.
+    //游戏可能被发布到不同的商店渠道上, 如AppStore, Google Play等.
+    //不同渠道的安装包表现和行为可能会有所差异, 如隐私条款等.
     [Serializable]
     internal class StoreChannel
     {
         public string channel;
     }
 
-    //packages from different channels may connect to the same gateway,
-    //for example, packages from various app stores in the same region.
+    //即使是同一商店渠道的安装包, 连接的服务器网关也会有所差异. 例如通过同一渠道发布到不同地区.
+    //开发环境的内部测试也会导致连接不同网关的情况.
     [Serializable]
     internal class ChannelGateway
     {
@@ -30,8 +29,8 @@ namespace U3DMobileEditor
         public string gateway;
     }
 
-    //sometimes the game needs to download assets and patches from a specific server,
-    //which is more convenient for debugging.
+    //从CDN服务器下载资产包和代码补丁是游戏的常见做法,
+    //可以避免游戏更新后用户从商店重新下载巨大的安装包.
     [Serializable]
     internal class ForcedURL
     {
@@ -39,9 +38,8 @@ namespace U3DMobileEditor
         public string url ;
     }
 
-    //packages of different channels may contain different assets with same names,
-    //such as different game icons.
-    //use "flavor" to differentiate them.
+    //上架到不同地区的安装包, 使用的资产包可能是不一样的, 例如图标, 启动背景图, 关卡背景等.
+    //用"资产变种"区分它们.
     [Serializable]
     internal class AssetFlavor
     {
@@ -64,7 +62,7 @@ namespace U3DMobileEditor
 
         private string[] GetItems<T>(List<T> list, Func<T, string> pick)
         {
-            //the first item "none" is default.
+            //第一项"none"是默认值.
             var valueList = new List<string> { "none" };
 
             if (list != null)
@@ -90,7 +88,7 @@ namespace U3DMobileEditor
 
         private string[][] GetEntries<T>(List<T> list, Func<T, string> pickK, Func<T, string> pickV)
         {
-            //the first item "none" is default.
+            //第一项"none"是默认值.
             var keyList   = new List<string>{ "none" };
             var valueList = new List<string>{ "none" };
 

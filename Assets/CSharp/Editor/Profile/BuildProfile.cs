@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace U3DMobileEditor
 {
-    //build parameters:
+    //构建参数:
     [Serializable]
     internal class BundleSerial
     {
@@ -23,14 +23,14 @@ namespace U3DMobileEditor
         public bool usePastBundle;
     }
 
-    //bundle carry option.
+    //搭载选项.
     [Serializable]
     internal class CarryOption
     {
         public string option;
     }
 
-    //bundle entry:
+    //资产条目:
     [Serializable]
     internal enum PackMode
     {
@@ -55,19 +55,19 @@ namespace U3DMobileEditor
         public string             carryOpts ;
     }
 
-    //patch entry.
+    //补丁条目.
     [Serializable]
     internal class PatchEntry
     {
         public UnityEngine.Object fileObj;
     }
 
-    //build profile.
+    //构建设置.
     internal class BuildProfile : ScriptableObject
     {
         internal const string SavedPath = "Assets/BuildProfile.asset";
 
-        //asset bundle set serial.
+        //资产序列号.
         [SerializeField]
         private BundleSerial _bundleSerial;
 
@@ -82,7 +82,7 @@ namespace U3DMobileEditor
             return _bundleSerial != null ? _bundleSerial.serial : 0;
         }
 
-        //force unity rebuild asset bundles.
+        //强制构建.
         [SerializeField]
         private ForceRebuildCheck _forceRebuild;
 
@@ -97,7 +97,7 @@ namespace U3DMobileEditor
             return _forceRebuild != null && _forceRebuild.forceRebuild;
         }
 
-        //use past asset bundle cache.
+        //复用资产.
         [SerializeField]
         private UsePastBundleCheck _usePastBundle;
 
@@ -112,9 +112,9 @@ namespace U3DMobileEditor
             return _usePastBundle != null && _usePastBundle.usePastBundle;
         }
 
-        //for different distribution channels,
-        //the asset bundles put into the installation package may be different.
-        //use the "CarryOption" to control this point.
+        //一般而言开发者倾向于安装包搭载所有资产, 这样用户从商店安装游戏后不需要再下载额外的资产包.
+        //遗憾的是某些商店, 如Google Play, 对安装包的大小有所限制.
+        //用"搭载选项"来描述哪些资产会被放在安装包内.
         [SerializeField] private string _currentCarry;
         [SerializeField] private List<CarryOption> _carryOptions;
 
@@ -152,7 +152,7 @@ namespace U3DMobileEditor
             return !string.IsNullOrWhiteSpace(_currentCarry) ? _currentCarry.Trim() : null;
         }
 
-        //asset bundle entries.
+        //资产条目.
         [SerializeField]
         private List<BundleEntry> _bundleEntries;
 
@@ -168,7 +168,7 @@ namespace U3DMobileEditor
             }
         }
 
-        //script patch entries.
+        //补丁条目.
         [SerializeField]
         private List<PatchEntry> _bundlePatches;
 

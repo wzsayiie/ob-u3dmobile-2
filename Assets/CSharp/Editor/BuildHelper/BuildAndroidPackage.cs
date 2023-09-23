@@ -13,7 +13,7 @@ namespace U3DMobileEditor
 
         private static void Export(string product, string keystore, List<string> errors)
         {
-            //check arguments:
+            //检查参数:
             if (EditorUserBuildSettings.activeBuildTarget != BuildTarget.Android)
             {
                 errors.Add("active build target is not android");
@@ -47,7 +47,7 @@ namespace U3DMobileEditor
                 return;
             }
 
-            //set keystore:
+            //签名:
             string jksPassText = File.ReadAllText(jksPassFile);
             string keyText     = File.ReadAllText(keyFile    );
             string keyPassText = File.ReadAllText(keyPassFile);
@@ -57,7 +57,7 @@ namespace U3DMobileEditor
             PlayerSettings.Android.keyaliasName = keyText     != null ? keyText    .Trim() : "";
             PlayerSettings.Android.keyaliasPass = keyPassText != null ? keyPassText.Trim() : "";
 
-            //build options:
+            //构建参数:
             var options = new BuildPlayerOptions
             {
                 scenes = new []{ "Assets/Game.unity" },
@@ -81,7 +81,7 @@ namespace U3DMobileEditor
                 PlayerSettings.Android.useAPKExpansionFiles = false;
             }
 
-            //build.
+            //构建.
             BuildReport report = BuildPipeline.BuildPlayer(options);
             if (report.summary.result != BuildResult.Succeeded)
             {

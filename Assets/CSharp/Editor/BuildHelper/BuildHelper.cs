@@ -8,7 +8,7 @@ namespace U3DMobileEditor
     {
         internal static void LaunchWithEnvironment()
         {
-            //parse arguments:
+            //检查参数:
             BuildArguments args = BuildEnvironment.ParseArguments();
 
             var errors = new List<string>();
@@ -18,7 +18,7 @@ namespace U3DMobileEditor
                 throw WriteErrors("Argument Error", errors);
             }
 
-            //update profile:
+            //更新设置:
             BuildEnvironment.UpdateProfile(args);
 
             errors.Clear();
@@ -28,7 +28,7 @@ namespace U3DMobileEditor
                 throw WriteErrors("Switch Asset Flavors Error", errors);
             }
 
-            //pack asset bundles.
+            //打包资产.
             errors.Clear();
             if (args.targetPlatform == "android")
             {
@@ -47,7 +47,7 @@ namespace U3DMobileEditor
                 }
             }
 
-            //pack packages.
+            //生成安装包.
             errors.Clear();
             if (args.targetProduct == "aab")
             {

@@ -43,8 +43,7 @@ namespace U3DMobileEditor
 
         protected virtual float OnGetIndent()
         {
-            //list items have indents.
-            //adding an indent for non-list items can make the ui looks tidier.
+            //全局条目添加一个缩进, 和列表条目对齐.
             return 14;
         }
 
@@ -83,7 +82,7 @@ namespace U3DMobileEditor
         {
             bool on = false;
             DrawElement(width, (Rect rect) => {
-                //use bold style to remind users that this is a "radio" toggle.
+                //单选框使用一个样式, 和勾选框有所区别.
                 on = EditorGUI.Toggle(rect, beingOn, GUI.skin.GetStyle("BoldToggle"));
             });
 

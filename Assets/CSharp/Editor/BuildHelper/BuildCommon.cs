@@ -20,15 +20,14 @@ namespace U3DMobileEditor
         {
             get
             {
-                //user-specified path.
+                //如果环境变量没有指定路径, 使用默认路径.
                 string path = Environment.GetEnvironmentVariable("_output_dir");
-                //default path.
                 if (string.IsNullOrWhiteSpace(path))
                 {
                     path = "BUILD/Local";
                 }
 
-                //make sure the directory exists.
+                //确保路径是存在的.
                 if (!Directory.Exists(path))
                 {
                     Directory.CreateDirectory(path);

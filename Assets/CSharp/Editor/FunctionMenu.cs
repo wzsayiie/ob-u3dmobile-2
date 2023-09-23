@@ -21,8 +21,8 @@ namespace U3DMobileEditor
             UIHelper.PingPath<GameProfileOpt>(GameProfileOpt.SavedPath);
         }
         
-        [MenuItem(I18N.U3DMobile_SwitchAssetFlavor, false, GameProfileMenu)]
-        internal static void SwitchAssetFlavor()
+        [MenuItem(I18N.U3DMobile_SwitchAssetFlavors, false, GameProfileMenu)]
+        internal static void SwitchAssetFlavors()
         {
             BuildHelper.SwitchAssetFlavors();
         }

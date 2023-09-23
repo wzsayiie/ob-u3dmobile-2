@@ -8,20 +8,20 @@ namespace U3DMobileEditor
 {
     internal class BuildArguments
     {
-        //platform.
+        //目标平台.
         public string targetPlatform;
         public string targetProduct ;
 
-        //keys.
+        //签名.
         public string apkKeystore   ;
         public string ipaProvision  ;
 
-        //application information.
+        //应用程序信息.
         public string appPackageId  ;
         public string appVersionStr ;
         public int    appVersionNum ;
 
-        //game profile.
+        //游戏设置.
         public int    packageSerial ;
         public string firstLanguage ;
         public string storeChannel  ;
@@ -32,7 +32,7 @@ namespace U3DMobileEditor
         public HashSet<string>            assetFlavors;
         public Dictionary<string, object> userFlags;
 
-        //build profile.
+        //构建设置.
         public int    bundleSerial  ;
         public bool   forceRebuild  ;
         public bool   usePastBundle ;
@@ -212,7 +212,7 @@ namespace U3DMobileEditor
 
         internal static void CheckArguments(BuildArguments args, List<string> errors)
         {
-            //platform.
+            //目标平台.
             if (args.targetPlatform == "android")
             {
                 if (args.targetProduct != "aab"    &&
@@ -235,7 +235,7 @@ namespace U3DMobileEditor
                 errors.Add("target platform only can be 'android' or 'ios'");
             }
 
-            //keys.
+            //签名.
             if (args.targetProduct == "aab" || args.targetProduct == "apk")
             {
                 if (!string.IsNullOrWhiteSpace(args.apkKeystore))
@@ -271,7 +271,7 @@ namespace U3DMobileEditor
                 }
             }
 
-            //application information.
+            //应用程序信息.
             if (string.IsNullOrWhiteSpace(args.appPackageId))
             {
                 errors.Add("application package id is empty");
@@ -285,7 +285,7 @@ namespace U3DMobileEditor
                 errors.Add($"illegal application version number: {args.appVersionNum}");
             }
 
-            //game profile:
+            //游戏设置:
             if (args.packageSerial <= 0)
             {
                 errors.Add($"illegal package serial: {args.packageSerial}");
@@ -316,7 +316,7 @@ namespace U3DMobileEditor
                 }
             }
 
-            //build profile:
+            //构建设置:
             if (args.bundleSerial <= 0)
             {
                 errors.Add($"illegal bundle serial: {args.bundleSerial}");
@@ -331,7 +331,7 @@ namespace U3DMobileEditor
 
         internal static void UpdateProfile(BuildArguments args)
         {
-            //application information.
+            //应用程序信息.
             if (args.targetPlatform == "android")
             {
                 PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.Android, args.appPackageId);
@@ -344,7 +344,7 @@ namespace U3DMobileEditor
             }
             PlayerSettings.bundleVersion = args.appVersionStr;
 
-            //game profile:
+            //游戏设置:
             var gameProfile = AssetHelper.LoadScriptable<GameProfile>(GameProfile.SavedPath);
 
             gameProfile.packageSerial  = args.packageSerial ;
@@ -359,7 +359,7 @@ namespace U3DMobileEditor
 
             EditorUtility.SetDirty(gameProfile);
 
-            //build profile:
+            //构建设置:
             var buildProfile = AssetHelper.LoadScriptable<BuildProfile>(BuildProfile.SavedPath);
 
             buildProfile.SetBundleSerial (args.bundleSerial );
@@ -369,7 +369,7 @@ namespace U3DMobileEditor
 
             EditorUtility.SetDirty(buildProfile);
 
-            //NOTE: remember to save.
+            //保存.
             AssetDatabase.SaveAssets();
         }
     }

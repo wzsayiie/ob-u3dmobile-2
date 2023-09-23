@@ -8,14 +8,13 @@ namespace U3DMobileEditor
     {
         internal static T LoadScriptable<T>(string path) where T : ScriptableObject
         {
-            //try load the asset.
             var asset = AssetDatabase.LoadAssetAtPath<T>(path);
             if (asset != null)
             {
                 return asset;
             }
 
-            //create the asset if needed:
+            //如果没有对应文件, 创建一个新的:
             string dir = Path.GetDirectoryName(path);
             if (!string.IsNullOrEmpty(dir) && !Directory.Exists(dir))
             {

@@ -37,6 +37,7 @@ namespace U3DMobile
         [SerializeField] private List<UserFlag> _userFlags   ;
 
     #if UNITY_EDITOR
+        //编辑器模式下才能进行"写"操作.
         public int    packageSerial  { get { return _packageSerial ; } set { _packageSerial  = value; } }
         public string firstLanguage  { get { return _firstLanguage ; } set { _firstLanguage  = value; } }
         public string storeChannel   { get { return _storeChannel  ; } set { _storeChannel   = value; } }
