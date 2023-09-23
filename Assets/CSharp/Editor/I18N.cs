@@ -7,18 +7,11 @@ namespace U3DMobileEditor
         internal const string Yes   = "确定";
         internal const string No    = "取消";
 
-        internal const string U3DMobile_GameProfile          = "功能/游戏设置";
-        internal const string U3DMobile_GameProfileOpt       = "功能/游戏设置可选项";
-        internal const string U3DMobile_SwitchAssetFlavors   = "功能/切换资产变种";
-        internal const string U3DMobile_BuildProfile         = "功能/构建设置";
-        internal const string U3DMobile_PackBundleForAndroid = "功能/打包Android资产包";
-        internal const string U3DMobile_PackBundleForIOS     = "功能/打包iOS资产包";
-        internal const string U3DMobile_CopyPatch            = "功能/复制补丁";
-        internal const string U3DMobile_ExportAndroidAAB     = "功能/导出Android AAB安装包";
-        internal const string U3DMobile_ExportAndroidAPK     = "功能/导出Android APK安装包";
-        internal const string U3DMobile_ExportIOSProject     = "功能/导出iOS Xcode工程";
-
+        internal const string U3DMobile            = "功能/";
+        internal const string GameProfile          = "游戏设置";
+        internal const string GameProfileOpt       = "游戏设置可选项";
         internal const string SwitchAssetFlavors   = "切换资产变种";
+        internal const string BuildProfile         = "构建设置";
         internal const string PackBundleForAndroid = "打包Android资产包";
         internal const string PackBundleForIOS     = "打包iOS资产包";
         internal const string CopyPatch            = "复制补丁";
