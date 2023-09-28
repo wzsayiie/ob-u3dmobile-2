@@ -1,7 +1,6 @@
-using U3DMobile;
 using UnityEditor;
 
-namespace U3DMobileEditor
+namespace U3DMobile.Edit
 {
     internal static class FunctionMenu
     {

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace U3DMobileEditor
+namespace U3DMobile.Edit
 {
     internal static class BuildAssetBundle
     {

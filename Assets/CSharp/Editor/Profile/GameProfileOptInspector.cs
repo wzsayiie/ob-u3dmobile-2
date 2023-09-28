@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace U3DMobileEditor
+namespace U3DMobile.Edit
 {
     [CustomPropertyDrawer(typeof(GameLanguage))]
     internal class GameLanguageDrawer : ListItemDrawer

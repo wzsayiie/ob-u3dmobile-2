@@ -2,7 +2,7 @@ using System;
 using UnityEditor;
 using UnityEngine;
 
-namespace U3DMobileEditor
+namespace U3DMobile.Edit
 {
     internal class BaseItemDrawer : PropertyDrawer
     {

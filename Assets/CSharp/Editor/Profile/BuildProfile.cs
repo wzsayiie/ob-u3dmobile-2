@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace U3DMobileEditor
+namespace U3DMobile.Edit
 {
     //构建参数:
     [Serializable]

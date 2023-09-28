@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEditor.Build.Reporting;
 using UnityEngine;
 
-namespace U3DMobileEditor
+namespace U3DMobile.Edit
 {
     internal static class BuildAndroidPackage
     {

@@ -1,3 +1,3 @@
-namespace U3DMobileForm
+namespace U3DMobile.Norm
 {
 }

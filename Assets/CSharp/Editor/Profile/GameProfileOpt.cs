@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace U3DMobileEditor
+namespace U3DMobile.Edit
 {
     //一般而言游戏内不需要动态切换语言.
     //但如果上架东南亚则是个例外, 因为那里有大量汉语和英语人口.

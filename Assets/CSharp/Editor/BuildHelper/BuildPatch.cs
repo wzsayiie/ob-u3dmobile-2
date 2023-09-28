@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace U3DMobileEditor
+namespace U3DMobile.Edit
 {
     internal static class BuildPatch
     {

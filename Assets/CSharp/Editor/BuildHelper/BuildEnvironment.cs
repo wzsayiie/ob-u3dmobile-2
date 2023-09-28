@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using U3DMobile;
 using UnityEditor;
 
-namespace U3DMobileEditor
+namespace U3DMobile.Edit
 {
     internal class BuildArguments
     {

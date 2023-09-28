@@ -1,4 +1,4 @@
-namespace U3DMobileEditor
+namespace U3DMobile.Edit
 {
     internal static class I18N
     {

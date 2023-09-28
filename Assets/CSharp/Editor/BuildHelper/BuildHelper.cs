@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
-using U3DMobile;
 
-namespace U3DMobileEditor
+namespace U3DMobile.Edit
 {
     internal static class BuildHelper
     {

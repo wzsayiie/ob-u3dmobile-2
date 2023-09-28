@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
-using U3DMobile;
 using UnityEditor;
 using UnityEngine;
 
-namespace U3DMobileEditor
+namespace U3DMobile.Edit
 {
     [CustomPropertyDrawer(typeof(UserFlag))]
     internal class UserFlagDrawer : ListItemDrawer
